@@ -169,8 +169,11 @@ Não dividir quando a separação:
 ### 6.2 Tipagem
 
 - Contratos públicos devem possuir tipos explícitos.
+- Preferir `unknown` a `any` quando o tipo ainda precisar ser validado.
 - Evitar `any`, tipagem excessivamente ampla e casts usados apenas para silenciar erros.
 - Dados externos devem ser validados em tempo de execução quando a tipagem estática não oferecer garantia suficiente.
+- Tipos devem impedir estados inválidos sempre que isso for viável.
+- Estados mutuamente exclusivos devem preferir uniões discriminadas ou representação equivalente.
 - Tipos locais devem permanecer próximos da implementação.
 - Tipos compartilhados devem representar contratos realmente compartilhados.
 - Não duplicar manualmente o mesmo contrato em diferentes partes do sistema quando houver uma fonte única viável.
@@ -183,6 +186,15 @@ Contrato é qualquer interface estável entre módulos, processos ou sistemas, i
 - Mudanças incompatíveis devem ser tratadas deliberadamente.
 - Implementações internas não devem vazar para consumidores.
 - Campos opcionais, valores nulos e estados de erro devem ser definidos intencionalmente.
+
+### 6.4 Comentários e documentação
+
+- Comentários devem explicar intenção, restrição, decisão ou motivo não evidente.
+- Não comentar linha a linha comportamentos que o próprio código já expressa com clareza.
+- Comentários devem permanecer sincronizados com a implementação.
+- Código desativado não deve permanecer comentado; deve ser removido e recuperado pelo histórico quando necessário.
+- Contratos públicos, fluxos complexos e decisões arquiteturais relevantes devem ser documentados quando não forem evidentes pelo código.
+- Documentação afetada por uma alteração deve ser atualizada junto com o código.
 
 ---
 
@@ -214,6 +226,10 @@ Antes de adicionar uma dependência, verificar se:
 
 - Configurações variáveis devem ser centralizadas.
 - Valores de ambiente devem ser validados na inicialização.
+- Configurações obrigatórias ausentes ou inválidas devem interromper a inicialização com erro claro.
+- Valores padrão só devem existir quando forem seguros e semanticamente válidos.
+- Ambientes como desenvolvimento, teste, homologação e produção devem possuir diferenças explícitas e controladas.
+- Deve existir exemplo documentado das variáveis necessárias, sem segredos reais.
 - URLs, chaves, limites e parâmetros operacionais não devem ser espalhados pelo código.
 - Segredos nunca devem ser versionados.
 - Valores específicos de ambiente não devem ser codificados diretamente na regra de negócio.
@@ -228,6 +244,7 @@ Antes de adicionar uma dependência, verificar se:
 - Erros não devem ser ignorados silenciosamente.
 - Erros esperados devem ser representados de forma previsível.
 - Falhas inesperadas devem preservar contexto suficiente para diagnóstico.
+- Diferenciar erros esperados, inesperados, recuperáveis e fatais quando isso afetar o fluxo.
 - Mensagens externas não devem expor detalhes internos, caminhos, credenciais ou stack traces.
 - Tratamentos genéricos não devem ocultar a causa original.
 - Recuperação automática só deve ocorrer quando for segura e claramente definida.
@@ -307,25 +324,16 @@ Não combinar escopos independentes sem necessidade.
 ### 10.2 Regras obrigatórias
 
 - Entender o fluxo existente antes de mover ou remover código.
-- Garantir que todo conteúdo necessário esteja na estrutura final antes da poda.
+- Garantir que todo conteúdo necessário esteja na estrutura final antes de remover a estrutura anterior.
 - Atualizar imports, referências, testes e configurações afetadas.
 - Preservar contratos públicos sem necessidade explícita de alteração.
 - Não renomear APIs públicas apenas por preferência estética.
 - Não alterar layout, comportamento, estado ou regras de negócio em uma refatoração exclusivamente estrutural.
 - Remover definitivamente arquivos, pastas e exports antigos após validar a migração.
 - Não manter cópias de segurança dentro da árvore do projeto.
+- Confirmar que não existem imports ou referências restantes para estruturas removidas.
 - Validar tipagem, lint, testes e build após a mudança.
 - Comparar o comportamento antes e depois quando houver risco relevante.
-
-### 10.3 Poda
-
-A poda só deve ocorrer depois que:
-
-- todos os usos foram migrados;
-- o conteúdo necessário foi preservado;
-- não existem imports ou referências restantes;
-- a estrutura final foi validada;
-- os mecanismos de qualidade disponíveis foram executados.
 
 ---
 
@@ -366,8 +374,17 @@ A arquitetura, a biblioteca de estado, o roteamento e a estratégia de estilos d
 
 ### 12.3 Estado
 
+O estado deve ser classificado pelo menor escopo necessário:
+
+1. estado local do componente;
+2. estado compartilhado dentro de uma funcionalidade;
+3. estado compartilhado entre páginas ou fluxos;
+4. estado global da aplicação;
+5. estado remoto proveniente do servidor.
+
 - Preferir estado local quando não houver compartilhamento real.
 - Estado global deve representar dados efetivamente compartilhados ou persistentes entre áreas.
+- Estado remoto deve possuir estratégia clara de carregamento, atualização, cache e invalidação.
 - Dados derivados devem preferencialmente ser calculados, não duplicados.
 - Não duplicar o mesmo estado em múltiplas fontes sem estratégia explícita de sincronização.
 - Efeitos colaterais devem ser isolados e possuir dependências claras.
@@ -378,6 +395,21 @@ A arquitetura, a biblioteca de estado, o roteamento e a estratégia de estilos d
 - Extrair hooks ou equivalentes quando houver lógica de estado ou efeitos reutilizável ou complexa.
 - Hooks não devem apenas renomear uma chamada simples sem adicionar significado.
 - Dependências e efeitos devem ser previsíveis e testáveis.
+
+### 12.5 Regras de negócio no front-end
+
+- Regras de negócio presentes no front-end devem possuir nomes semânticos e permanecer separadas da renderização.
+- Regras complexas devem ser isoladas em módulos testáveis.
+- Validações críticas não devem existir exclusivamente no front-end.
+- A interface pode antecipar restrições para melhorar a experiência, mas o servidor continua responsável por garantir integridade e autorização.
+
+### 12.6 Navegação e rotas
+
+- Rotas, nomes e parâmetros devem seguir convenção consistente.
+- Strings de rotas recorrentes não devem ser espalhadas pela aplicação.
+- Uma página não deve depender de detalhes internos de outra página.
+- Parâmetros recebidos pela navegação devem ser tratados como entrada externa.
+- A aplicação não deve presumir execução obrigatória na raiz do domínio.
 
 ---
 
@@ -435,6 +467,7 @@ A arquitetura, a biblioteca de estado, o roteamento e a estratégia de estilos d
 ### 14.1 Formulários
 
 - Estado, validação, envio e resposta devem possuir responsabilidades claras.
+- Diferenciar campo ausente, formato inválido, regra de negócio violada, falha de comunicação e erro inesperado.
 - Erros devem ser associados ao campo ou ao fluxo correspondente.
 - Dados devem ser normalizados antes do envio quando necessário.
 - O estado de envio deve impedir ações duplicadas.
@@ -519,6 +552,9 @@ A arquitetura concreta, o runtime, o framework, o banco e as integrações devem
 - Integridade deve ser protegida pelo banco quando possível.
 - Alterações de schema devem possuir migração versionada.
 - Migrações devem ser reproduzíveis e compatíveis com a estratégia de implantação.
+- Migrações destrutivas devem definir estratégia de backup, reversão ou recuperação.
+- Dados iniciais, dados de teste e dados de produção devem possuir responsabilidades e mecanismos separados.
+- Migrações não devem executar cargas arbitrárias de dados sem justificativa e controle explícitos.
 
 ### 18.2 Contratos e DTOs
 
@@ -550,32 +586,45 @@ A arquitetura concreta, o runtime, o framework, o banco e as integrações devem
 - Não confiar em identificadores ou permissões enviados pelo cliente.
 - Operações sensíveis devem possuir rastreabilidade proporcional ao risco.
 
-### 19.2 Integrações externas
+### 19.2 Segurança operacional
+
+- CORS deve permitir somente origens, métodos e cabeçalhos necessários.
+- Limites de tamanho, frequência e duração devem ser definidos conforme o risco.
+- Rate limiting deve ser aplicado em operações suscetíveis a abuso.
+- Credenciais e senhas devem utilizar armazenamento apropriado e nunca ser registradas em texto puro.
+- Entradas devem ser protegidas contra injeção, traversal, execução indevida e formatos maliciosos conforme a tecnologia utilizada.
+- Configurações permissivas de desenvolvimento não devem ser transportadas automaticamente para produção.
+
+### 19.3 Integrações externas
 
 - Integrações devem ser encapsuladas atrás de contratos internos claros.
-- Definir timeout, tratamento de falha e política de repetição.
+- Definir timeout, tratamento de falha, fallback e política de repetição.
+- Respostas externas devem ser validadas antes de afetar o estado interno.
+- Erros externos devem ser convertidos para erros internos previsíveis.
 - Repetições devem evitar duplicação de efeitos.
-- Respostas externas devem ser validadas.
+- Operações não idempotentes não devem ser repetidas automaticamente sem proteção explícita.
 - Falhas externas não devem corromper o estado interno.
 - Dependência externa indisponível deve produzir comportamento previsível.
 
-### 19.3 Transações e consistência
+### 19.4 Transações e consistência
 
 - Operações compostas devem preservar invariantes.
 - Usar transações quando múltiplas alterações precisarem ocorrer de forma atômica.
 - Transações devem ser mantidas pelo menor tempo necessário.
 - Não realizar chamadas externas dentro de transações sem justificativa forte.
-- Processos distribuídos devem definir estratégia para falha parcial.
+- Processos distribuídos devem definir estratégia para falha parcial, reversão, compensação ou retomada.
+- O resultado de falhas intermediárias deve ser conhecido e testável.
 
-### 19.4 Concorrência e idempotência
+### 19.5 Concorrência e idempotência
 
 - Operações sujeitas a repetição devem considerar idempotência.
 - Concorrência deve proteger recursos compartilhados e invariantes.
 - Não presumir que uma verificação seguida de escrita seja atômica.
-- Filas e tarefas assíncronas devem tratar repetição, ordem e falha.
+- Atualizações concorrentes devem possuir estratégia de bloqueio, versão, restrição ou detecção de conflito quando necessário.
+- Filas e tarefas assíncronas devem tratar repetição, ordem, reprocessamento e falha.
 - Identificadores idempotentes devem possuir escopo e validade definidos.
 
-### 19.5 Logs
+### 19.6 Logs
 
 - Registrar contexto suficiente para reconstruir o fluxo.
 - Não registrar segredos ou corpos sensíveis indiscriminadamente.
@@ -592,7 +641,7 @@ A arquitetura concreta, o runtime, o framework, o banco e as integrações devem
 - Testes de integração devem validar banco, filas, contratos e integrações relevantes.
 - Testes end-to-end devem cobrir fluxos críticos quando o risco justificar.
 - Persistência deve ser testada contra comportamento real quando mocks não forem suficientes.
-- Autorização, validação, transações e falhas externas devem receber cobertura proporcional ao risco.
+- Autorização, validação, transações, concorrência e falhas externas devem receber cobertura proporcional ao risco.
 - Testes devem controlar relógio, aleatoriedade e dependências externas quando necessário.
 
 ### 20.2 Performance
@@ -630,6 +679,7 @@ A arquitetura concreta, o runtime, o framework, o banco e as integrações devem
 - [ ] Estado permanece no menor escopo possível.
 - [ ] Não há duplicação desnecessária de estado derivado.
 - [ ] Loading, erro, vazio e sucesso foram tratados.
+- [ ] Rotas e parâmetros são centralizados e validados.
 - [ ] A interface preserva responsividade e acessibilidade.
 - [ ] Requisições e formulários evitam ações duplicadas.
 - [ ] Layout e comportamento não foram alterados fora do escopo.
@@ -640,9 +690,11 @@ A arquitetura concreta, o runtime, o framework, o banco e as integrações devem
 - [ ] Regras de negócio estão centralizadas.
 - [ ] Entradas e respostas possuem contratos e validação.
 - [ ] Autenticação e autorização foram aplicadas corretamente.
+- [ ] Configurações obrigatórias são validadas na inicialização.
 - [ ] Persistência protege integridade e evita consultas desnecessárias.
-- [ ] Transações e concorrência preservam consistência.
-- [ ] Integrações possuem timeout e tratamento de falha.
+- [ ] Migrações possuem estratégia segura de implantação e recuperação.
+- [ ] Transações, concorrência e idempotência preservam consistência.
+- [ ] Integrações possuem timeout, validação e tratamento de falha.
 - [ ] Logs permitem diagnóstico sem expor dados sensíveis.
 
 ---
