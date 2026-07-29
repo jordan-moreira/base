@@ -102,25 +102,44 @@ A redução da quantidade de nós não deve resultar em responsabilidades mistur
 
 A estrutura correta é a menor árvore semanticamente suficiente, e não simplesmente a árvore com menor quantidade absoluta de elementos.
 
-### 2.9 Balanceamento recursivo
+### 2.9 Balanceamento recursivo das folhas para a raiz
 
-As mesmas regras de balanceamento devem ser aplicadas recursivamente da raiz do projeto até cada menor bloco lógico indivisível.
+As mesmas regras de balanceamento devem ser aplicadas recursivamente em todos os níveis da árvore, mas sua aplicação operacional deve ocorrer obrigatoriamente das folhas para a raiz.
 
-Todo nó deve ser avaliado considerando:
+A análise deve começar nos menores blocos lógicos indivisíveis do código e avançar exatamente um nível em direção à raiz somente quando todos os nós relevantes do nível atual estiverem em conformidade com estas regras.
 
-- a responsabilidade que representa;
+A ordem obrigatória de avaliação é:
+
+```text
+menores blocos lógicos indivisíveis
+→ funções, métodos ou componentes
+→ arquivos
+→ diretórios
+→ módulos
+→ domínios ou contextos
+→ raiz do projeto
+```
+
+Nenhum nó pai pode ser considerado corretamente balanceado enquanto seus filhos ainda apresentarem mistura de responsabilidades, fragmentação artificial, alocação incorreta, largura inadequada ou organização interna inconsistente.
+
+Em cada nível, todos os nós relevantes devem ser avaliados considerando:
+
+- a responsabilidade que representam;
 - as responsabilidades de seus filhos;
 - a quantidade de filhos;
 - a facilidade de localizar e compreender cada filho;
 - a profundidade necessária para alcançar suas folhas;
-- o custo de navegação criado pela estrutura.
+- o custo de navegação criado pela estrutura;
+- o acoplamento e as dependências existentes;
+- os ciclos de mudança e os consumidores de cada parte.
 
 Um nó deve permanecer indiviso enquanto:
 
 - representar adequadamente uma única responsabilidade;
 - seus filhos forem semanticamente relacionados;
 - a quantidade de filhos permitir localização e manutenção previsíveis;
-- sua profundidade for proporcional à complexidade representada.
+- sua profundidade for proporcional à complexidade representada;
+- sua divisão não produzir responsabilidades independentes reais.
 
 Um nó deve ser dividido ou seus filhos devem ser realocados quando:
 
@@ -131,6 +150,8 @@ Um nó deve ser dividido ou seus filhos devem ser realocados quando:
 5. a realocação reduzir profundidade desnecessária ou sobrecarga do nó atual.
 
 A quantidade de filhos é um indicador, não um limite numérico absoluto. A divisão só deve ocorrer quando essa quantidade causar prejuízo semântico ou operacional.
+
+Se uma alteração realizada em um nível superior afetar qualquer nível inferior já validado, todo o ramo afetado deve ser reavaliado novamente das folhas para a raiz antes de prosseguir.
 
 ### 2.10 Balanceamento horizontal e vertical
 
@@ -148,27 +169,21 @@ A árvore está adequadamente balanceada quando:
 - a largura não impede localização direta;
 - nenhuma divisão existe apenas por simetria visual.
 
-### 2.11 Modularização de dentro para fora
+### 2.11 Modularização progressiva de baixo para cima
 
-Toda modularização deve começar no menor nível aplicável e avançar progressivamente para níveis superiores.
+Toda modularização deve começar nas folhas e avançar progressivamente em direção à raiz.
 
-A ordem obrigatória de avaliação é:
-
-1. blocos lógicos internos;
-2. funções, métodos ou componentes;
-3. arquivos;
-4. diretórios;
-5. módulos;
-6. domínios ou contextos;
-7. estrutura global do projeto.
+A progressão para o nível pai só é permitida quando o nível atual estiver integralmente de acordo com as regras de responsabilidade, coesão, divisão, alocação, largura, profundidade e dependências.
 
 Em cada nível:
 
-1. organizar os elementos existentes;
-2. avaliar responsabilidade, coesão, dependências e extensão;
-3. manter no nível atual o que continuar semanticamente coeso;
-4. separar ou promover apenas responsabilidades independentes;
-5. reavaliar largura e profundidade após a alteração.
+1. identificar todos os nós relevantes;
+2. organizar os elementos existentes;
+3. avaliar responsabilidade, coesão, dependências, extensão, largura e profundidade;
+4. dividir, agrupar ou realocar apenas quando houver justificativa semântica;
+5. remover fragmentações, duplicações ou níveis artificiais;
+6. reavaliar o nível após as alterações;
+7. avançar um nível em direção à raiz somente depois de confirmar sua conformidade.
 
 A arquitetura global deve emergir das responsabilidades reais do código organizado. Não deve ser imposta antecipadamente por meio de pastas, camadas ou módulos vazios.
 
@@ -218,7 +233,26 @@ Ao dividir um nó:
 
 A divisão não deve criar nós primos artificialmente apenas para distribuir visualmente a árvore.
 
-### 3.4 Regra de parada
+### 3.4 Regra de avanço entre níveis
+
+O nível pai só pode ser avaliado como unidade estrutural depois que todos os nós relevantes do nível filho estiverem conformes.
+
+Antes de avançar para o nível pai, confirmar que no nível atual:
+
+- cada nó possui responsabilidade clara;
+- responsabilidades independentes foram separadas;
+- elementos inseparáveis permanecem próximos;
+- a quantidade de filhos é administrável;
+- a alocação de cada filho é semanticamente correta;
+- não existem duplicações ou classificações concorrentes;
+- a navegação não supera o ganho de clareza;
+- não existem subdivisões preventivas ou artificiais.
+
+A progressão é interrompida enquanto existir qualquer não conformidade relevante no nível atual.
+
+### 3.5 Regra de parada
+
+A modularização estará concluída somente quando a raiz e todos os níveis abaixo dela tiverem sido validados no percurso das folhas para a raiz.
 
 A modularização deve parar quando todos os nós avaliados:
 
@@ -229,7 +263,7 @@ A modularização deve parar quando todos os nós avaliados:
 - não exigirem conhecimento excessivo para localização;
 - não puderem ser divididos sem criar fragmentação artificial.
 
-### 3.5 Criar uma abstração
+### 3.6 Criar uma abstração
 
 Criar uma abstração somente quando ela:
 
@@ -242,13 +276,13 @@ Criar uma abstração somente quando ela:
 
 Não abstrair apenas para antecipar necessidades futuras.
 
-### 3.6 Compartilhar código
+### 3.7 Compartilhar código
 
 Compartilhar somente quando os usos possuírem o mesmo significado e comportamento esperado.
 
 Semelhança visual ou estrutural isolada não é suficiente para justificar compartilhamento.
 
-### 3.7 Adicionar uma camada
+### 3.8 Adicionar uma camada
 
 Adicionar uma camada somente quando houver responsabilidade distinta, fronteira técnica ou regra de dependência que justifique sua existência.
 
@@ -346,6 +380,8 @@ bloco lógico
 ```
 
 Um elemento só deve subir de nível quando adquirir responsabilidade, dependências, consumidores, contrato ou ciclo de mudança próprios.
+
+A promoção estrutural e a validação do balanceamento devem respeitar o percurso obrigatório das folhas para a raiz.
 
 ### 4.6 Proximidade antes do compartilhamento
 
@@ -701,18 +737,23 @@ Camadas que apenas encaminham argumentos devem ser removidas ou incorporadas ao 
 
 ## 12. Refatoração e manutenção
 
-Toda refatoração estrutural deve ocorrer de dentro para fora:
+Toda refatoração estrutural deve ocorrer das folhas para a raiz:
 
 1. compreender o comportamento atual;
-2. organizar os blocos lógicos internos;
-3. modularizar funções, métodos e componentes;
-4. extrair arquivos quando necessário;
-5. organizar arquivos em diretórios quando necessário;
-6. consolidar módulos e domínios;
-7. ajustar a estrutura global;
-8. atualizar imports, referências e contratos;
-9. remover estruturas antigas;
-10. validar comportamento, build e testes.
+2. identificar os menores blocos lógicos indivisíveis;
+3. organizar e validar os blocos lógicos internos;
+4. modularizar e validar funções, métodos e componentes;
+5. extrair e validar arquivos quando necessário;
+6. organizar e validar arquivos em diretórios quando necessário;
+7. consolidar e validar módulos e domínios;
+8. validar a estrutura global e a raiz do projeto;
+9. atualizar imports, referências e contratos;
+10. remover estruturas antigas;
+11. validar comportamento, build e testes.
+
+A passagem de uma etapa estrutural para a seguinte só pode ocorrer quando o nível atual estiver em conformidade com estas regras.
+
+Se uma alteração em etapa posterior afetar um nível anteriormente validado, o ramo afetado deve retornar ao menor nível modificado e ser novamente validado das folhas para a raiz.
 
 Além disso:
 
@@ -722,7 +763,7 @@ Além disso:
 - Não manter versões antigas e novas da mesma responsabilidade em paralelo.
 - Dívida técnica deliberada deve ser documentada.
 
-Mover código desorganizado para uma nova árvore apenas transfere o problema. A responsabilidade interna deve ser compreendida antes da realocação externa.
+Mover código desorganizado para uma nova árvore apenas transfere o problema. A responsabilidade interna deve ser compreendida e validada antes da realocação externa.
 
 ---
 
@@ -732,11 +773,24 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 
 - [ ] A raiz considerada é o diretório raiz do projeto.
 - [ ] As folhas consideradas são os menores blocos lógicos indivisíveis do código.
-- [ ] A regra de balanceamento foi aplicada recursivamente em todos os níveis.
+- [ ] A regra de balanceamento foi aplicada em todos os níveis.
+- [ ] A aplicação começou nas folhas e avançou em direção à raiz.
 - [ ] Cada nó possui responsabilidade identificável.
 - [ ] Cada folha permanece indivisível sem misturar responsabilidades.
 
-### 13.2 Balanceamento
+### 13.2 Progressão das folhas para a raiz
+
+- [ ] Os menores blocos lógicos foram avaliados primeiro.
+- [ ] Nenhuma função foi validada antes de seus blocos internos.
+- [ ] Nenhum arquivo foi validado antes de suas funções, componentes ou blocos internos.
+- [ ] Nenhum diretório foi validado antes de seus arquivos e subdiretórios.
+- [ ] Nenhum módulo foi validado antes de seus nós internos.
+- [ ] Nenhum domínio foi validado antes de seus módulos.
+- [ ] A raiz só foi validada após todos os níveis inferiores.
+- [ ] Cada avanço ocorreu apenas depois da conformidade integral do nível atual.
+- [ ] Ramos afetados por alterações superiores foram reavaliados das folhas para a raiz.
+
+### 13.3 Balanceamento
 
 - [ ] Filhos do mesmo nó são semanticamente relacionados.
 - [ ] Responsabilidades diferentes foram separadas ou realocadas.
@@ -749,7 +803,7 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] A navegação não é maior que o ganho de clareza.
 - [ ] A árvore é a menor estrutura semanticamente suficiente.
 
-### 13.3 Modularização de dentro para fora
+### 13.4 Modularização
 
 - [ ] A modularização começou pelos blocos lógicos internos.
 - [ ] Funções, métodos e componentes foram organizados antes da extração de arquivos.
@@ -759,7 +813,7 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] A arquitetura global surgiu das responsabilidades reais do código.
 - [ ] Nenhuma pasta ou camada foi criada preventivamente.
 
-### 13.4 Nomenclatura
+### 13.5 Nomenclatura
 
 - [ ] Blocos, funções, arquivos e pastas possuem nomes semânticos e sugestivos.
 - [ ] O nome permite inferir a responsabilidade do elemento.
@@ -767,7 +821,7 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] Termos genéricos possuem delimitação semântica.
 - [ ] Convenções prevaleceram somente quando necessárias ou mais eficientes.
 
-### 13.5 Arquivos e código interno
+### 13.6 Arquivos e código interno
 
 - [ ] Cada arquivo possui responsabilidade principal.
 - [ ] Cada função possui responsabilidade principal.
@@ -777,7 +831,7 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] Auxiliares locais permanecem próximos de seus consumidores.
 - [ ] Exports representam interface pública intencional.
 
-### 13.6 Migrações e refatorações
+### 13.7 Migrações e refatorações
 
 - [ ] Todo conteúdo necessário foi colocado na árvore final antes da remoção.
 - [ ] Imports e referências foram atualizados.
