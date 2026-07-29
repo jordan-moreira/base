@@ -2,7 +2,11 @@
 
 ## 1. Objetivo e aplicação
 
-Este documento define os padrões permanentes de engenharia, organização e qualidade aplicáveis aos projetos.
+Este documento define os padrões permanentes de engenharia, organização, estruturação, modularização e qualidade aplicáveis a todos os projetos.
+
+Todo projeto derivado deste repositório deve utilizar estas regras como base para organizar o código dentro dos arquivos e distribuir arquivos e diretórios na árvore do projeto.
+
+A árvore concreta deve ser registrada em `regrasProjeto.md`, mas deve respeitar integralmente os critérios estruturais definidos neste documento.
 
 As regras gerais aplicam-se a todo o código. As regras específicas de front-end e back-end complementam as regras gerais somente nos contextos correspondentes.
 
@@ -116,23 +120,218 @@ Camadas que apenas repassam dados sem transformação, proteção ou coordenaç�
 
 A estrutura concreta de cada projeto deve ser definida em `regrasProjeto.md`.
 
+### 4.1 Padrão obrigatório de organização da árvore
+
+A árvore de diretórios deve representar as responsabilidades reais do sistema.
+
+A organização deve seguir a seguinte ordem de decisão:
+
+1. separar contextos técnicos de alto nível quando possuírem execução, dependências ou responsabilidades distintas;
+2. organizar o código principal por domínio, módulo ou funcionalidade;
+3. manter dentro de cada módulo os elementos específicos daquele contexto;
+4. mover para áreas compartilhadas apenas elementos realmente reutilizados por múltiplos módulos;
+5. manter infraestrutura, configuração e pontos de entrada separados das regras de domínio.
+
+A árvore deve permitir responder, sem abrir os arquivos:
+
+- qual é a responsabilidade de cada diretório;
+- a qual domínio ou funcionalidade um arquivo pertence;
+- quais elementos são específicos;
+- quais elementos são compartilhados;
+- onde estão os pontos de entrada;
+- onde estão as integrações externas;
+- onde estão as regras de negócio.
+
+Não devem existir:
+
+- dois diretórios com a mesma responsabilidade;
+- estruturas antigas mantidas após uma migração;
+- arquivos duplicados em árvores diferentes;
+- diretórios genéricos usados como depósito de código;
+- módulos específicos armazenados em áreas compartilhadas;
+- arquivos compartilhados que dependam de módulos consumidores;
+- diretórios criados apenas para reproduzir uma árvore previamente conhecida;
+- níveis intermediários que não expressem uma responsabilidade real.
+
+Quando um arquivo for movido durante uma reorganização:
+
+1. confirmar que o arquivo necessário existe na árvore final;
+2. atualizar todos os imports e referências;
+3. validar o funcionamento;
+4. remover a versão anterior;
+5. confirmar que não restaram duplicações ou caminhos obsoletos.
+
+A reorganização só estará concluída quando existir uma única árvore válida para cada responsabilidade.
+
+### 4.2 Modelo abstrato da árvore
+
+A estrutura concreta depende da tecnologia e deve ser definida em `regrasProjeto.md`, mas deve derivar conceitualmente do seguinte modelo:
+
+```text
+projeto/
+├── documentação e regras
+├── configurações
+├── scripts e automações
+├── código-fonte/
+│   ├── inicialização e composição
+│   ├── domínios ou funcionalidades
+│   │   └── módulo/
+│   │       ├── interface ou apresentação
+│   │       ├── aplicação ou coordenação
+│   │       ├── domínio ou regras
+│   │       ├── infraestrutura ou integrações
+│   │       └── contratos e testes específicos
+│   ├── compartilhado
+│   └── infraestrutura global
+├── recursos estáticos
+└── testes externos, quando aplicável
+```
+
+Esse modelo é conceitual.
+
+Os nomes, diretórios e camadas concretos só devem existir quando houver responsabilidade real no projeto.
+
+Não é obrigatório criar todas as divisões representadas. É obrigatório preservar a separação semântica correspondente quando essas responsabilidades existirem.
+
 ---
 
 ## 5. Modularização e responsabilidades
 
 ### 5.1 Modularização entre arquivos
 
-- Cada arquivo deve possuir uma responsabilidade principal.
-- Código deve ser extraído quando possuir dependências, testes, reutilização ou ciclo de mudança próprios.
-- Funções auxiliares específicas devem permanecer próximas de onde são usadas.
-- Utilitários genéricos só devem ser criados quando o comportamento for realmente genérico.
+Cada arquivo deve possuir uma responsabilidade principal, identificável por seu nome e por sua posição na árvore.
+
+Um arquivo deve ser separado quando o conteúdo:
+
+- representa um conceito próprio;
+- possui motivo de mudança diferente do restante;
+- depende de recursos diferentes;
+- pode ser testado isoladamente;
+- possui reutilização real;
+- implementa uma fronteira ou contrato;
+- trata uma etapa independente do fluxo;
+- compromete a leitura quando permanece junto ao restante.
+
+A separação deve ocorrer por responsabilidade, e não apenas por tamanho.
+
+Não devem ser criados arquivos diferentes apenas para:
+
+- reduzir artificialmente o número de linhas;
+- armazenar uma única constante sem contexto próprio;
+- encapsular uma função usada uma única vez e inseparável do fluxo;
+- reproduzir uma convenção de outro projeto;
+- antecipar reutilização ainda inexistente;
+- criar camadas que apenas repassam chamadas.
+
+Cada arquivo deve:
+
+- possuir nome semanticamente específico;
+- estar no diretório correspondente à sua responsabilidade;
+- expor apenas o necessário;
+- evitar conhecer detalhes internos de outros módulos;
+- manter auxiliares locais próximos da implementação;
+- importar dependências por interfaces estáveis quando aplicável.
+
+Arquivos genéricos como `utils`, `helpers`, `common`, `service`, `manager`, `misc` ou `shared` não devem existir sem delimitação semântica adicional.
+
+Prefira:
+
+```text
+formatarData.ts
+validarCpf.ts
+calcularTotalPedido.ts
+```
+
+em vez de:
+
+```text
+utils.ts
+```
+
+quando esses comportamentos representarem responsabilidades independentes.
+
+Prefira:
+
+```text
+usuarios/
+├── buscarUsuario.ts
+├── criarUsuario.ts
+└── usuarioRepository.ts
+```
+
+em vez de:
+
+```text
+services/
+└── usuarioService.ts
+```
+
+quando essas operações possuírem responsabilidades, dependências ou ciclos de mudança distintos.
 
 ### 5.2 Modularização dentro dos arquivos
 
-- Funções extensas devem ser divididas por etapas lógicas e responsabilidades.
-- Blocos de transformação, validação, persistência e apresentação não devem ser misturados sem necessidade.
-- A ordem interna deve ser previsível: imports, tipos, constantes, auxiliares, implementação e exports, conforme aplicável.
-- Evitar funções que coordenem múltiplas tarefas independentes.
+O conteúdo de um arquivo deve ser organizado em blocos lógicos previsíveis.
+
+Quando aplicável, utilizar a seguinte ordem:
+
+1. imports;
+2. tipos e contratos locais;
+3. constantes locais;
+4. validações;
+5. funções auxiliares privadas;
+6. implementação principal;
+7. composição ou coordenação;
+8. exports.
+
+Essa ordem pode ser adaptada à linguagem ou framework, mas deve permanecer consistente dentro do projeto.
+
+Cada função deve:
+
+- executar uma responsabilidade principal;
+- possuir nome que descreva a ação realizada;
+- receber apenas os dados necessários;
+- evitar alterar estado externo sem tornar isso explícito;
+- retornar resultado previsível;
+- evitar misturar validação, transformação, persistência e apresentação;
+- delegar etapas independentes para funções próprias;
+- evitar níveis excessivos de aninhamento;
+- tratar erros na fronteira adequada.
+
+Uma função coordenadora pode executar um fluxo composto, desde que delegue as etapas específicas.
+
+Exemplo:
+
+```js
+async function criarPedido(dadosPedido) {
+    const pedidoValidado = validarPedido(dadosPedido);
+    const pedidoCalculado = calcularPedido(pedidoValidado);
+    const pedidoSalvo = await salvarPedido(pedidoCalculado);
+
+    return apresentarPedido(pedidoSalvo);
+}
+```
+
+A função coordenadora descreve o fluxo. Cada etapa mantém sua própria responsabilidade.
+
+Não concentrar no mesmo bloco:
+
+- leitura de entrada;
+- validação;
+- regra de negócio;
+- acesso ao banco;
+- integração externa;
+- formatação da resposta;
+- manipulação visual.
+
+Comentários devem identificar blocos lógicos apenas quando a responsabilidade ou a razão da implementação não estiver clara pelo próprio código.
+
+Não utilizar comentários para compensar:
+
+- funções excessivamente extensas;
+- nomes genéricos;
+- fluxo desorganizado;
+- mistura de responsabilidades;
+- abstrações pouco claras.
 
 ### 5.3 Quando não dividir
 
@@ -149,6 +348,51 @@ Não dividir quando a separação:
 - Duplicação ocasional e pequena pode ser preferível a uma abstração incorreta.
 - A extração deve ocorrer quando a repetição representar o mesmo conceito e possuir tendência real de manutenção conjunta.
 - Não unificar comportamentos que apenas parecem semelhantes.
+
+### 5.5 Limites dos módulos
+
+Cada módulo deve possuir uma fronteira clara.
+
+Um módulo deve concentrar:
+
+- regras específicas do seu domínio;
+- componentes específicos;
+- contratos específicos;
+- serviços específicos;
+- validações específicas;
+- testes específicos;
+- integrações usadas exclusivamente por ele.
+
+Um módulo não deve acessar arquivos internos de outro módulo diretamente.
+
+A comunicação entre módulos deve ocorrer por:
+
+- interface pública;
+- contrato;
+- evento;
+- serviço de aplicação;
+- função explicitamente exportada;
+- mecanismo equivalente definido no projeto.
+
+Elementos compartilhados não devem depender de módulos específicos.
+
+A direção aceitável é:
+
+```text
+módulo específico
+    ↓
+código compartilhado
+```
+
+A direção abaixo deve ser evitada:
+
+```text
+código compartilhado
+    ↓
+módulo específico
+```
+
+Quando uma funcionalidade deixar de ser específica e se tornar realmente compartilhada, ela deve ser movida de forma completa, com atualização dos consumidores e remoção da implementação anterior.
 
 ---
 
@@ -258,445 +502,79 @@ Antes de adicionar uma dependência, verificar se:
 - Dados sensíveis devem ser protegidos em armazenamento, transporte e logs.
 - Não confiar no cliente para decisões de segurança.
 - Dependências e configurações de segurança devem ser mantidas atualizadas conforme o projeto.
-- Falhas de segurança não devem ser tratadas apenas como problemas de interface.
 
-### 8.3 Logs e observabilidade
+### 8.3 Observabilidade
 
-- Logs devem possuir contexto útil, como operação, módulo e identificadores não sensíveis.
-- Não registrar senhas, tokens, segredos ou dados pessoais desnecessários.
-- Níveis de log devem refletir a gravidade e a possibilidade de ação.
-- Logs temporários de depuração devem ser removidos antes da conclusão.
-- Erros não devem ser registrados repetidamente em várias camadas sem ganho de contexto.
+- Logs devem possuir contexto suficiente para diagnóstico.
+- Não registrar segredos, credenciais ou dados sensíveis sem necessidade explícita.
+- Mensagens de log devem ser consistentes e acionáveis.
 - Métricas e rastreamento devem ser adicionados quando houver necessidade operacional real.
 
 ---
 
-## 9. Testes e qualidade
+## 9. Testes e validação
 
-### 9.1 Testes
-
-- Regras de negócio e fluxos críticos devem ser testados.
-- Bugs corrigidos devem receber teste de regressão quando viável.
-- Testes devem validar comportamento observável, não detalhes internos sem relevância contratual.
-- Testes devem ser determinísticos e independentes.
-- Dependências externas devem ser isoladas quando necessário para confiabilidade.
-- A quantidade e o tipo de teste devem ser proporcionais ao risco.
-- Não manter testes que deixaram de representar o comportamento esperado.
-
-### 9.2 Qualidade
-
-Antes de concluir uma alteração:
-
-- remover código morto;
-- remover arquivos órfãos;
-- remover imports e dependências não utilizados;
-- remover logs e comentários temporários;
-- verificar duplicações e estruturas concorrentes;
-- executar tipagem, lint, testes e build disponíveis;
-- confirmar que o comportamento previsto foi preservado;
-- revisar nomes, fronteiras e responsabilidades.
-
-### 9.3 Performance
-
-- Otimizações devem ser motivadas por necessidade real, medição ou risco conhecido.
-- Clareza e corretude não devem ser sacrificadas por micro-otimizações sem evidência.
-- Gargalos devem ser tratados na origem.
-- Cache, memoização, paralelismo e pré-processamento devem possuir estratégia de invalidação, consistência e falha.
+- Alterações devem ser acompanhadas por validação proporcional ao risco.
+- Regras de negócio devem possuir testes quando forem relevantes e estáveis.
+- Testes devem verificar comportamento observável, não detalhes internos desnecessários.
+- Refatorações devem preservar contratos e comportamento existentes.
+- Testes quebrados não devem ser ignorados ou removidos apenas para permitir integração.
+- Cenários de erro e limites devem ser testados quando fizerem parte do comportamento esperado.
 
 ---
 
-## 10. Refatoração
+## 10. Refatoração e manutenção
 
-Refatoração deve melhorar a estrutura sem alterar comportamento observável, contratos ou regras de negócio, salvo quando a mudança funcional estiver explicitamente incluída no escopo.
-
-### 10.1 Separação de escopos
-
-Distinguir claramente:
-
-- refatoração estrutural;
-- alteração funcional;
-- mudança arquitetural;
-- migração tecnológica;
-- correção de bug.
-
-Não combinar escopos independentes sem necessidade.
-
-### 10.2 Regras obrigatórias
-
-- Entender o fluxo existente antes de mover ou remover código.
-- Garantir que todo conteúdo necessário esteja na estrutura final antes de remover a estrutura anterior.
-- Atualizar imports, referências, testes e configurações afetadas.
-- Preservar contratos públicos sem necessidade explícita de alteração.
-- Não renomear APIs públicas apenas por preferência estética.
-- Não alterar layout, comportamento, estado ou regras de negócio em uma refatoração exclusivamente estrutural.
-- Remover definitivamente arquivos, pastas e exports antigos após validar a migração.
-- Não manter cópias de segurança dentro da árvore do projeto.
-- Confirmar que não existem imports ou referências restantes para estruturas removidas.
-- Validar tipagem, lint, testes e build após a mudança.
-- Comparar o comportamento antes e depois quando houver risco relevante.
+- Refatorações não devem alterar comportamento sem autorização explícita.
+- Antes de remover código, confirmar que não existem referências ativas.
+- Durante migrações, colocar todo o conteúdo necessário na estrutura final antes da poda.
+- Após a migração, remover arquivos, diretórios, imports e caminhos obsoletos.
+- Não manter versões antigas e novas da mesma responsabilidade em paralelo.
+- Alterações estruturais devem ser validadas por build, testes e execução dos fluxos afetados.
+- Dívida técnica deliberada deve ser documentada quando não puder ser resolvida no mesmo momento.
 
 ---
 
-# Regras específicas de front-end
-
-## 11. Estrutura do front-end
-
-- Páginas ou telas devem coordenar fluxos, não concentrar toda a implementação.
-- Funcionalidades devem agrupar componentes, estado, regras e integrações relacionadas quando isso melhorar coesão.
-- Componentes específicos devem permanecer próximos de sua página ou funcionalidade.
-- Componentes compartilhados exigem reutilização real e significado consistente.
-- Serviços, assets e estilos devem ser organizados por responsabilidade.
-- A estrutura não deve depender desnecessariamente de um framework específico.
-- Estado deve permanecer no menor escopo capaz de atender aos consumidores.
-
-A arquitetura, a biblioteca de estado, o roteamento e a estratégia de estilos devem ser definidos em `regrasProjeto.md`.
-
----
-
-## 12. Componentes, páginas e estado
-
-### 12.1 Componentes
-
-- Cada componente deve possuir responsabilidade visual ou comportamental clara.
-- Componentes visuais não devem concentrar regras de negócio extensas.
-- Props devem formar contratos pequenos, semânticos e previsíveis.
-- Evitar componentes excessivamente configuráveis que ocultem múltiplas responsabilidades.
-- Extrair um componente quando houver reutilização real, isolamento de comportamento ou ganho claro de leitura.
-- Não criar automaticamente pasta, estilos, tipos, constantes e auxiliares para cada componente.
-- Preferir composição a grandes conjuntos de flags condicionais.
-
-### 12.2 Páginas e telas
-
-- Páginas devem coordenar carregamento, estado e composição da interface.
-- Fluxos complexos devem ser delegados a módulos, hooks ou serviços apropriados.
-- Estados de carregamento, erro, vazio e sucesso devem ser tratados explicitamente.
-- Navegação e parâmetros devem ser validados antes do uso.
-
-### 12.3 Estado
-
-O estado deve ser classificado pelo menor escopo necessário:
-
-1. estado local do componente;
-2. estado compartilhado dentro de uma funcionalidade;
-3. estado compartilhado entre páginas ou fluxos;
-4. estado global da aplicação;
-5. estado remoto proveniente do servidor.
-
-- Preferir estado local quando não houver compartilhamento real.
-- Estado global deve representar dados efetivamente compartilhados ou persistentes entre áreas.
-- Estado remoto deve possuir estratégia clara de carregamento, atualização, cache e invalidação.
-- Dados derivados devem preferencialmente ser calculados, não duplicados.
-- Não duplicar o mesmo estado em múltiplas fontes sem estratégia explícita de sincronização.
-- Efeitos colaterais devem ser isolados e possuir dependências claras.
-- A lógica de estado não deve depender desnecessariamente da camada visual.
-
-### 12.4 Hooks e lógica reutilizável
-
-- Extrair hooks ou equivalentes quando houver lógica de estado ou efeitos reutilizável ou complexa.
-- Hooks não devem apenas renomear uma chamada simples sem adicionar significado.
-- Dependências e efeitos devem ser previsíveis e testáveis.
-
-### 12.5 Regras de negócio no front-end
-
-- Regras de negócio presentes no front-end devem possuir nomes semânticos e permanecer separadas da renderização.
-- Regras complexas devem ser isoladas em módulos testáveis.
-- Validações críticas não devem existir exclusivamente no front-end.
-- A interface pode antecipar restrições para melhorar a experiência, mas o servidor continua responsável por garantir integridade e autorização.
-
-### 12.6 Navegação e rotas
-
-- Rotas, nomes e parâmetros devem seguir convenção consistente.
-- Strings de rotas recorrentes não devem ser espalhadas pela aplicação.
-- Uma página não deve depender de detalhes internos de outra página.
-- Parâmetros recebidos pela navegação devem ser tratados como entrada externa.
-- A aplicação não deve presumir execução obrigatória na raiz do domínio.
-
----
-
-## 13. Interface, estilos e acessibilidade
-
-### 13.1 Interface
-
-- A interface deve preservar consistência visual e comportamental.
-- Estados interativos devem possuir resposta clara.
-- Ações destrutivas ou irreversíveis devem exigir tratamento proporcional ao risco.
-- Mensagens devem orientar o usuário sem expor detalhes técnicos internos.
-- Refatorações estruturais não devem alterar layout ou comportamento visual fora do escopo.
-
-### 13.2 Estilos
-
-- Utilizar uma estratégia principal de estilos definida pelo projeto.
-- Reutilizar tokens para cores, espaçamento, tipografia, bordas e dimensões recorrentes.
-- Evitar valores mágicos repetidos.
-- Estilos específicos devem permanecer próximos do componente quando fizer sentido.
-- Estilos globais devem ser restritos a responsabilidades realmente globais.
-- Não duplicar sistemas visuais concorrentes.
-
-### 13.3 Responsividade
-
-- Tamanhos e dispositivos suportados devem ser definidos no projeto.
-- A interface deve adaptar conteúdo e interação, não apenas reduzir dimensões.
-- Evitar dependência exclusiva de largura fixa.
-- Testar fluxos críticos nos tamanhos relevantes.
-
-### 13.4 Acessibilidade
-
-- Preferir elementos semânticos nativos.
-- Interações devem funcionar por teclado quando aplicável.
-- Controles devem possuir nome acessível.
-- Estados de foco devem permanecer visíveis.
-- Cor não deve ser o único meio de transmitir informação.
-- Imagens informativas devem possuir descrição adequada.
-- Mudanças importantes de estado devem ser comunicadas de forma acessível.
-
----
-
-## 14. Comunicação com serviços
-
-- Centralizar clientes, URL base, autenticação e políticas comuns.
-- Não espalhar endpoints ou detalhes de transporte pelos componentes.
-- A camada visual deve consumir contratos claros.
-- Requisições devem tratar carregamento, sucesso, erro, cancelamento e repetição quando aplicável.
-- Evitar submissões duplicadas.
-- Não assumir que a aplicação será executada na raiz do domínio.
-- Dados recebidos devem ser tratados como externos e potencialmente inválidos.
-- Validação de interface não substitui validação do servidor.
-- Transformações entre contratos externos e modelos internos devem ocorrer em fronteiras identificáveis.
-- Cache no cliente deve possuir critérios claros de validade e invalidação.
-
-### 14.1 Formulários
-
-- Estado, validação, envio e resposta devem possuir responsabilidades claras.
-- Diferenciar campo ausente, formato inválido, regra de negócio violada, falha de comunicação e erro inesperado.
-- Erros devem ser associados ao campo ou ao fluxo correspondente.
-- Dados devem ser normalizados antes do envio quando necessário.
-- O estado de envio deve impedir ações duplicadas.
-- Valores iniciais e reinicialização devem ser previsíveis.
-
----
-
-## 15. Testes e performance do front-end
-
-### 15.1 Testes
-
-- Priorizar fluxos críticos, validações, regras e integrações.
-- Testar comportamento percebido pelo usuário.
-- Evitar testes excessivamente acoplados à árvore interna de componentes.
-- Componentes puramente visuais simples não exigem testes isolados quando já forem cobertos por fluxos relevantes.
-- Navegação, formulários, estados de erro e permissões devem ser testados conforme o risco.
-
-### 15.2 Performance
-
-- Evitar renderizações, cálculos e requisições desnecessárias.
-- Não adicionar memoização sem necessidade demonstrada.
-- Listas extensas devem considerar paginação, virtualização ou carregamento progressivo.
-- Recursos pesados devem ser carregados somente quando necessários.
-- Imagens e assets devem usar formatos e dimensões adequados.
-- Otimizações não devem comprometer consistência de estado ou clareza da implementação.
-
----
-
-# Regras específicas de back-end
-
-## 16. Estrutura do back-end
-
-- A inicialização deve apenas carregar configuração, montar dependências e iniciar o sistema.
-- Regras de negócio não devem permanecer no ponto de entrada.
-- Módulos devem ser organizados por domínio ou responsabilidade.
-- Fronteiras entre transporte, aplicação, domínio e infraestrutura devem ser claras quando essas camadas existirem.
-- Não criar camadas sem responsabilidade real.
-- Configuração e dependências devem ser centralizadas e validadas.
-- Implementações de infraestrutura não devem contaminar desnecessariamente o domínio.
-
-A arquitetura concreta, o runtime, o framework, o banco e as integrações devem ser definidos em `regrasProjeto.md`.
-
----
-
-## 17. Transporte, domínio e casos de uso
-
-### 17.1 Transporte
-
-- Rotas, handlers e controllers devem tratar protocolo, autenticação, entrada e tradução de resposta.
-- Controllers devem ser pequenos e não conter regras de negócio extensas.
-- Detalhes de HTTP, fila ou CLI não devem vazar para o domínio sem necessidade.
-- Respostas devem seguir contratos consistentes.
-- Status e códigos de erro devem representar corretamente o resultado.
-
-### 17.2 Casos de uso e serviços
-
-- Casos de uso devem coordenar operações de aplicação.
-- Cada caso de uso deve representar uma intenção clara do sistema.
-- Serviços não devem se tornar agrupamentos genéricos de funções sem coesão.
-- Coordenação, validação de negócio e transações devem possuir fronteiras explícitas.
-- Dependências devem ser recebidas de forma identificável e testável.
-
-### 17.3 Domínio
-
-- Regras de negócio devem ser explicitamente nomeadas e centralizadas.
-- O domínio não deve depender desnecessariamente de transporte, framework ou banco.
-- Invariantes devem ser protegidas na camada adequada.
-- Entidades e valores devem representar conceitos reais do negócio, não apenas tabelas.
-- Regras não devem ser duplicadas entre controllers, serviços e persistência.
-
----
-
-## 18. Persistência, contratos e validação
-
-### 18.1 Persistência
-
-- Consultas e detalhes do banco devem permanecer em módulos de persistência identificáveis.
-- Controllers não devem acessar o banco diretamente sem justificativa explícita.
-- Repositories ou equivalentes devem ser criados quando isolarem consultas, contratos ou dependências relevantes.
-- Não criar repositories que apenas repassem chamadas sem agregar fronteira ou significado.
-- Consultas devem buscar apenas os dados necessários.
-- Integridade deve ser protegida pelo banco quando possível.
-- Alterações de schema devem possuir migração versionada.
-- Migrações devem ser reproduzíveis e compatíveis com a estratégia de implantação.
-- Migrações destrutivas devem definir estratégia de backup, reversão ou recuperação.
-- Dados iniciais, dados de teste e dados de produção devem possuir responsabilidades e mecanismos separados.
-- Migrações não devem executar cargas arbitrárias de dados sem justificativa e controle explícitos.
-
-### 18.2 Contratos e DTOs
-
-- Entradas e saídas externas devem possuir contratos explícitos.
-- DTOs devem representar a fronteira e não necessariamente o modelo interno.
-- Não retornar entidades de persistência diretamente quando isso expuser detalhes internos.
-- Versionar contratos incompatíveis quando necessário.
-- Campos opcionais, nulos e valores padrão devem ser definidos intencionalmente.
-
-### 18.3 Validação
-
-- Toda entrada externa deve ser validada.
-- Validação estrutural deve ocorrer antes da regra de negócio.
-- Validação estrutural não substitui invariantes do domínio.
-- Normalização deve ocorrer de maneira previsível.
-- Dados inválidos devem produzir respostas consistentes e sem exposição interna.
-- Regras críticas não devem depender apenas de validação no cliente.
-
----
-
-## 19. Segurança, integrações e consistência
-
-### 19.1 Autenticação e autorização
-
-- Autenticação identifica o agente; autorização define o que ele pode realizar.
-- Autorização deve ser validada no servidor para cada operação protegida.
-- Aplicar menor privilégio.
-- Sessões, tokens e credenciais devem possuir expiração e armazenamento adequados.
-- Não confiar em identificadores ou permissões enviados pelo cliente.
-- Operações sensíveis devem possuir rastreabilidade proporcional ao risco.
-
-### 19.2 Segurança operacional
-
-- CORS deve permitir somente origens, métodos e cabeçalhos necessários.
-- Limites de tamanho, frequência e duração devem ser definidos conforme o risco.
-- Rate limiting deve ser aplicado em operações suscetíveis a abuso.
-- Credenciais e senhas devem utilizar armazenamento apropriado e nunca ser registradas em texto puro.
-- Entradas devem ser protegidas contra injeção, traversal, execução indevida e formatos maliciosos conforme a tecnologia utilizada.
-- Configurações permissivas de desenvolvimento não devem ser transportadas automaticamente para produção.
-
-### 19.3 Integrações externas
-
-- Integrações devem ser encapsuladas atrás de contratos internos claros.
-- Definir timeout, tratamento de falha, fallback e política de repetição.
-- Respostas externas devem ser validadas antes de afetar o estado interno.
-- Erros externos devem ser convertidos para erros internos previsíveis.
-- Repetições devem evitar duplicação de efeitos.
-- Operações não idempotentes não devem ser repetidas automaticamente sem proteção explícita.
-- Falhas externas não devem corromper o estado interno.
-- Dependência externa indisponível deve produzir comportamento previsível.
-
-### 19.4 Transações e consistência
-
-- Operações compostas devem preservar invariantes.
-- Usar transações quando múltiplas alterações precisarem ocorrer de forma atômica.
-- Transações devem ser mantidas pelo menor tempo necessário.
-- Não realizar chamadas externas dentro de transações sem justificativa forte.
-- Processos distribuídos devem definir estratégia para falha parcial, reversão, compensação ou retomada.
-- O resultado de falhas intermediárias deve ser conhecido e testável.
-
-### 19.5 Concorrência e idempotência
-
-- Operações sujeitas a repetição devem considerar idempotência.
-- Concorrência deve proteger recursos compartilhados e invariantes.
-- Não presumir que uma verificação seguida de escrita seja atômica.
-- Atualizações concorrentes devem possuir estratégia de bloqueio, versão, restrição ou detecção de conflito quando necessário.
-- Filas e tarefas assíncronas devem tratar repetição, ordem, reprocessamento e falha.
-- Identificadores idempotentes devem possuir escopo e validade definidos.
-
-### 19.6 Logs
-
-- Registrar contexto suficiente para reconstruir o fluxo.
-- Não registrar segredos ou corpos sensíveis indiscriminadamente.
-- Correlation IDs ou equivalentes devem ser usados quando necessários para rastrear operações distribuídas.
-- Falhas devem ser registradas na camada que possui contexto útil, evitando duplicação sem valor.
-
----
-
-## 20. Testes e performance do back-end
-
-### 20.1 Testes
-
-- Testes unitários devem proteger regras isoladas.
-- Testes de integração devem validar banco, filas, contratos e integrações relevantes.
-- Testes end-to-end devem cobrir fluxos críticos quando o risco justificar.
-- Persistência deve ser testada contra comportamento real quando mocks não forem suficientes.
-- Autorização, validação, transações, concorrência e falhas externas devem receber cobertura proporcional ao risco.
-- Testes devem controlar relógio, aleatoriedade e dependências externas quando necessário.
-
-### 20.2 Performance
-
-- Evitar consultas repetidas, N+1, processamento redundante e carregamento excessivo.
-- Paginar conjuntos potencialmente grandes.
-- Índices devem refletir consultas reais e ser avaliados pelo custo de escrita.
-- Cache deve possuir estratégia de invalidação, consistência e fallback.
-- Processamento pesado deve ser deslocado para tarefas assíncronas somente quando isso melhorar o fluxo e a confiabilidade.
-- Limites de memória, tempo e concorrência devem ser considerados.
-- Otimizar com base em métricas, perfis ou risco conhecido.
-
----
-
-## 21. Checklist final
-
-### 21.1 Geral
-
-- [ ] A alteração respeita `regrasProjeto.md` e este documento.
-- [ ] A solução possui responsabilidade e fronteiras claras.
-- [ ] A arquitetura é proporcional à complexidade.
-- [ ] Não foram criadas abstrações, arquivos ou pastas sem necessidade.
-- [ ] Nomes são semânticos e seguem as convenções.
-- [ ] Contratos e tipos estão explícitos.
-- [ ] Não existem imports, dependências ou código mortos.
-- [ ] Erros e entradas externas foram tratados.
-- [ ] Dados sensíveis não são expostos ou registrados.
-- [ ] Testes relevantes foram criados ou atualizados.
-- [ ] Tipagem, lint, testes e build disponíveis foram executados.
-- [ ] A documentação afetada foi atualizada.
-
-### 21.2 Front-end
-
-- [ ] Componentes e páginas possuem responsabilidades claras.
-- [ ] Estado permanece no menor escopo possível.
-- [ ] Não há duplicação desnecessária de estado derivado.
-- [ ] Loading, erro, vazio e sucesso foram tratados.
-- [ ] Rotas e parâmetros são centralizados e validados.
-- [ ] A interface preserva responsividade e acessibilidade.
-- [ ] Requisições e formulários evitam ações duplicadas.
-- [ ] Layout e comportamento não foram alterados fora do escopo.
-
-### 21.3 Back-end
-
-- [ ] Controllers tratam apenas responsabilidades de transporte.
-- [ ] Regras de negócio estão centralizadas.
-- [ ] Entradas e respostas possuem contratos e validação.
-- [ ] Autenticação e autorização foram aplicadas corretamente.
-- [ ] Configurações obrigatórias são validadas na inicialização.
-- [ ] Persistência protege integridade e evita consultas desnecessárias.
-- [ ] Migrações possuem estratégia segura de implantação e recuperação.
-- [ ] Transações, concorrência e idempotência preservam consistência.
-- [ ] Integrações possuem timeout, validação e tratamento de falha.
-- [ ] Logs permitem diagnóstico sem expor dados sensíveis.
-
----
-
-Este documento deve permanecer estável. Alterações devem representar evolução real do padrão de desenvolvimento, e não particularidades isoladas de um único projeto.
+## 11. Verificação de estrutura e modularização
+
+Antes de considerar uma implementação ou refatoração concluída, verificar:
+
+### 11.1 Árvore de diretórios
+
+- [ ] Cada diretório possui responsabilidade identificável.
+- [ ] Não existem árvores concorrentes para a mesma responsabilidade.
+- [ ] Não existem arquivos duplicados em caminhos diferentes.
+- [ ] Não existem diretórios antigos após migrações concluídas.
+- [ ] Código específico permanece próximo do módulo consumidor.
+- [ ] Código compartilhado possui reutilização real.
+- [ ] A árvore concreta está documentada em `regrasProjeto.md`.
+- [ ] Os nomes permitem localizar o conteúdo sem abrir os arquivos.
+
+### 11.2 Arquivos
+
+- [ ] Cada arquivo possui responsabilidade principal.
+- [ ] O nome do arquivo representa seu conteúdo.
+- [ ] O arquivo está no diretório semanticamente correto.
+- [ ] Não há mistura desnecessária de domínio, persistência, integração e apresentação.
+- [ ] Auxiliares locais permanecem próximos de seus consumidores.
+- [ ] Arquivos genéricos foram evitados ou devidamente delimitados.
+- [ ] Exports representam uma interface pública intencional.
+
+### 11.3 Código interno
+
+- [ ] Cada função possui uma responsabilidade principal.
+- [ ] Funções coordenadoras delegam etapas independentes.
+- [ ] Validação, transformação, persistência e apresentação estão separadas quando necessário.
+- [ ] Não existem blocos extensos executando tarefas não relacionadas.
+- [ ] A ordem interna do arquivo é previsível.
+- [ ] Os nomes descrevem intenção.
+- [ ] Comentários explicam decisões, não linhas de código.
+
+### 11.4 Migrações e refatorações
+
+- [ ] Todo conteúdo necessário foi colocado na árvore final antes da remoção.
+- [ ] Imports e referências foram atualizados.
+- [ ] A implementação anterior foi removida.
+- [ ] Não restaram caminhos obsoletos.
+- [ ] O comportamento foi validado após a reorganização.
+- [ ] A refatoração não alterou contratos ou regras de negócio sem autorização.
