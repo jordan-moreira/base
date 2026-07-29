@@ -4,9 +4,9 @@
 
 Este documento define os padrões permanentes de engenharia, organização, estruturação, modularização e qualidade aplicáveis a todos os projetos.
 
-Todo projeto derivado deste repositório deve utilizar estas regras como base para organizar o código dentro dos arquivos e distribuir arquivos e diretórios na árvore do projeto.
+Todo projeto derivado deste repositório deve utilizar estas regras como base para organizar o código dentro dos arquivos e distribuir blocos lógicos, funções, arquivos, diretórios, módulos e domínios na árvore do projeto.
 
-A árvore concreta deve ser registrada em `regrasProjeto.md`, mas deve respeitar integralmente os critérios estruturais definidos neste documento.
+A estrutura concreta deve ser registrada em `regrasProjeto.md`, respeitando integralmente os critérios definidos neste documento.
 
 As regras gerais aplicam-se a todo o código. As regras específicas de front-end e back-end complementam as regras gerais somente nos contextos correspondentes.
 
@@ -14,9 +14,10 @@ As decisões específicas de cada projeto, como stack, arquitetura adotada, estr
 
 Em caso de conflito, aplicar a seguinte precedência:
 
-1. `regrasProjeto.md`;
-2. este documento;
-3. convenções já consolidadas no projeto.
+1. exigências técnicas obrigatórias da linguagem, framework ou ferramenta;
+2. `regrasProjeto.md`;
+3. este documento;
+4. convenções já consolidadas no projeto.
 
 Exceções devem ser explícitas, justificadas e restritas ao menor escopo possível.
 
@@ -32,218 +33,246 @@ Exceções devem ser explícitas, justificadas e restritas ao menor escopo poss�
 
 ### 2.2 Responsabilidade
 
-- Cada módulo, arquivo, função ou componente deve possuir uma responsabilidade principal claramente identificável.
+- Cada nó estrutural deve possuir uma responsabilidade principal claramente identificável.
 - Uma responsabilidade representa um motivo para mudança.
-- Quando um elemento tende a mudar por motivos distintos, ele deve ser avaliado para separação.
+- Quando um nó tende a mudar por motivos distintos, ele deve ser avaliado para divisão.
 
 ### 2.3 Coesão
 
 - Elementos que colaboram para resolver o mesmo problema devem permanecer próximos.
-- Código não relacionado deve permanecer separado, mesmo quando possa tecnicamente compartilhar o mesmo arquivo.
+- Código não relacionado deve permanecer separado, mesmo quando possa tecnicamente compartilhar o mesmo nó.
 
 ### 2.4 Acoplamento
 
-- Dependências entre módulos devem ser explícitas e reduzidas ao necessário.
-- Alterações internas de um módulo não devem exigir mudanças indiscriminadas em outros módulos.
-- Módulos não devem depender de detalhes internos de outros módulos.
+- Dependências entre nós devem ser explícitas e reduzidas ao necessário.
+- Alterações internas de um nó não devem exigir mudanças indiscriminadas em outros nós.
+- Um nó não deve depender de detalhes internos de outro nó fora de sua fronteira permitida.
 
 ### 2.5 Arquitetura proporcional
 
 - A arquitetura deve crescer conforme a complexidade real do projeto.
 - Projetos pequenos não devem reproduzir estruturas próprias de sistemas grandes sem necessidade.
 - Projetos maiores não devem permanecer em estruturas simples quando isso comprometer manutenção, testes ou evolução.
-- Nenhuma camada, abstração ou diretório deve existir apenas para satisfazer um padrão teórico.
+- Nenhuma camada, abstração, arquivo ou diretório deve existir apenas para satisfazer um padrão teórico.
 
 ### 2.6 Proximidade
 
-- Código específico deve permanecer próximo do domínio, funcionalidade, página ou módulo que o utiliza.
-- Código só deve ser movido para áreas compartilhadas quando houver reutilização real, estável e semanticamente coerente.
+- Código específico deve permanecer próximo do domínio, funcionalidade, página, módulo, arquivo ou função que o utiliza.
+- Código só deve ser promovido para áreas compartilhadas quando houver reutilização real, estável e semanticamente coerente.
 
-### 2.7 Árvore mínima suficiente
+### 2.7 Modelo universal da árvore do projeto
 
-A árvore de diretórios deve utilizar o menor número possível de arquivos, diretórios e níveis de profundidade capaz de preservar:
+A estrutura completa de um projeto deve ser compreendida como uma única árvore semântica.
+
+- A raiz é o diretório raiz do projeto.
+- Os nós intermediários podem ser contextos, domínios, módulos, diretórios, arquivos, funções, métodos, componentes ou blocos lógicos.
+- As folhas são os menores blocos lógicos indivisíveis do código.
+
+Um bloco lógico é indivisível quando sua separação não produzir responsabilidades independentes e apenas aumentar a navegação, o acoplamento ou a dificuldade de entendimento.
+
+A definição de folha não está limitada a arquivos ou funções. Ela representa o menor elemento lógico que ainda possui significado coeso dentro da implementação.
+
+Exemplo conceitual:
+
+```text
+raiz do projeto
+└── domínio
+    └── módulo
+        └── diretório
+            └── arquivo
+                └── função
+                    └── bloco lógico indivisível
+```
+
+Nem todos os níveis precisam existir. Cada nível deve ser criado somente quando representar uma responsabilidade real.
+
+### 2.8 Árvore mínima semanticamente suficiente
+
+A estrutura deve utilizar o menor número possível de nós, folhas e níveis de profundidade capaz de preservar:
 
 - separação clara de responsabilidades;
 - localização intuitiva do código;
+- coesão;
 - isolamento entre domínios;
 - manutenção independente;
 - testabilidade;
 - direção previsível das dependências.
 
-A redução da quantidade de folhas não deve resultar em arquivos genéricos, responsabilidades misturadas ou diretórios usados como depósitos de código.
+A redução da quantidade de nós não deve resultar em responsabilidades misturadas, arquivos genéricos, funções extensas ou diretórios usados como depósitos.
 
-A estrutura correta é a menor árvore semanticamente suficiente, e não simplesmente a árvore com menor quantidade absoluta de arquivos.
+A estrutura correta é a menor árvore semanticamente suficiente, e não simplesmente a árvore com menor quantidade absoluta de elementos.
 
-### 2.8 Balanceamento estrutural
+### 2.9 Balanceamento recursivo
 
-A árvore deve permanecer semanticamente equilibrada entre concentração e fragmentação.
+As mesmas regras de balanceamento devem ser aplicadas recursivamente da raiz do projeto até cada menor bloco lógico indivisível.
 
-Considera-se concentração excessiva quando:
+Todo nó deve ser avaliado considerando:
 
-- um diretório reúne responsabilidades não relacionadas;
-- um arquivo contém múltiplos fluxos independentes;
-- nomes genéricos escondem conceitos distintos;
-- localizar uma responsabilidade exige conhecer previamente sua implementação.
+- a responsabilidade que representa;
+- as responsabilidades de seus filhos;
+- a quantidade de filhos;
+- a facilidade de localizar e compreender cada filho;
+- a profundidade necessária para alcançar suas folhas;
+- o custo de navegação criado pela estrutura.
 
-Considera-se fragmentação excessiva quando:
+Um nó deve permanecer indiviso enquanto:
 
-- existem muitos diretórios com uma única folha sem justificativa;
-- um fluxo simples está distribuído por vários níveis;
-- funções inseparáveis foram transformadas em arquivos independentes;
-- existem camadas que apenas repassam chamadas;
-- a navegação entre arquivos é maior que o ganho de clareza;
-- a árvore reproduz divisões teóricas sem necessidade concreta.
+- representar adequadamente uma única responsabilidade;
+- seus filhos forem semanticamente relacionados;
+- a quantidade de filhos permitir localização e manutenção previsíveis;
+- sua profundidade for proporcional à complexidade representada.
 
-O equilíbrio deve ser determinado pela responsabilidade, e não pela quantidade uniforme de arquivos em cada diretório.
+Um nó deve ser dividido ou seus filhos devem ser realocados quando:
+
+1. seus filhos representarem responsabilidades diferentes que precisem ser isoladas;
+2. a quantidade de filhos prejudicar localização, compreensão, manutenção ou evolução;
+3. a responsabilidade do nó se tornar extensa a ponto de exigir sub-responsabilidades explícitas;
+4. a divisão reduzir acoplamento ou permitir testes independentes;
+5. a realocação reduzir profundidade desnecessária ou sobrecarga do nó atual.
+
+A quantidade de filhos é um indicador, não um limite numérico absoluto. A divisão só deve ocorrer quando essa quantidade causar prejuízo semântico ou operacional.
+
+### 2.10 Balanceamento horizontal e vertical
+
+O balanceamento horizontal controla a quantidade e a relação semântica dos filhos de cada nó.
+
+O balanceamento vertical controla a profundidade entre a raiz e as folhas.
+
+A árvore está adequadamente balanceada quando:
+
+- cada nó possui filhos semanticamente relacionados;
+- nós sobrecarregados são subdivididos apenas quando existem grupos reais;
+- não existem níveis intermediários sem responsabilidade própria;
+- não existem cadeias de nós com filho único sem justificativa;
+- a profundidade é proporcional à complexidade;
+- a largura não impede localização direta;
+- nenhuma divisão existe apenas por simetria visual.
+
+### 2.11 Modularização de dentro para fora
+
+Toda modularização deve começar no menor nível aplicável e avançar progressivamente para níveis superiores.
+
+A ordem obrigatória de avaliação é:
+
+1. blocos lógicos internos;
+2. funções, métodos ou componentes;
+3. arquivos;
+4. diretórios;
+5. módulos;
+6. domínios ou contextos;
+7. estrutura global do projeto.
+
+Em cada nível:
+
+1. organizar os elementos existentes;
+2. avaliar responsabilidade, coesão, dependências e extensão;
+3. manter no nível atual o que continuar semanticamente coeso;
+4. separar ou promover apenas responsabilidades independentes;
+5. reavaliar largura e profundidade após a alteração.
+
+A arquitetura global deve emergir das responsabilidades reais do código organizado. Não deve ser imposta antecipadamente por meio de pastas, camadas ou módulos vazios.
 
 ---
 
-## 3. Critérios de decisão arquitetural
+## 3. Critérios universais de divisão e alocação
 
-Antes de criar uma nova abstração, pasta, camada, serviço ou módulo, verificar:
+### 3.1 Regra de divisão de qualquer nó
 
-- existe uma responsabilidade própria e estável;
-- há redução real de acoplamento ou complexidade;
-- existe reutilização concreta, e não apenas hipotética;
-- o elemento possui ciclo de vida ou dependências próprias;
-- a separação melhora leitura, testes ou manutenção;
-- não existe alternativa mais simples com a mesma clareza.
+Um nó deve ser dividido quando ocorrer pelo menos uma destas condições:
 
-### 3.1 Criar um novo diretório
+- contém responsabilidades diferentes;
+- possui filhos com ciclos de mudança distintos;
+- mistura fronteiras técnicas incompatíveis;
+- sua responsabilidade única tornou-se extensa e possui sub-responsabilidades nomeáveis;
+- a quantidade de filhos dificulta localização, leitura, testes ou manutenção;
+- partes internas possuem dependências ou consumidores independentes;
+- a divisão reduz acoplamento relevante;
+- a divisão torna contratos ou limites mais claros.
 
-Criar um novo diretório somente quando ele:
+O tamanho físico, isoladamente, não justifica divisão.
 
-- representar uma responsabilidade semanticamente identificável;
-- agrupar elementos relacionados;
-- separar código de natureza diferente;
-- representar domínio, funcionalidade, fronteira técnica ou categoria estável;
-- reduzir mistura de responsabilidades no diretório pai;
-- melhorar a localização dos arquivos;
-- evitar colisões semânticas entre conteúdos diferentes.
+Quantidade de linhas, funções, arquivos ou diretórios deve ser tratada como sinal para análise, nunca como regra automática.
 
-Não criar um diretório apenas porque:
+### 3.2 Regra de permanência no mesmo nó
 
-- existe um único arquivo de determinado tipo;
-- outra arquitetura utiliza esse diretório;
-- futuramente outros arquivos poderão ser adicionados;
-- o nome técnico do arquivo permite classificá-lo;
-- a separação torna a árvore visualmente simétrica.
+Elementos devem permanecer no mesmo nó quando:
 
-Diretórios contendo uma única folha são aceitáveis somente quando:
+- participam do mesmo fluxo;
+- possuem o mesmo motivo de mudança;
+- utilizam as mesmas dependências;
+- não possuem valor ou consumidores independentes;
+- sua separação aumentaria apenas a navegação;
+- o nó atual continua claro, coeso e previsível.
 
-- representam uma fronteira arquitetural real;
-- são exigidos pela tecnologia;
-- isolam configuração, integração ou recurso com ciclo de vida próprio;
-- preservam uma organização necessária entre módulos equivalentes;
-- possuem expansão concreta e imediata já prevista.
+### 3.3 Regra de alocação
 
-Caso contrário, o arquivo deve permanecer no diretório semanticamente mais próximo.
+Cada elemento deve ser alocado no menor nó semanticamente correto capaz de representá-lo.
 
-### 3.2 Criar um novo arquivo
+Ao dividir um nó:
 
-Criar um novo arquivo quando o conteúdo:
+- criar nós irmãos quando as responsabilidades estiverem no mesmo nível de abstração;
+- criar subnós quando representarem partes internas de uma responsabilidade maior;
+- realocar para outro ramo quando a responsabilidade pertencer a outro domínio ou contexto;
+- criar área compartilhada somente quando houver consumidores reais em ramos distintos;
+- preservar uma única localização canônica para cada responsabilidade.
 
-- possuir responsabilidade própria;
-- possuir nome semântico próprio;
-- mudar por motivo diferente do restante;
-- possuir dependências próprias;
-- representar contrato, componente, engine, store, serviço ou regra independente;
-- puder ser testado isoladamente;
-- possuir reutilização real;
-- comprometer a coesão ou leitura do arquivo atual.
+A divisão não deve criar nós primos artificialmente apenas para distribuir visualmente a árvore.
 
-Não criar um arquivo apenas para:
+### 3.4 Regra de parada
 
-- reduzir artificialmente o número de linhas;
-- armazenar uma constante local;
-- separar uma função privada inseparável do fluxo;
-- encapsular poucas linhas sem responsabilidade própria;
-- criar um wrapper que apenas repassa parâmetros;
-- antecipar reutilização inexistente;
-- reproduzir um modelo estrutural previamente conhecido.
+A modularização deve parar quando todos os nós avaliados:
 
-### 3.3 Criar uma abstração
+- representarem responsabilidades claras;
+- possuírem filhos semanticamente relacionados;
+- apresentarem quantidade administrável de filhos;
+- mantiverem profundidade proporcional;
+- não exigirem conhecimento excessivo para localização;
+- não puderem ser divididos sem criar fragmentação artificial.
 
-Criar somente quando ela eliminar repetição relevante, estabilizar um contrato, isolar uma dependência ou representar um conceito real do domínio.
+### 3.5 Criar uma abstração
+
+Criar uma abstração somente quando ela:
+
+- eliminar repetição relevante;
+- estabilizar um contrato;
+- isolar uma dependência;
+- representar conceito real do domínio;
+- proteger uma fronteira;
+- simplificar consumidores.
 
 Não abstrair apenas para antecipar necessidades futuras.
 
-### 3.4 Compartilhar código
+### 3.6 Compartilhar código
 
 Compartilhar somente quando os usos possuírem o mesmo significado e comportamento esperado.
 
 Semelhança visual ou estrutural isolada não é suficiente para justificar compartilhamento.
 
-### 3.5 Adicionar uma camada
+### 3.7 Adicionar uma camada
 
-Adicionar somente quando houver responsabilidade distinta, fronteira técnica ou regra de dependência que justifique sua existência.
+Adicionar uma camada somente quando houver responsabilidade distinta, fronteira técnica ou regra de dependência que justifique sua existência.
 
-Camadas que apenas repassam dados sem transformação, proteção ou coordenação devem ser evitadas.
+Camadas que apenas repassam dados sem transformação, proteção, coordenação ou adaptação devem ser evitadas.
 
 ---
 
 ## 4. Organização e arquitetura
 
+### 4.1 Organização obrigatória
+
 - A estrutura deve ser organizada por responsabilidade, domínio ou funcionalidade, conforme a natureza do projeto.
-- Cada diretório deve possuir propósito claro e nome semanticamente coerente.
+- Cada nó deve possuir propósito claro e nome semanticamente coerente.
 - A árvore deve permitir localizar um código sem conhecer previamente toda a implementação.
-- Arquivos relacionados devem permanecer próximos.
+- Elementos relacionados devem permanecer próximos.
 - Código compartilhado deve ser separado de código específico.
 - Não manter duas árvores concorrentes para a mesma responsabilidade.
-- Não preservar diretórios antigos após uma migração concluída.
-- Não criar arquivos `index` apenas para reexportar automaticamente todo o conteúdo de uma pasta.
-- Reexports devem existir somente quando definirem uma interface pública clara.
-- Dependências devem seguir uma direção previsível e evitar ciclos.
-- As fronteiras entre módulos devem ser explícitas.
+- Não preservar estruturas antigas após uma migração concluída.
+- Dependências devem seguir direção previsível e evitar ciclos.
+- Fronteiras entre módulos devem ser explícitas.
 
 A estrutura concreta de cada projeto deve ser definida em `regrasProjeto.md`.
 
-### 4.1 Padrão obrigatório de organização da árvore
-
-A árvore de diretórios deve representar as responsabilidades reais do sistema.
-
-A organização deve seguir a seguinte ordem de decisão:
-
-1. separar contextos técnicos de alto nível quando possuírem execução, dependências ou responsabilidades distintas;
-2. organizar o código principal por domínio, módulo ou funcionalidade;
-3. manter dentro de cada módulo os elementos específicos daquele contexto;
-4. mover para áreas compartilhadas apenas elementos realmente reutilizados por múltiplos módulos;
-5. manter infraestrutura, configuração e pontos de entrada separados das regras de domínio.
-
-A árvore deve permitir responder, sem abrir os arquivos:
-
-- qual é a responsabilidade de cada diretório;
-- a qual domínio ou funcionalidade um arquivo pertence;
-- quais elementos são específicos;
-- quais elementos são compartilhados;
-- onde estão os pontos de entrada;
-- onde estão as integrações externas;
-- onde estão as regras de negócio.
-
-Não devem existir:
-
-- dois diretórios com a mesma responsabilidade;
-- estruturas antigas mantidas após uma migração;
-- arquivos duplicados em árvores diferentes;
-- diretórios genéricos usados como depósito de código;
-- módulos específicos armazenados em áreas compartilhadas;
-- arquivos compartilhados que dependam de módulos consumidores;
-- diretórios criados apenas para reproduzir uma árvore previamente conhecida;
-- níveis intermediários que não expressem uma responsabilidade real.
-
-Quando um arquivo for movido durante uma reorganização:
-
-1. confirmar que o arquivo necessário existe na árvore final;
-2. atualizar todos os imports e referências;
-3. validar o funcionamento;
-4. remover a versão anterior;
-5. confirmar que não restaram duplicações ou caminhos obsoletos.
-
-A reorganização só estará concluída quando existir uma única árvore válida para cada responsabilidade.
-
-### 4.2 Modelo abstrato da árvore
-
-A estrutura concreta depende da tecnologia e deve ser definida em `regrasProjeto.md`, mas deve derivar conceitualmente do seguinte modelo:
+### 4.2 Modelo abstrato da estrutura
 
 ```text
 projeto/
@@ -265,176 +294,170 @@ projeto/
 └── testes externos, quando aplicável
 ```
 
-Esse modelo é conceitual.
+Esse modelo é conceitual. Nenhum diretório ou camada é obrigatório sem responsabilidade real.
 
-Os nomes, diretórios e camadas concretos só devem existir quando houver responsabilidade real no projeto.
+### 4.3 Profundidade controlada
 
-Não é obrigatório criar todas as divisões representadas. É obrigatório preservar a separação semântica correspondente quando essas responsabilidades existirem.
+A profundidade deve ser a menor possível sem comprometer a separação semântica.
 
-### 4.3 Profundidade mínima necessária
+Um novo nível só deve ser criado quando:
 
-A profundidade da árvore deve ser a menor possível sem comprometer a separação semântica.
-
-Um novo nível de diretório só deve ser criado quando:
-
+- representar responsabilidade própria;
 - agrupar múltiplos elementos relacionados;
-- representar uma responsabilidade própria;
 - separar conteúdo de natureza distinta;
-- reduzir mistura relevante no nível atual;
-- tornar a localização mais previsível.
+- reduzir sobrecarga real no nível atual;
+- tornar localização mais previsível.
 
-Não criar níveis intermediários que:
+Não criar níveis que:
 
 - apenas repitam o nome do nível anterior;
-- contenham uma única folha sem justificativa;
-- representem somente uma categoria técnica desnecessária;
-- aumentem a navegação sem melhorar entendimento.
+- contenham um único filho sem justificativa;
+- representem somente categoria técnica desnecessária;
+- aumentem navegação sem melhorar entendimento.
 
-### 4.4 Promoção progressiva da estrutura
+### 4.4 Largura controlada
 
-Todo código deve começar na estrutura mais simples semanticamente correta.
+Não existe quantidade máxima fixa de filhos por nó.
 
-Um conteúdo deve ser promovido para novo arquivo, diretório ou módulo somente quando:
+Um nó deve ser avaliado para subdivisão quando:
 
-- adquirir responsabilidade própria;
-- passar a possuir múltiplos elementos relacionados;
-- ganhar dependências ou ciclo de mudança próprios;
-- precisar ser testado isoladamente;
-- possuir mais de um consumidor real;
-- comprometer a coesão da estrutura atual.
+- contém muitos elementos difíceis de localizar;
+- utiliza prefixos repetidos para simular agrupamentos;
+- mistura grupos semanticamente distintos;
+- novos elementos não possuem posição previsível;
+- sua manutenção exige busca frequente por conteúdo.
 
-Não criar antecipadamente uma estrutura destinada a uma complexidade que ainda não existe.
+Não subdividir apenas para reduzir visualmente a quantidade de filhos.
 
-A estrutura deve crescer conforme a responsabilidade cresce.
+### 4.5 Promoção progressiva
 
-### 4.5 Proximidade antes do compartilhamento
+Todo conteúdo deve começar na estrutura mais simples semanticamente correta.
+
+A promoção deve seguir, quando necessária:
+
+```text
+bloco lógico
+→ função, método ou componente
+→ arquivo
+→ diretório
+→ módulo
+→ domínio
+→ estrutura global
+```
+
+Um elemento só deve subir de nível quando adquirir responsabilidade, dependências, consumidores, contrato ou ciclo de mudança próprios.
+
+### 4.6 Proximidade antes do compartilhamento
 
 Todo código deve permanecer próximo do consumidor principal durante sua criação inicial.
 
-Mover para uma área compartilhada somente quando:
+Mover para área compartilhada somente quando:
 
 - existirem consumidores reais em mais de um módulo;
 - o significado for igual em todos os usos;
 - o comportamento for estável;
 - o código não depender de detalhes internos de um módulo específico.
 
-Não mover código para diretórios como `shared`, `common`, `utils`, `components`, `services` ou equivalentes apenas por possibilidade futura de reutilização.
+### 4.7 Diretórios genéricos
 
-### 4.6 Diretórios genéricos
+Diretórios como `components`, `utils`, `services`, `helpers`, `common`, `shared`, `types` e `hooks` devem possuir escopo claro.
 
-Diretórios genéricos devem possuir escopo e finalidade claros.
+Não devem ser usados como depósitos de elementos classificados apenas pelo tipo técnico.
 
-Exemplos:
+### 4.8 Reorganizações
 
-```text
-components
-utils
-services
-helpers
-common
-shared
-types
-hooks
-```
+Quando um elemento for movido:
 
-Esses diretórios não devem ser usados como depósitos de elementos classificados apenas pelo tipo técnico.
+1. confirmar que todo conteúdo necessário existe na estrutura final;
+2. atualizar imports, referências e contratos;
+3. validar o funcionamento;
+4. remover a versão anterior;
+5. confirmar que não restaram duplicações ou caminhos obsoletos.
 
-Quando o conteúdo possuir domínio ou funcionalidade própria, ele deve permanecer próximo desse domínio.
-
-Manter em diretórios compartilhados apenas elementos:
-
-- verdadeiramente reutilizados;
-- independentes de módulos específicos;
-- semanticamente coerentes entre todos os consumidores;
-- com contrato estável.
-
-### 4.7 Critério de redução de folhas
-
-A quantidade de folhas da árvore deve ser minimizada sem sacrificar coesão.
-
-Antes de criar uma nova folha, verificar:
-
-- se o conteúdo possui responsabilidade própria;
-- se permanecer no arquivo atual prejudica leitura ou manutenção;
-- se a nova folha reduz ou aumenta a navegação;
-- se a separação cria apenas um wrapper ou arquivo intermediário;
-- se a responsabilidade pode permanecer próxima do consumidor;
-- se existe justificativa além do tamanho do arquivo.
-
-Agrupar conteúdos pequenos quando:
-
-- pertencem ao mesmo fluxo;
-- compartilham dependências;
-- mudam pelos mesmos motivos;
-- não possuem uso independente;
-- a separação não melhora testes ou manutenção.
-
-Separar conteúdos quando:
-
-- possuem ciclos de mudança diferentes;
-- representam conceitos independentes;
-- misturam apresentação, domínio, persistência ou integração;
-- possuem consumidores distintos;
-- exigem testes isolados.
+A reorganização só estará concluída quando existir uma única árvore válida para cada responsabilidade.
 
 ---
 
-## 5. Modularização e responsabilidades
+## 5. Modularização do código
 
-### 5.1 Modularização entre arquivos
+### 5.1 Blocos lógicos indivisíveis
 
-Cada arquivo deve possuir uma responsabilidade principal, identificável por seu nome e por sua posição na árvore.
+O menor bloco lógico indivisível deve:
 
-Um arquivo deve ser separado quando o conteúdo:
+- executar uma parte coesa do fluxo;
+- possuir propósito identificável;
+- não misturar responsabilidades independentes;
+- permanecer próximo do contexto que lhe dá significado;
+- não ser separado quando a extração apenas aumentar navegação.
 
-- representa um conceito próprio;
-- possui motivo de mudança diferente do restante;
-- depende de recursos diferentes;
-- pode ser testado isoladamente;
-- possui reutilização real;
-- implementa uma fronteira ou contrato;
-- trata uma etapa independente do fluxo;
-- compromete a leitura quando permanece junto ao restante.
+Um bloco deixa de ser indivisível quando contém partes com responsabilidades, dependências, ciclos de mudança ou possibilidades de teste independentes.
 
-A separação deve ocorrer por responsabilidade, e não apenas por tamanho.
+### 5.2 Funções, métodos e componentes
 
-A modularização deve minimizar simultaneamente:
+Cada função, método ou componente deve:
 
-- a quantidade de responsabilidades por arquivo;
-- a quantidade de arquivos sem responsabilidade própria;
-- a profundidade da navegação;
-- a duplicação;
-- o acoplamento entre módulos.
+- executar uma responsabilidade principal;
+- possuir nome que descreva sua intenção;
+- receber apenas os dados necessários;
+- tornar efeitos externos explícitos;
+- retornar resultado previsível;
+- evitar misturar validação, transformação, persistência e apresentação;
+- delegar etapas independentes;
+- evitar aninhamento excessivo;
+- tratar erros na fronteira adequada.
 
-Não existe quantidade ideal fixa de linhas ou arquivos.
+Uma função coordenadora pode representar um fluxo composto, desde que delegue etapas independentes para filhos semanticamente claros.
 
-O resultado esperado é o menor conjunto de arquivos capaz de representar corretamente as responsabilidades existentes.
+### 5.3 Arquivos
 
-Não devem ser criados arquivos diferentes apenas para:
+Cada arquivo deve possuir responsabilidade principal identificável pelo nome e pela posição na árvore.
 
-- reduzir artificialmente o número de linhas;
-- armazenar uma única constante sem contexto próprio;
-- encapsular uma função usada uma única vez e inseparável do fluxo;
-- reproduzir uma convenção de outro projeto;
-- antecipar reutilização ainda inexistente;
-- criar camadas que apenas repassam chamadas.
+Criar novo arquivo quando o conteúdo:
 
-Cada arquivo deve:
+- representar conceito próprio;
+- possuir motivo de mudança diferente;
+- depender de recursos distintos;
+- puder ser testado isoladamente;
+- possuir reutilização real;
+- implementar fronteira ou contrato;
+- comprometer a coesão do arquivo atual.
 
-- possuir nome semanticamente específico;
-- estar no diretório correspondente à sua responsabilidade;
-- expor apenas o necessário;
-- evitar conhecer detalhes internos de outros módulos;
-- manter auxiliares locais próximos da implementação;
-- importar dependências por interfaces estáveis quando aplicável.
+Não criar arquivo apenas para:
 
-Arquivos genéricos como `utils`, `helpers`, `common`, `service`, `manager`, `misc` ou `shared` não devem existir sem delimitação semântica adicional.
+- reduzir quantidade de linhas;
+- armazenar constante local sem contexto próprio;
+- separar função privada inseparável do fluxo;
+- criar wrapper sem responsabilidade;
+- antecipar reutilização inexistente;
+- reproduzir convenção de outro projeto.
 
-### 5.2 Modularização dentro dos arquivos
+### 5.4 Diretórios
 
-O conteúdo de um arquivo deve ser organizado em blocos lógicos previsíveis.
+Criar diretório somente quando houver conjunto de arquivos ou subdiretórios que:
 
-Quando aplicável, utilizar a seguinte ordem:
+- represente responsabilidade semanticamente identificável;
+- possua relação coesa;
+- forme domínio, funcionalidade ou fronteira;
+- torne o diretório pai sobrecarregado;
+- precise ser localizado como grupo.
+
+Diretório com único filho exige justificativa arquitetural ou técnica explícita.
+
+### 5.5 Módulos e domínios
+
+Criar módulo quando um conjunto possuir:
+
+- responsabilidade funcional ou de negócio própria;
+- contratos próprios;
+- dependências próprias;
+- ciclo de vida relativamente independente;
+- fronteira clara com o restante do sistema.
+
+Módulos devem expor interface pública e não permitir acesso indiscriminado a detalhes internos.
+
+### 5.6 Modularização interna de arquivos
+
+Quando aplicável, utilizar ordem previsível:
 
 1. imports;
 2. tipos e contratos locais;
@@ -445,137 +468,72 @@ Quando aplicável, utilizar a seguinte ordem:
 7. composição ou coordenação;
 8. exports.
 
-Essa ordem pode ser adaptada à linguagem ou framework, mas deve permanecer consistente dentro do projeto.
+Essa ordem pode ser adaptada à tecnologia, mas deve permanecer consistente no projeto.
 
-Cada função deve:
+### 5.7 Duplicação
 
-- executar uma responsabilidade principal;
-- possuir nome que descreva a ação realizada;
-- receber apenas os dados necessários;
-- evitar alterar estado externo sem tornar isso explícito;
-- retornar resultado previsível;
-- evitar misturar validação, transformação, persistência e apresentação;
-- delegar etapas independentes para funções próprias;
-- evitar níveis excessivos de aninhamento;
-- tratar erros na fronteira adequada.
-
-Uma função coordenadora pode executar um fluxo composto, desde que delegue as etapas específicas.
-
-Não concentrar no mesmo bloco:
-
-- leitura de entrada;
-- validação;
-- regra de negócio;
-- acesso ao banco;
-- integração externa;
-- formatação da resposta;
-- manipulação visual.
-
-Comentários devem identificar blocos lógicos apenas quando a responsabilidade ou a razão da implementação não estiver clara pelo próprio código.
-
-### 5.3 Quando não dividir
-
-Não dividir quando a separação:
-
-- aumentar a navegação sem melhorar entendimento;
-- criar arquivos sem responsabilidade própria;
-- espalhar um fluxo simples por várias camadas;
-- existir apenas para reduzir o tamanho aparente do arquivo;
-- tornar dependências simples mais difíceis de acompanhar.
-
-### 5.4 Duplicação
-
-- Duplicação ocasional e pequena pode ser preferível a uma abstração incorreta.
-- A extração deve ocorrer quando a repetição representar o mesmo conceito e possuir tendência real de manutenção conjunta.
+- Duplicação ocasional e pequena pode ser preferível a abstração incorreta.
+- Extrair quando a repetição representar o mesmo conceito e possuir manutenção conjunta.
 - Não unificar comportamentos que apenas parecem semelhantes.
-
-### 5.5 Limites dos módulos
-
-Cada módulo deve possuir uma fronteira clara.
-
-Um módulo deve concentrar:
-
-- regras específicas do seu domínio;
-- componentes específicos;
-- contratos específicos;
-- serviços específicos;
-- validações específicas;
-- testes específicos;
-- integrações usadas exclusivamente por ele.
-
-Um módulo não deve acessar arquivos internos de outro módulo diretamente.
-
-A comunicação entre módulos deve ocorrer por interface pública, contrato, evento, serviço de aplicação, função explicitamente exportada ou mecanismo equivalente definido no projeto.
-
-Elementos compartilhados não devem depender de módulos específicos.
-
-### 5.6 Agrupamento semântico
-
-Conteúdos podem permanecer no mesmo arquivo quando:
-
-- participam do mesmo fluxo;
-- possuem o mesmo motivo de mudança;
-- utilizam as mesmas dependências;
-- não possuem valor isolado;
-- não possuem consumidores independentes;
-- sua separação aumentaria apenas a navegação.
-
-Conteúdos devem ser separados quando:
-
-- possuem responsabilidades independentes;
-- representam conceitos nomeáveis diferentes;
-- misturam fronteiras técnicas;
-- possuem ciclos de mudança distintos;
-- exigem testes isolados;
-- são reutilizados separadamente.
-
-O agrupamento deve ocorrer por significado e responsabilidade, nunca apenas por tipo técnico.
 
 ---
 
 ## 6. Nomenclatura, tipagem e contratos
 
-### 6.1 Nomenclatura
+### 6.1 Nomenclatura semântica
+
+Códigos, blocos, funções, variáveis, arquivos, diretórios, módulos e domínios devem possuir nomes semânticos, sugestivos e coerentes com a responsabilidade representada.
+
+O nome deve permitir inferir a finalidade sem abrir o elemento ou conhecer previamente sua implementação.
 
 - Usar `camelCase` para variáveis, funções, métodos e propriedades.
 - Usar `PascalCase` para componentes, classes, tipos, interfaces e enums.
-- Usar `UPPER_SNAKE_CASE` apenas para constantes globais verdadeiramente imutáveis e convencionais.
+- Usar `UPPER_SNAKE_CASE` apenas para constantes globais convencionais.
 - Funções devem indicar ação.
-- Booleanos devem indicar condição, preferencialmente com prefixos como `is`, `has`, `can` ou `should`.
+- Booleanos devem indicar condição, preferencialmente com `is`, `has`, `can` ou `should`.
 - Coleções devem usar nomes no plural.
-- Nomes devem representar intenção, não detalhes acidentais de implementação.
-- Evitar abreviações não consolidadas, nomes genéricos e identificadores ambíguos.
-- Evitar nomes como `data`, `item`, `value`, `temp`, `utils` ou `service` quando um nome mais específico for possível.
+- Evitar abreviações não consolidadas e nomes ambíguos.
+- Evitar repetir no nome do filho o contexto já expresso pelo nó pai.
+- Evitar nomes genéricos quando houver alternativa mais específica.
 
-### 6.2 Tipagem
+### 6.2 Convenções de nomenclatura
+
+Uma convenção pode prevalecer sobre o nome semanticamente ideal quando:
+
+- for obrigatória para a linguagem, framework ou ferramenta;
+- permitir descoberta automática;
+- reduzir configuração ou código adicional;
+- for consolidada no ecossistema;
+- melhorar previsibilidade para quem utiliza a tecnologia.
+
+A convenção não deve ser aplicada apenas por hábito quando um nome semântico produzir estrutura mais clara.
+
+### 6.3 Tipagem
 
 - Contratos públicos devem possuir tipos explícitos.
-- Preferir `unknown` a `any` quando o tipo ainda precisar ser validado.
-- Evitar `any`, tipagem excessivamente ampla e casts usados apenas para silenciar erros.
-- Dados externos devem ser validados em tempo de execução quando a tipagem estática não oferecer garantia suficiente.
-- Tipos devem impedir estados inválidos sempre que isso for viável.
-- Estados mutuamente exclusivos devem preferir uniões discriminadas ou representação equivalente.
+- Preferir `unknown` a `any` quando o dado ainda precisar ser validado.
+- Evitar casts usados apenas para silenciar erros.
+- Dados externos devem ser validados em tempo de execução quando necessário.
+- Tipos devem impedir estados inválidos sempre que viável.
 - Tipos locais devem permanecer próximos da implementação.
 - Tipos compartilhados devem representar contratos realmente compartilhados.
-- Não duplicar manualmente o mesmo contrato em diferentes partes do sistema quando houver uma fonte única viável.
 
-### 6.3 Contratos
+### 6.4 Contratos
 
-Contrato é qualquer interface estável entre módulos, processos ou sistemas, incluindo funções públicas, eventos, estruturas de dados, APIs e formatos persistidos.
+Contrato é qualquer interface estável entre módulos, processos ou sistemas.
 
 - Contratos devem ser explícitos e previsíveis.
 - Mudanças incompatíveis devem ser tratadas deliberadamente.
 - Implementações internas não devem vazar para consumidores.
-- Campos opcionais, valores nulos e estados de erro devem ser definidos intencionalmente.
+- Campos opcionais, valores nulos e estados de erro devem ser intencionais.
 
-### 6.4 Comentários e documentação
+### 6.5 Comentários e documentação
 
 - Comentários devem explicar intenção, restrição, decisão ou motivo não evidente.
-- Não comentar linha a linha comportamentos que o próprio código já expressa com clareza.
+- Não comentar linha a linha comportamentos já claros.
 - Comentários devem permanecer sincronizados com a implementação.
-- Código desativado não deve permanecer comentado; deve ser removido e recuperado pelo histórico quando necessário.
-- Contratos públicos, fluxos complexos e decisões arquiteturais relevantes devem ser documentados quando não forem evidentes pelo código.
-- Documentação afetada por uma alteração deve ser atualizada junto com o código.
+- Código desativado não deve permanecer comentado.
+- Documentação afetada por alteração deve ser atualizada junto com o código.
 
 ---
 
@@ -585,51 +543,41 @@ Contrato é qualquer interface estável entre módulos, processos ou sistemas, i
 
 Antes de adicionar uma dependência, verificar se:
 
-- resolve um problema real;
-- não existe solução adequada na linguagem, plataforma ou projeto;
+- resolve problema real;
+- não existe solução adequada no projeto ou plataforma;
 - reduz mais complexidade do que adiciona;
 - possui manutenção, documentação e licença compatíveis;
 - seu impacto em segurança, tamanho e desempenho é aceitável.
 
-- Dependências não utilizadas devem ser removidas.
-- Bibliotecas não devem ser usadas para tarefas triviais quando uma implementação simples e segura for suficiente.
-- Dependências centrais devem ser encapsuladas quando sua substituição ou isolamento for relevante.
+Dependências não utilizadas devem ser removidas.
 
 ### 7.2 Imports
 
 - Remover imports não utilizados.
 - Evitar imports circulares.
-- Preferir caminhos estáveis e sem conhecimento excessivo da estrutura interna de outros módulos.
-- Imports devem seguir uma ordem consistente definida pelas ferramentas do projeto.
-- Evitar reexports em cadeia que dificultem identificar a origem de uma dependência.
+- Preferir caminhos estáveis.
+- Evitar conhecimento excessivo da estrutura interna de outros módulos.
+- Evitar reexports em cadeia.
 
 ### 7.3 Configuração
 
 - Configurações variáveis devem ser centralizadas.
 - Valores de ambiente devem ser validados na inicialização.
-- Configurações obrigatórias ausentes ou inválidas devem interromper a inicialização com erro claro.
-- Valores padrão só devem existir quando forem seguros e semanticamente válidos.
-- Ambientes como desenvolvimento, teste, homologação e produção devem possuir diferenças explícitas e controladas.
-- Deve existir exemplo documentado das variáveis necessárias, sem segredos reais.
-- URLs, chaves, limites e parâmetros operacionais não devem ser espalhados pelo código.
+- Configurações obrigatórias ausentes devem produzir erro claro.
 - Segredos nunca devem ser versionados.
-- Valores específicos de ambiente não devem ser codificados diretamente na regra de negócio.
-- Valores fixos de domínio devem possuir nome e contexto claros.
+- Valores específicos de ambiente não devem ser codificados na regra de negócio.
 
 ---
 
 ## 8. Erros, segurança e observabilidade
 
-### 8.1 Tratamento de erros
+### 8.1 Erros
 
 - Erros não devem ser ignorados silenciosamente.
 - Erros esperados devem ser representados de forma previsível.
-- Falhas inesperadas devem preservar contexto suficiente para diagnóstico.
-- Diferenciar erros esperados, inesperados, recuperáveis e fatais quando isso afetar o fluxo.
-- Mensagens externas não devem expor detalhes internos, caminhos, credenciais ou stack traces.
-- Tratamentos genéricos não devem ocultar a causa original.
-- Recuperação automática só deve ocorrer quando for segura e claramente definida.
-- Recursos devem ser liberados mesmo em cenários de falha.
+- Falhas inesperadas devem preservar contexto para diagnóstico.
+- Mensagens externas não devem expor detalhes internos.
+- Recuperação automática só deve ocorrer quando for segura.
 
 ### 8.2 Segurança
 
@@ -638,14 +586,13 @@ Antes de adicionar uma dependência, verificar se:
 - Aplicar o princípio do menor privilégio.
 - Dados sensíveis devem ser protegidos em armazenamento, transporte e logs.
 - Não confiar no cliente para decisões de segurança.
-- Dependências e configurações de segurança devem ser mantidas atualizadas conforme o projeto.
 
 ### 8.3 Observabilidade
 
 - Logs devem possuir contexto suficiente para diagnóstico.
-- Não registrar segredos, credenciais ou dados sensíveis sem necessidade explícita.
+- Não registrar segredos ou dados sensíveis sem necessidade explícita.
 - Mensagens de log devem ser consistentes e acionáveis.
-- Métricas e rastreamento devem ser adicionados quando houver necessidade operacional real.
+- Métricas e rastreamento devem existir quando houver necessidade operacional real.
 
 ---
 
@@ -655,109 +602,53 @@ Antes de adicionar uma dependência, verificar se:
 
 A árvore de front-end deve representar responsabilidades reais da interface e dos fluxos da aplicação.
 
-Quando existirem, distinguir semanticamente:
+Quando existirem, distinguir:
 
-- inicialização e composição da aplicação;
+- inicialização e composição;
 - páginas, telas ou rotas;
 - funcionalidades ou domínios;
 - componentes compartilhados;
-- componentes específicos de uma funcionalidade;
-- estado compartilhado;
-- estado local;
-- regras de transformação;
-- engines de geração ou processamento;
-- templates e definições declarativas;
-- integrações externas;
+- componentes específicos;
+- estado compartilhado e local;
+- engines e transformações;
+- templates;
+- integrações;
 - assets;
-- tipos e contratos compartilhados;
-- utilitários semanticamente delimitados.
+- contratos.
 
-Modelo conceitual:
+Nenhuma dessas divisões deve ser criada automaticamente.
 
-```text
-src/
-├── inicialização e composição
-├── páginas ou telas
-├── funcionalidades ou domínios
-├── componentes compartilhados
-├── estado compartilhado
-├── engines e transformações
-├── templates e definições
-├── integrações
-├── assets
-├── contratos
-└── utilitários delimitados
-```
-
-Esse modelo não obriga a existência de todos os diretórios.
-
-Criar apenas os diretórios correspondentes às responsabilidades realmente presentes.
-
-### 9.2 Componentes específicos e compartilhados
+### 9.2 Componentes
 
 Componentes usados por uma única página ou funcionalidade devem permanecer próximos dela.
 
-Mover um componente para uma área compartilhada somente quando:
+Mover para área compartilhada somente com reutilização real e contrato estável.
 
-- existir reutilização real;
-- o significado visual e comportamental for o mesmo;
-- não houver dependência de estado ou regra específica;
-- o contrato estiver estável.
-
-Não manter simultaneamente árvores como `src/components` e `src/shared/components` quando ambas representarem a mesma responsabilidade.
-
-Deve existir uma única localização válida para componentes compartilhados.
+Não manter simultaneamente `src/components` e `src/shared/components` quando ambas representarem a mesma responsabilidade.
 
 ### 9.3 Páginas e telas
 
-Páginas e telas devem coordenar a interface e os fluxos de alto nível.
+Páginas e telas devem coordenar interface e fluxos de alto nível.
 
-Não devem concentrar transformação complexa de dados, geração de arquivos, regras de negócio, integração externa detalhada, persistência ou validações reutilizáveis.
+Não devem concentrar transformações complexas, geração de arquivos, regras de negócio, persistência ou integrações detalhadas.
 
-Essas responsabilidades devem ser delegadas para módulos próprios quando possuírem complexidade ou reutilização real.
+### 9.4 Estado
 
-### 9.4 Estado no front-end
+Estado local deve permanecer próximo do consumidor.
 
-Estado local deve permanecer no componente ou funcionalidade que o consome.
+Promover para store, contexto ou equivalente somente quando houver múltiplos consumidores, sobrevivência entre componentes ou atualização coordenada.
 
-Estado compartilhado deve ser promovido para store, contexto ou mecanismo equivalente somente quando:
+### 9.5 Engines e templates
 
-- for usado por múltiplos consumidores;
-- precisar sobreviver à troca de componentes;
-- representar fluxo compartilhado;
-- exigir atualização coordenada.
+Transformações complexas, cálculos, serialização e geração de arquivos devem permanecer fora de componentes visuais quando representarem responsabilidades próprias.
 
-Não mover estado para uma store global apenas para centralização preventiva.
+Preview e exportação não devem depender de fontes de verdade divergentes.
 
-### 9.5 Engines e transformações
+### 9.6 Assets
 
-Transformações complexas, geração de arquivos, cálculos, serialização e processamento não devem permanecer em páginas ou componentes visuais.
+Assets devem ser organizados por finalidade ou domínio.
 
-Criar uma engine ou módulo equivalente quando:
-
-- existir fluxo de transformação próprio;
-- houver entrada e saída bem definidas;
-- a implementação puder ser testada sem a interface;
-- o processamento for reutilizado;
-- a regra não pertencer à apresentação.
-
-Engines devem evitar dependência direta de componentes visuais.
-
-### 9.6 Templates e definições declarativas
-
-Templates devem ser separados de páginas e engines quando representarem definições reutilizáveis, metadados, contratos de renderização ou configurações declarativas.
-
-A apresentação visual e a geração final não devem depender de duas fontes de verdade divergentes.
-
-Quando preview e exportação utilizarem tecnologias diferentes, os dados compartilhados devem estar representados em contratos ou metadados explícitos.
-
-### 9.7 Assets
-
-Assets devem ser organizados por finalidade ou domínio de uso.
-
-Não criar subdiretórios para cada asset isolado.
-
-Criar agrupamentos apenas quando existirem múltiplos recursos relacionados ou fronteira de uso claramente distinta.
+Não criar subdiretórios para cada asset isolado sem fronteira real.
 
 ---
 
@@ -770,133 +661,127 @@ A árvore de back-end deve ser organizada prioritariamente por domínio ou funci
 Quando existirem, distinguir:
 
 - inicialização e composição;
-- domínios ou funcionalidades;
 - casos de uso;
 - regras de negócio;
 - persistência;
 - integrações externas;
-- transporte HTTP, filas ou eventos;
+- transporte;
 - contratos;
 - configuração;
 - infraestrutura compartilhada.
 
-Modelo conceitual:
-
-```text
-src/
-├── inicialização e composição
-├── domínios ou funcionalidades
-│   └── módulo/
-│       ├── aplicação
-│       ├── domínio
-│       ├── persistência
-│       ├── transporte
-│       └── integrações
-├── infraestrutura compartilhada
-├── configuração
-└── contratos compartilhados
-```
-
-Não criar todas essas subdivisões automaticamente.
-
-Um módulo pequeno pode manter seus elementos diretamente no diretório da funcionalidade até que a complexidade justifique novos níveis.
+Nenhuma subdivisão deve ser criada automaticamente.
 
 ### 10.2 Domínio antes da categoria técnica
 
-Evitar concentrar todas as responsabilidades em diretórios globais como `controllers`, `services`, `repositories` e `models` quando isso dispersar uma mesma funcionalidade por toda a árvore.
+Evitar diretórios globais como `controllers`, `services`, `repositories` e `models` quando dispersarem uma mesma funcionalidade por toda a árvore.
 
 Preferir manter próximos os elementos pertencentes ao mesmo domínio.
 
-Subdiretórios internos devem surgir somente quando a quantidade ou complexidade dos elementos justificar a separação.
-
 ### 10.3 Camadas proporcionais
 
-Não criar controller, service, use case, repository, gateway e adapter para todo fluxo de forma automática.
+Não criar controller, service, use case, repository, gateway e adapter para todo fluxo automaticamente.
 
 Cada camada deve possuir responsabilidade real.
 
-Camadas que apenas encaminham argumentos sem validar, transformar, proteger fronteiras, coordenar, aplicar regras ou adaptar contratos devem ser removidas ou incorporadas à camada semanticamente correta.
+Camadas que apenas encaminham argumentos devem ser removidas ou incorporadas ao nó semanticamente correto.
 
 ---
 
 ## 11. Testes e validação
 
 - Alterações devem ser acompanhadas por validação proporcional ao risco.
-- Regras de negócio devem possuir testes quando forem relevantes e estáveis.
-- Testes devem verificar comportamento observável, não detalhes internos desnecessários.
-- Refatorações devem preservar contratos e comportamento existentes.
-- Testes quebrados não devem ser ignorados ou removidos apenas para permitir integração.
+- Regras de negócio devem possuir testes quando relevantes e estáveis.
+- Testes devem verificar comportamento observável.
+- Refatorações devem preservar contratos e comportamento.
+- Testes quebrados não devem ser ignorados ou removidos para permitir integração.
 - Cenários de erro e limites devem ser testados quando fizerem parte do comportamento esperado.
 
 ---
 
 ## 12. Refatoração e manutenção
 
+Toda refatoração estrutural deve ocorrer de dentro para fora:
+
+1. compreender o comportamento atual;
+2. organizar os blocos lógicos internos;
+3. modularizar funções, métodos e componentes;
+4. extrair arquivos quando necessário;
+5. organizar arquivos em diretórios quando necessário;
+6. consolidar módulos e domínios;
+7. ajustar a estrutura global;
+8. atualizar imports, referências e contratos;
+9. remover estruturas antigas;
+10. validar comportamento, build e testes.
+
+Além disso:
+
 - Refatorações não devem alterar comportamento sem autorização explícita.
 - Antes de remover código, confirmar que não existem referências ativas.
-- Durante migrações, colocar todo o conteúdo necessário na estrutura final antes da poda.
-- Após a migração, remover arquivos, diretórios, imports e caminhos obsoletos.
+- Colocar todo o conteúdo necessário na estrutura final antes da poda.
 - Não manter versões antigas e novas da mesma responsabilidade em paralelo.
-- Alterações estruturais devem ser validadas por build, testes e execução dos fluxos afetados.
-- Dívida técnica deliberada deve ser documentada quando não puder ser resolvida no mesmo momento.
+- Dívida técnica deliberada deve ser documentada.
+
+Mover código desorganizado para uma nova árvore apenas transfere o problema. A responsabilidade interna deve ser compreendida antes da realocação externa.
 
 ---
 
 ## 13. Verificação de estrutura e modularização
 
-Antes de considerar uma implementação ou refatoração concluída, verificar:
+### 13.1 Modelo da árvore
 
-### 13.1 Árvore de diretórios
+- [ ] A raiz considerada é o diretório raiz do projeto.
+- [ ] As folhas consideradas são os menores blocos lógicos indivisíveis do código.
+- [ ] A regra de balanceamento foi aplicada recursivamente em todos os níveis.
+- [ ] Cada nó possui responsabilidade identificável.
+- [ ] Cada folha permanece indivisível sem misturar responsabilidades.
 
-- [ ] Cada diretório possui responsabilidade identificável.
-- [ ] Não existem árvores concorrentes para a mesma responsabilidade.
-- [ ] Não existem arquivos duplicados em caminhos diferentes.
-- [ ] Não existem diretórios antigos após migrações concluídas.
-- [ ] Código específico permanece próximo do módulo consumidor.
-- [ ] Código compartilhado possui reutilização real.
-- [ ] A árvore concreta está documentada em `regrasProjeto.md`.
-- [ ] Os nomes permitem localizar o conteúdo sem abrir os arquivos.
+### 13.2 Balanceamento
 
-### 13.2 Balanceamento da árvore
-
-- [ ] A árvore utiliza o menor número possível de folhas sem misturar responsabilidades.
-- [ ] Não existem diretórios com uma única folha sem justificativa.
-- [ ] Não existem níveis intermediários sem responsabilidade própria.
-- [ ] Diretórios genéricos não são usados como depósitos.
-- [ ] Código específico permanece próximo dos consumidores.
-- [ ] Código compartilhado possui reutilização real.
+- [ ] Filhos do mesmo nó são semanticamente relacionados.
+- [ ] Responsabilidades diferentes foram separadas ou realocadas.
+- [ ] Nós com muitos filhos continuam fáceis de localizar e manter.
+- [ ] Nós extensos foram subdivididos somente em sub-responsabilidades reais.
+- [ ] Não existem limites numéricos arbitrários usados como regra automática.
 - [ ] A profundidade é proporcional à complexidade.
-- [ ] A estrutura não antecipa necessidades inexistentes.
+- [ ] Não existem níveis intermediários sem responsabilidade própria.
+- [ ] Não existem cadeias de filho único sem justificativa.
 - [ ] A navegação não é maior que o ganho de clareza.
-- [ ] A árvore cresce por promoção progressiva.
-- [ ] Não existem classificações concorrentes para o mesmo conteúdo.
-- [ ] Cada folha representa responsabilidade própria ou agrupamento coeso.
+- [ ] A árvore é a menor estrutura semanticamente suficiente.
 
-### 13.3 Arquivos
+### 13.3 Modularização de dentro para fora
+
+- [ ] A modularização começou pelos blocos lógicos internos.
+- [ ] Funções, métodos e componentes foram organizados antes da extração de arquivos.
+- [ ] Arquivos só foram criados para responsabilidades próprias.
+- [ ] Diretórios só foram criados para agrupamentos semânticos reais.
+- [ ] Módulos só foram criados após consolidação das responsabilidades internas.
+- [ ] A arquitetura global surgiu das responsabilidades reais do código.
+- [ ] Nenhuma pasta ou camada foi criada preventivamente.
+
+### 13.4 Nomenclatura
+
+- [ ] Blocos, funções, arquivos e pastas possuem nomes semânticos e sugestivos.
+- [ ] O nome permite inferir a responsabilidade do elemento.
+- [ ] O contexto do nó pai não é repetido desnecessariamente no nome do filho.
+- [ ] Termos genéricos possuem delimitação semântica.
+- [ ] Convenções prevaleceram somente quando necessárias ou mais eficientes.
+
+### 13.5 Arquivos e código interno
 
 - [ ] Cada arquivo possui responsabilidade principal.
-- [ ] O nome do arquivo representa seu conteúdo.
-- [ ] O arquivo está no diretório semanticamente correto.
-- [ ] Não há mistura desnecessária de domínio, persistência, integração e apresentação.
-- [ ] Auxiliares locais permanecem próximos de seus consumidores.
-- [ ] Arquivos genéricos foram evitados ou devidamente delimitados.
-- [ ] Exports representam uma interface pública intencional.
-
-### 13.4 Código interno
-
-- [ ] Cada função possui uma responsabilidade principal.
+- [ ] Cada função possui responsabilidade principal.
 - [ ] Funções coordenadoras delegam etapas independentes.
 - [ ] Validação, transformação, persistência e apresentação estão separadas quando necessário.
 - [ ] Não existem blocos extensos executando tarefas não relacionadas.
-- [ ] A ordem interna do arquivo é previsível.
-- [ ] Os nomes descrevem intenção.
-- [ ] Comentários explicam decisões, não linhas de código.
+- [ ] Auxiliares locais permanecem próximos de seus consumidores.
+- [ ] Exports representam interface pública intencional.
 
-### 13.5 Migrações e refatorações
+### 13.6 Migrações e refatorações
 
 - [ ] Todo conteúdo necessário foi colocado na árvore final antes da remoção.
 - [ ] Imports e referências foram atualizados.
 - [ ] A implementação anterior foi removida.
-- [ ] Não restaram caminhos obsoletos.
+- [ ] Não restaram caminhos obsoletos ou duplicados.
 - [ ] O comportamento foi validado após a reorganização.
-- [ ] A refatoração não alterou contratos ou regras de negócio sem autorização.
+- [ ] Contratos e regras de negócio foram preservados.
