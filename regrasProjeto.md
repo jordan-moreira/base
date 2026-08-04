@@ -16,6 +16,7 @@ Este arquivo deve conter apenas definições, convenções, restrições e decis
 - Cada decisão deve existir em apenas uma seção.
 - Campos aplicáveis não devem permanecer vazios.
 - Use `Pendente.` quando a decisão ainda não tiver sido tomada.
+- Campos pendentes não impedem atividades independentes, mas impedem declarar conformidade integral quando forem aplicáveis ao escopo validado.
 - Use `Não se aplica.` quando o campo não pertencer ao projeto.
 - Os exemplos servem apenas para indicar o tipo e o formato da informação esperada.
 - Justificativas, histórico e contexto das decisões devem ser registrados no `README.md`.
@@ -80,6 +81,22 @@ Ex.: Nome da pessoa, equipe ou organização responsável.
 Repositório principal:
 
 Ex.: `owner/repository`
+
+Revisão de `regrasDev.md` adotada:
+
+Ex.: SHA do commit ou versão da fonte canônica.
+
+Revisão de `regrasUxUi.md` adotada:
+
+Ex.: SHA do commit, versão da fonte canônica ou `Não se aplica.`
+
+Data da última sincronização das regras gerais:
+
+Ex.: 2026-08-04.
+
+Divergências ou exceções locais conhecidas:
+
+Ex.: Não se aplica.
 
 Estado atual do projeto:
 
@@ -1149,6 +1166,14 @@ Ex.:
 - estados não são comunicados apenas por cor;
 - foco visível deve ser preservado.
 
+Nível de validação UX/UI exigido:
+
+Ex.: Operacional, com validação estrutural e automatizada concluídas.
+
+Contextos obrigatórios para validação UX/UI:
+
+Ex.: Chrome e Firefox em desktop, navegação por teclado e viewport mobile definido.
+
 ## 18. Back-end
 
 Aplicabilidade da seção:
@@ -1718,7 +1743,43 @@ Cobertura mínima obrigatória:
 
 Ex.: Não se aplica; fluxos e regras críticas devem possuir cobertura explícita.
 
+Política de permanência dos testes:
+
+Ex.: Testes que protegem comportamento estável permanecem versionados junto ao código.
+
+Critério para remoção de testes temporários:
+
+Ex.: Remover somente quando verificarem migração concluída e não protegerem comportamento permanente.
+
+Política para testes privados:
+
+Ex.: Permitidos apenas quando expuserem dados ou contratos sensíveis, com validação vinculada ao projeto.
+
 ## 26. Build, validação e entrega
+
+Branch estável:
+
+Ex.: `main`.
+
+Branch de integração:
+
+Ex.: `develop` ou `Não se aplica.`
+
+Estratégia para branches de trabalho:
+
+Ex.: Uma branch por alteração, criada a partir da branch de integração.
+
+Política para alterações diretas na branch estável:
+
+Ex.: Proibidas, salvo correção emergencial explicitamente autorizada.
+
+Estratégia de integração:
+
+Ex.: Pull request com squash após aprovação das validações.
+
+Política para atualização forçada de branches:
+
+Ex.: Proibida nas branches estável e de integração.
 
 Comando de desenvolvimento:
 
@@ -1763,6 +1824,22 @@ Ex.: Build estático produzido pelo Vite.
 Estratégia de deploy:
 
 Ex.: Publicação automática após aprovação na branch principal.
+
+Critério para promoção entre branches:
+
+Ex.: Diff revisado, validações aprovadas, documentação atualizada e ausência de resíduos temporários.
+
+Relatórios permanentes de conformidade:
+
+Ex.: Arquivos versionados que devem ser atualizados quando suas conclusões forem afetadas.
+
+Destino das evidências temporárias:
+
+Ex.: Logs e artefatos da integração contínua.
+
+Política para workflows, scripts e arquivos temporários:
+
+Ex.: Remover após a finalidade ser concluída e antes da promoção para a branch estável.
 
 Validações obrigatórias antes de concluir uma alteração:
 
@@ -1869,6 +1946,7 @@ Ex.:
 - [ ] A implementação pertence ao escopo definido.
 - [ ] O módulo responsável foi identificado.
 - [ ] As decisões pendentes relacionadas foram verificadas.
+- [ ] A revisão das regras gerais adotadas está identificada.
 - [ ] A implementação segue a arquitetura adotada.
 - [ ] A estrutura de diretórios foi respeitada.
 - [ ] A responsabilidade de cada arquivo está clara.
@@ -1883,6 +1961,11 @@ Ex.:
 - [ ] Erros são tratados na fronteira adequada.
 - [ ] Logs não expõem dados sensíveis.
 - [ ] Testes necessários foram adicionados ou atualizados.
+- [ ] Testes permanentes não foram removidos sem justificativa.
+- [ ] A política de branches e integração foi respeitada.
+- [ ] Artefatos e automações temporárias foram removidos.
+- [ ] Resultados declarados como aprovados possuem evidência verificável.
+- [ ] O nível de validação UX/UI exigido foi alcançado quando aplicável.
 - [ ] Lint foi executado com sucesso.
 - [ ] Verificação de tipos foi executada com sucesso.
 - [ ] Testes afetados foram executados com sucesso.
