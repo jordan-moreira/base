@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - .github/workflows/atualizar-regras-gerais.yml
 
 permissions:
   contents: write
@@ -313,14 +311,14 @@ Uma interface só pode ser considerada concluída quando:
           regras_projeto_path.write_text(regras_projeto.rstrip() + "\n", encoding="utf-8")
           PY
 
-      - name: Remover workflow temporário
-        run: rm .github/workflows/atualizar-regras-gerais.yml
+      - name: Remover arquivos temporários
+        run: rm -f .github/workflows/atualizar-regras-gerais.yml .github/atualizar-regras.trigger
 
       - name: Publicar atualização
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add regrasDev.md regrasUxUi.md regrasProjeto.md .github/workflows/atualizar-regras-gerais.yml
+          git add regrasDev.md regrasUxUi.md regrasProjeto.md .github/workflows/atualizar-regras-gerais.yml .github/atualizar-regras.trigger
           git commit -m "docs: amplia regras gerais de desenvolvimento e interface"
           git push
