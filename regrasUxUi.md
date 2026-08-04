@@ -278,6 +278,7 @@ A redução de níveis não deve resultar em telas sobrecarregadas, informaçõe
 - A cor deve possuir função de hierarquia, identidade, estado ou orientação.
 - A mesma cor funcional deve manter o mesmo significado no mesmo contexto.
 - Informações não devem depender exclusivamente de cor.
+- Estados podem combinar fundo, borda, espessura, forma, símbolo, posição ou texto; a distinção não deve depender apenas do reconhecimento de uma tonalidade.
 - Cores decorativas não devem competir com estados, alertas ou ações.
 
 ### 5.6 Contraste
@@ -354,6 +355,8 @@ Componentes interativos devem prever, quando aplicável:
 - sucesso.
 
 A ausência de um estado deve ser deliberada e não consequência de implementação incompleta.
+
+Textos visuais como `Selecionado`, `Ativo` ou equivalentes não são obrigatórios quando o estado já estiver perceptível por sinais visuais não dependentes apenas de cor e exposto programaticamente por semântica nativa ou atributos acessíveis.
 
 ### 6.5 Elementos nativos
 
@@ -555,8 +558,10 @@ Detalhes internos, códigos e rastreamentos não devem substituir uma explicaç�
 ### 9.3 Formato esperado
 
 - Formatos específicos devem ser comunicados por exemplo, máscara, unidade ou instrução.
+- Valores compostos reconhecíveis, como duração em `minutos:segundos`, podem utilizar um único campo quando isso reduzir esforço sem comprometer clareza.
 - A interface deve aceitar variações razoáveis quando puder normalizá-las com segurança.
 - Restrições devem ser apresentadas antes do envio quando forem conhecidas.
+- Máscaras e formatações automáticas devem preservar cursor, seleção, exclusão, colagem, teclado virtual e tecnologias assistivas; quando isso não puder ser garantido, a normalização deve ocorrer após a conclusão da entrada.
 - Máscaras não devem impedir edição, colagem ou uso de tecnologias assistivas.
 
 ### 9.4 Tipo de controle
@@ -1020,7 +1025,19 @@ Problemas encontrados devem registrar:
 - correção proposta;
 - prioridade.
 
-### 15.9 Critério de conclusão
+### 15.9 Níveis de validação
+
+O nível alcançado deve ser declarado conforme as evidências disponíveis:
+
+- estrutural: implementação, semântica, estados e contratos inspecionados;
+- automatizado: verificações automáticas aplicáveis aprovadas;
+- operacional: fluxos executados nos navegadores, dispositivos e métodos de entrada definidos;
+- empírico: uso observado com tecnologias assistivas ou perfis representativos quando aplicável;
+- integral: todos os níveis exigidos pelo projeto foram concluídos.
+
+O nível exigido deve ser proporcional ao risco e ao estágio do produto e registrado em `regrasProjeto.md`. Um nível não deve ser declarado quando suas evidências não tiverem sido obtidas.
+
+### 15.10 Critério de conclusão
 
 Uma interface só pode ser considerada concluída quando:
 
@@ -1028,7 +1045,8 @@ Uma interface só pode ser considerada concluída quando:
 - estados relevantes estiverem implementados;
 - problemas críticos de usabilidade e acessibilidade estiverem resolvidos;
 - exceções restantes estiverem documentadas e justificadas;
-- o comportamento observado corresponder aos objetivos definidos.
+- o comportamento observado corresponder aos objetivos definidos;
+- o nível de validação exigido pelo projeto tiver sido alcançado.
 
 ---
 
@@ -1071,6 +1089,7 @@ Uma interface só pode ser considerada concluída quando:
 - [ ] Componentes equivalentes possuem comportamento consistente.
 - [ ] Variantes representam diferenças semânticas reais.
 - [ ] Estados interativos necessários foram implementados.
+- [ ] Estados selecionados são perceptíveis visualmente e expostos programaticamente sem depender apenas de cor ou de texto redundante.
 - [ ] Elementos nativos são utilizados quando adequados.
 - [ ] Controles possuem área de interação suficiente e indicação clara de uso.
 
@@ -1087,6 +1106,7 @@ Uma interface só pode ser considerada concluída quando:
 - [ ] Apenas dados necessários são solicitados.
 - [ ] Todos os campos possuem rótulo persistente.
 - [ ] Formatos e restrições são informados antes ou durante o preenchimento.
+- [ ] Campos de valores compostos e formatações automáticas preservam edição e métodos de entrada suportados.
 - [ ] Mensagens de erro explicam como corrigir.
 - [ ] Dados válidos são preservados após falhas.
 - [ ] A ação principal descreve o resultado concreto.
@@ -1139,4 +1159,5 @@ Uma interface só pode ser considerada concluída quando:
 - [ ] Navegação por teclado e estrutura acessível foram verificadas.
 - [ ] Contextos de dispositivo e entrada definidos no projeto foram validados.
 - [ ] Problemas encontrados foram corrigidos ou documentados com justificativa.
+- [ ] O nível de validação declarado corresponde às evidências obtidas.
 - [ ] A interface atende aos critérios de sucesso definidos para o produto.
