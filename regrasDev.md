@@ -516,11 +516,22 @@ Essa ordem pode ser adaptada à tecnologia, mas deve permanecer consistente no p
 
 ## 6. Nomenclatura, tipagem e contratos
 
-### 6.1 Nomenclatura semântica
+### 6.1 Nomenclatura semântica orientada à responsabilidade
 
-Códigos, blocos, funções, variáveis, arquivos, diretórios, módulos e domínios devem possuir nomes semânticos, sugestivos e coerentes com a responsabilidade representada.
+Todo nó da árvore do projeto deve possuir um nome semântico que represente sua responsabilidade real dentro do contexto fornecido pelos nós superiores.
 
-O nome deve permitir inferir a finalidade sem abrir o elemento ou conhecer previamente sua implementação.
+A leitura do caminho da raiz até uma folha deve permitir compreender progressivamente a finalidade de cada nó.
+
+Os nomes devem:
+
+- representar o conteúdo ou comportamento real do nó;
+- distinguir responsabilidades diferentes;
+- utilizar o vocabulário consistente do domínio;
+- conter apenas o contexto necessário para evitar ambiguidade;
+- evitar termos genéricos, históricos, visuais ou baseados apenas na implementação;
+- ser reavaliados quando a responsabilidade do nó mudar.
+
+As convenções da linguagem ou tecnologia definem a forma de escrita do nome, mas não substituem sua definição semântica.
 
 - Usar `camelCase` para variáveis, funções, métodos e propriedades.
 - Usar `PascalCase` para componentes, classes, tipos, interfaces e enums.
@@ -815,11 +826,15 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 
 ### 13.5 Nomenclatura
 
-- [ ] Blocos, funções, arquivos e pastas possuem nomes semânticos e sugestivos.
+- [ ] Cada nó possui nome correspondente à sua responsabilidade real.
+- [ ] A leitura do caminho da raiz até a folha forma uma sequência semântica coerente.
 - [ ] O nome permite inferir a responsabilidade do elemento.
+- [ ] Responsabilidades diferentes são distinguíveis pelos nomes.
+- [ ] O vocabulário do domínio permanece consistente.
 - [ ] O contexto do nó pai não é repetido desnecessariamente no nome do filho.
 - [ ] Termos genéricos possuem delimitação semântica.
 - [ ] Convenções prevaleceram somente quando necessárias ou mais eficientes.
+- [ ] Nomes foram reavaliados após mudanças de responsabilidade.
 
 ### 13.6 Arquivos e código interno
 
