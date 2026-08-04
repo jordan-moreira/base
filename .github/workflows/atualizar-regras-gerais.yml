@@ -1,0 +1,326 @@
+name: Atualizar regras gerais
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/atualizar-regras-gerais.yml
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@v4
+
+      - name: Atualizar documentos normativos
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def substituir_uma_vez(texto, antigo, novo, arquivo):
+              ocorrencias = texto.count(antigo)
+              if ocorrencias != 1:
+                  raise RuntimeError(
+                      f"{arquivo}: esperado 1 trecho para substituição, encontrado {ocorrencias}."
+                  )
+              return texto.replace(antigo, novo, 1)
+
+          regras_dev_path = Path("regrasDev.md")
+          regras_dev = regras_dev_path.read_text(encoding="utf-8")
+
+          regras_dev = substituir_uma_vez(
+              regras_dev,
+              "Exceções devem ser explícitas, justificadas e restritas ao menor escopo possível.\n\n---",
+              "Exceções devem ser explícitas, justificadas e restritas ao menor escopo possível.\n\nOs documentos gerais adotados por um projeto devem possuir origem e revisão identificáveis. Cópias locais não devem divergir silenciosamente da fonte canônica; divergências necessárias devem ser registradas como decisões ou exceções específicas do projeto.\n\n---",
+              "regrasDev.md",
+          )
+
+          regras_dev = substituir_uma_vez(
+              regras_dev,
+              "- Documentação afetada por alteração deve ser atualizada junto com o código.\n",
+              "- Documentação afetada por alteração deve ser atualizada junto com o código.\n- Relatórios permanentes de conformidade devem ser atualizados quando alterações invalidarem suas conclusões.\n- Evidências temporárias de execução devem permanecer em logs, artefatos ou registros apropriados, sem ocupar a árvore definitiva quando não constituírem documentação mantida.\n",
+              "regrasDev.md",
+          )
+
+          secao_testes_antiga = """## 11. Testes e validação
+
+- Alterações devem ser acompanhadas por validação proporcional ao risco.
+- Regras de negócio devem possuir testes quando relevantes e estáveis.
+- Testes devem verificar comportamento observável.
+- Refatorações devem preservar contratos e comportamento.
+- Testes quebrados não devem ser ignorados ou removidos para permitir integração.
+- Cenários de erro e limites devem ser testados quando fizerem parte do comportamento esperado.
+
+---
+
+## 12. Refatoração e manutenção
+"""
+
+          secao_testes_nova = """## 11. Testes e validação
+
+### 11.1 Cobertura e comportamento
+
+- Alterações devem ser acompanhadas por validação proporcional ao risco.
+- Regras de negócio devem possuir testes quando relevantes e estáveis.
+- Testes devem verificar comportamento observável.
+- Refatorações devem preservar contratos e comportamento.
+- Testes quebrados não devem ser ignorados ou removidos para permitir integração.
+- Cenários de erro e limites devem ser testados quando fizerem parte do comportamento esperado.
+
+### 11.2 Permanência e localização
+
+- Testes que protegem comportamento estável devem permanecer versionados junto ao código ou em infraestrutura de validação claramente vinculada ao projeto.
+- Testes não devem ser removidos apenas porque já foram executados ou porque a alteração foi concluída.
+- Testes temporários podem ser removidos somente quando verificarem exclusivamente uma migração encerrada e não protegerem comportamento permanente.
+- Testes podem permanecer privados quando expuserem dados, contratos ou cenários sensíveis, sem ocultar a ausência real de validação.
+
+### 11.3 Automação e evidências
+
+- Integração contínua deve executar as validações aplicáveis antes da promoção de alterações, quando utilizada pelo projeto.
+- Validações essenciais devem possuir forma documentada de execução local ou equivalente.
+- Ausência de execução, resultado indisponível ou status desconhecido não equivale a aprovação.
+- Declarações de validação devem identificar o escopo, a revisão verificada, os procedimentos executados, os resultados obtidos e as limitações existentes.
+
+---
+
+## 12. Versionamento e integração
+
+### 12.1 Branches
+
+- Todo projeto deve identificar os papéis de suas branches estáveis, de integração e de trabalho, quando existirem.
+- Alterações devem ocorrer fora da branch estável quando o projeto possuir fluxo de integração ou revisão.
+- Os nomes concretos das branches e as exceções permitidas devem ser registrados em `regrasProjeto.md`.
+- Atualizações forçadas devem ser evitadas e somente podem ocorrer quando explicitamente autorizadas e sem perda de histórico relevante.
+
+### 12.2 Promoção e integração
+
+Uma alteração somente pode ser promovida para uma branch mais estável quando:
+
+- o diff corresponder ao escopo autorizado;
+- build, testes e validações aplicáveis estiverem aprovados;
+- contratos e comportamentos protegidos permanecerem preservados;
+- a documentação afetada estiver atualizada;
+- não existirem resíduos, caminhos antigos ou implementações concorrentes;
+- limitações e exceções restantes estiverem documentadas;
+- a branch de destino não tiver recebido alterações incompatíveis.
+
+A estratégia de integração deve preservar rastreabilidade suficiente para auditoria e reversão e ser definida em `regrasProjeto.md`.
+
+### 12.3 Artefatos e automações temporárias
+
+- Arquivos, scripts, workflows, branches, pacotes e fragmentos criados exclusivamente para transporte, migração, montagem ou auditoria devem possuir finalidade temporária explícita.
+- Artefatos temporários não devem tornar-se dependências da arquitetura final nem permanecer acionáveis após a conclusão.
+- Automações com permissão de escrita devem possuir escopo mínimo, resultado determinístico e proteção contra ciclos de alteração.
+- Todo resíduo temporário deve ser removido antes da validação final.
+
+---
+
+## 13. Refatoração e manutenção
+"""
+
+          regras_dev = substituir_uma_vez(
+              regras_dev,
+              secao_testes_antiga,
+              secao_testes_nova,
+              "regrasDev.md",
+          )
+
+          regras_dev = substituir_uma_vez(
+              regras_dev,
+              "## 13. Verificação de estrutura e modularização",
+              "## 14. Verificação de estrutura e modularização",
+              "regrasDev.md",
+          )
+
+          for numero in range(1, 8):
+              regras_dev = substituir_uma_vez(
+                  regras_dev,
+                  f"### 13.{numero} ",
+                  f"### 14.{numero} ",
+                  "regrasDev.md",
+              )
+
+          regras_dev += """
+
+### 14.8 Versionamento e validação
+
+- [ ] Os papéis das branches estão definidos no projeto.
+- [ ] A alteração foi realizada fora da branch estável quando aplicável.
+- [ ] A promoção ocorreu somente após as validações obrigatórias.
+- [ ] Resultados declarados como aprovados possuem evidência verificável.
+- [ ] Testes permanentes continuam vinculados ao projeto.
+- [ ] Artefatos e automações temporárias foram removidos.
+- [ ] A origem e a revisão das regras gerais adotadas são identificáveis.
+"""
+
+          regras_dev_path.write_text(regras_dev.rstrip() + "\n", encoding="utf-8")
+
+          regras_ux_path = Path("regrasUxUi.md")
+          regras_ux = regras_ux_path.read_text(encoding="utf-8")
+
+          regras_ux = substituir_uma_vez(
+              regras_ux,
+              "- Informações não devem depender exclusivamente de cor.\n- Cores decorativas não devem competir com estados, alertas ou ações.",
+              "- Informações não devem depender exclusivamente de cor.\n- Estados podem combinar fundo, borda, espessura, forma, símbolo, posição ou texto; a distinção não deve depender apenas do reconhecimento de uma tonalidade.\n- Cores decorativas não devem competir com estados, alertas ou ações.",
+              "regrasUxUi.md",
+          )
+
+          regras_ux = substituir_uma_vez(
+              regras_ux,
+              "A ausência de um estado deve ser deliberada e não consequência de implementação incompleta.",
+              "A ausência de um estado deve ser deliberada e não consequência de implementação incompleta.\n\nTextos visuais como `Selecionado`, `Ativo` ou equivalentes não são obrigatórios quando o estado já estiver perceptível por sinais visuais não dependentes apenas de cor e exposto programaticamente por semântica nativa ou atributos acessíveis.",
+              "regrasUxUi.md",
+          )
+
+          regras_ux = substituir_uma_vez(
+              regras_ux,
+              "- Formatos específicos devem ser comunicados por exemplo, máscara, unidade ou instrução.\n- A interface deve aceitar variações razoáveis quando puder normalizá-las com segurança.\n- Restrições devem ser apresentadas antes do envio quando forem conhecidas.\n- Máscaras não devem impedir edição, colagem ou uso de tecnologias assistivas.",
+              "- Formatos específicos devem ser comunicados por exemplo, máscara, unidade ou instrução.\n- Valores compostos reconhecíveis, como duração em `minutos:segundos`, podem utilizar um único campo quando isso reduzir esforço sem comprometer clareza.\n- A interface deve aceitar variações razoáveis quando puder normalizá-las com segurança.\n- Restrições devem ser apresentadas antes do envio quando forem conhecidas.\n- Máscaras e formatações automáticas devem preservar cursor, seleção, exclusão, colagem, teclado virtual e tecnologias assistivas; quando isso não puder ser garantido, a normalização deve ocorrer após a conclusão da entrada.\n- Máscaras não devem impedir edição, colagem ou uso de tecnologias assistivas.",
+              "regrasUxUi.md",
+          )
+
+          criterio_conclusao_antigo = """### 15.9 Critério de conclusão
+
+Uma interface só pode ser considerada concluída quando:
+
+- os fluxos principais funcionarem nos contextos suportados;
+- estados relevantes estiverem implementados;
+- problemas críticos de usabilidade e acessibilidade estiverem resolvidos;
+- exceções restantes estiverem documentadas e justificadas;
+- o comportamento observado corresponder aos objetivos definidos.
+"""
+
+          criterio_conclusao_novo = """### 15.9 Níveis de validação
+
+O nível alcançado deve ser declarado conforme as evidências disponíveis:
+
+- estrutural: implementação, semântica, estados e contratos inspecionados;
+- automatizado: verificações automáticas aplicáveis aprovadas;
+- operacional: fluxos executados nos navegadores, dispositivos e métodos de entrada definidos;
+- empírico: uso observado com tecnologias assistivas ou perfis representativos quando aplicável;
+- integral: todos os níveis exigidos pelo projeto foram concluídos.
+
+O nível exigido deve ser proporcional ao risco e ao estágio do produto e registrado em `regrasProjeto.md`. Um nível não deve ser declarado quando suas evidências não tiverem sido obtidas.
+
+### 15.10 Critério de conclusão
+
+Uma interface só pode ser considerada concluída quando:
+
+- os fluxos principais funcionarem nos contextos suportados;
+- estados relevantes estiverem implementados;
+- problemas críticos de usabilidade e acessibilidade estiverem resolvidos;
+- exceções restantes estiverem documentadas e justificadas;
+- o comportamento observado corresponder aos objetivos definidos;
+- o nível de validação exigido pelo projeto tiver sido alcançado.
+"""
+
+          regras_ux = substituir_uma_vez(
+              regras_ux,
+              criterio_conclusao_antigo,
+              criterio_conclusao_novo,
+              "regrasUxUi.md",
+          )
+
+          regras_ux = substituir_uma_vez(
+              regras_ux,
+              "- [ ] Estados interativos necessários foram implementados.\n- [ ] Elementos nativos são utilizados quando adequados.",
+              "- [ ] Estados interativos necessários foram implementados.\n- [ ] Estados selecionados são perceptíveis visualmente e expostos programaticamente sem depender apenas de cor ou de texto redundante.\n- [ ] Elementos nativos são utilizados quando adequados.",
+              "regrasUxUi.md",
+          )
+
+          regras_ux = substituir_uma_vez(
+              regras_ux,
+              "- [ ] Formatos e restrições são informados antes ou durante o preenchimento.\n- [ ] Mensagens de erro explicam como corrigir.",
+              "- [ ] Formatos e restrições são informados antes ou durante o preenchimento.\n- [ ] Campos de valores compostos e formatações automáticas preservam edição e métodos de entrada suportados.\n- [ ] Mensagens de erro explicam como corrigir.",
+              "regrasUxUi.md",
+          )
+
+          regras_ux = substituir_uma_vez(
+              regras_ux,
+              "- [ ] Problemas encontrados foram corrigidos ou documentados com justificativa.\n- [ ] A interface atende aos critérios de sucesso definidos para o produto.",
+              "- [ ] Problemas encontrados foram corrigidos ou documentados com justificativa.\n- [ ] O nível de validação declarado corresponde às evidências obtidas.\n- [ ] A interface atende aos critérios de sucesso definidos para o produto.",
+              "regrasUxUi.md",
+          )
+
+          regras_ux_path.write_text(regras_ux.rstrip() + "\n", encoding="utf-8")
+
+          regras_projeto_path = Path("regrasProjeto.md")
+          regras_projeto = regras_projeto_path.read_text(encoding="utf-8")
+
+          regras_projeto = substituir_uma_vez(
+              regras_projeto,
+              "- Use `Pendente.` quando a decisão ainda não tiver sido tomada.\n- Use `Não se aplica.` quando o campo não pertencer ao projeto.",
+              "- Use `Pendente.` quando a decisão ainda não tiver sido tomada.\n- Campos pendentes não impedem atividades independentes, mas impedem declarar conformidade integral quando forem aplicáveis ao escopo validado.\n- Use `Não se aplica.` quando o campo não pertencer ao projeto.",
+              "regrasProjeto.md",
+          )
+
+          regras_projeto = substituir_uma_vez(
+              regras_projeto,
+              "Repositório principal:\n\nEx.: `owner/repository`\n\nEstado atual do projeto:",
+              "Repositório principal:\n\nEx.: `owner/repository`\n\nRevisão de `regrasDev.md` adotada:\n\nEx.: SHA do commit ou versão da fonte canônica.\n\nRevisão de `regrasUxUi.md` adotada:\n\nEx.: SHA do commit, versão da fonte canônica ou `Não se aplica.`\n\nData da última sincronização das regras gerais:\n\nEx.: 2026-08-04.\n\nDivergências ou exceções locais conhecidas:\n\nEx.: Não se aplica.\n\nEstado atual do projeto:",
+              "regrasProjeto.md",
+          )
+
+          regras_projeto = substituir_uma_vez(
+              regras_projeto,
+              "Regras de acessibilidade específicas:\n\nEx.:\n\n- todos os controles possuem nome acessível;\n- estados não são comunicados apenas por cor;\n- foco visível deve ser preservado.",
+              "Regras de acessibilidade específicas:\n\nEx.:\n\n- todos os controles possuem nome acessível;\n- estados não são comunicados apenas por cor;\n- foco visível deve ser preservado.\n\nNível de validação UX/UI exigido:\n\nEx.: Operacional, com validação estrutural e automatizada concluídas.\n\nContextos obrigatórios para validação UX/UI:\n\nEx.: Chrome e Firefox em desktop, navegação por teclado e viewport mobile definido.",
+              "regrasProjeto.md",
+          )
+
+          regras_projeto = substituir_uma_vez(
+              regras_projeto,
+              "Cobertura mínima obrigatória:\n\nEx.: Não se aplica; fluxos e regras críticas devem possuir cobertura explícita.\n\n## 26. Build, validação e entrega",
+              "Cobertura mínima obrigatória:\n\nEx.: Não se aplica; fluxos e regras críticas devem possuir cobertura explícita.\n\nPolítica de permanência dos testes:\n\nEx.: Testes que protegem comportamento estável permanecem versionados junto ao código.\n\nCritério para remoção de testes temporários:\n\nEx.: Remover somente quando verificarem migração concluída e não protegerem comportamento permanente.\n\nPolítica para testes privados:\n\nEx.: Permitidos apenas quando expuserem dados ou contratos sensíveis, com validação vinculada ao projeto.\n\n## 26. Build, validação e entrega",
+              "regrasProjeto.md",
+          )
+
+          regras_projeto = substituir_uma_vez(
+              regras_projeto,
+              "## 26. Build, validação e entrega\n\nComando de desenvolvimento:",
+              "## 26. Build, validação e entrega\n\nBranch estável:\n\nEx.: `main`.\n\nBranch de integração:\n\nEx.: `develop` ou `Não se aplica.`\n\nEstratégia para branches de trabalho:\n\nEx.: Uma branch por alteração, criada a partir da branch de integração.\n\nPolítica para alterações diretas na branch estável:\n\nEx.: Proibidas, salvo correção emergencial explicitamente autorizada.\n\nEstratégia de integração:\n\nEx.: Pull request com squash após aprovação das validações.\n\nPolítica para atualização forçada de branches:\n\nEx.: Proibida nas branches estável e de integração.\n\nComando de desenvolvimento:",
+              "regrasProjeto.md",
+          )
+
+          regras_projeto = substituir_uma_vez(
+              regras_projeto,
+              "Estratégia de deploy:\n\nEx.: Publicação automática após aprovação na branch principal.\n\nValidações obrigatórias antes de concluir uma alteração:",
+              "Estratégia de deploy:\n\nEx.: Publicação automática após aprovação na branch principal.\n\nCritério para promoção entre branches:\n\nEx.: Diff revisado, validações aprovadas, documentação atualizada e ausência de resíduos temporários.\n\nRelatórios permanentes de conformidade:\n\nEx.: Arquivos versionados que devem ser atualizados quando suas conclusões forem afetadas.\n\nDestino das evidências temporárias:\n\nEx.: Logs e artefatos da integração contínua.\n\nPolítica para workflows, scripts e arquivos temporários:\n\nEx.: Remover após a finalidade ser concluída e antes da promoção para a branch estável.\n\nValidações obrigatórias antes de concluir uma alteração:",
+              "regrasProjeto.md",
+          )
+
+          regras_projeto = substituir_uma_vez(
+              regras_projeto,
+              "- [ ] As decisões pendentes relacionadas foram verificadas.\n- [ ] A implementação segue a arquitetura adotada.",
+              "- [ ] As decisões pendentes relacionadas foram verificadas.\n- [ ] A revisão das regras gerais adotadas está identificada.\n- [ ] A implementação segue a arquitetura adotada.",
+              "regrasProjeto.md",
+          )
+
+          regras_projeto = substituir_uma_vez(
+              regras_projeto,
+              "- [ ] Testes necessários foram adicionados ou atualizados.\n- [ ] Lint foi executado com sucesso.",
+              "- [ ] Testes necessários foram adicionados ou atualizados.\n- [ ] Testes permanentes não foram removidos sem justificativa.\n- [ ] A política de branches e integração foi respeitada.\n- [ ] Artefatos e automações temporárias foram removidos.\n- [ ] Resultados declarados como aprovados possuem evidência verificável.\n- [ ] O nível de validação UX/UI exigido foi alcançado quando aplicável.\n- [ ] Lint foi executado com sucesso.",
+              "regrasProjeto.md",
+          )
+
+          regras_projeto_path.write_text(regras_projeto.rstrip() + "\n", encoding="utf-8")
+          PY
+
+      - name: Remover workflow temporário
+        run: rm .github/workflows/atualizar-regras-gerais.yml
+
+      - name: Publicar atualização
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add regrasDev.md regrasUxUi.md regrasProjeto.md .github/workflows/atualizar-regras-gerais.yml
+          git commit -m "docs: amplia regras gerais de desenvolvimento e interface"
+          git push
