@@ -21,6 +21,8 @@ Em caso de conflito, aplicar a seguinte precedência:
 
 Exceções devem ser explícitas, justificadas e restritas ao menor escopo possível.
 
+Os documentos gerais adotados por um projeto devem possuir origem e revisão identificáveis. Cópias locais não devem divergir silenciosamente da fonte canônica; divergências necessárias devem ser registradas como decisões ou exceções específicas do projeto.
+
 ---
 
 ## 2. Princípios gerais
@@ -581,6 +583,8 @@ Contrato é qualquer interface estável entre módulos, processos ou sistemas.
 - Comentários devem permanecer sincronizados com a implementação.
 - Código desativado não deve permanecer comentado.
 - Documentação afetada por alteração deve ser atualizada junto com o código.
+- Relatórios permanentes de conformidade devem ser atualizados quando alterações invalidarem suas conclusões.
+- Evidências temporárias de execução devem permanecer em logs, artefatos ou registros apropriados, sem ocupar a árvore definitiva quando não constituírem documentação mantida.
 
 ---
 
@@ -737,6 +741,8 @@ Camadas que apenas encaminham argumentos devem ser removidas ou incorporadas ao 
 
 ## 11. Testes e validação
 
+### 11.1 Cobertura e comportamento
+
 - Alterações devem ser acompanhadas por validação proporcional ao risco.
 - Regras de negócio devem possuir testes quando relevantes e estáveis.
 - Testes devem verificar comportamento observável.
@@ -744,9 +750,55 @@ Camadas que apenas encaminham argumentos devem ser removidas ou incorporadas ao 
 - Testes quebrados não devem ser ignorados ou removidos para permitir integração.
 - Cenários de erro e limites devem ser testados quando fizerem parte do comportamento esperado.
 
+### 11.2 Permanência e localização
+
+- Testes que protegem comportamento estável devem permanecer versionados junto ao código ou em infraestrutura de validação claramente vinculada ao projeto.
+- Testes não devem ser removidos apenas porque já foram executados ou porque a alteração foi concluída.
+- Testes temporários podem ser removidos somente quando verificarem exclusivamente uma migração encerrada e não protegerem comportamento permanente.
+- Testes podem permanecer privados quando expuserem dados, contratos ou cenários sensíveis, sem ocultar a ausência real de validação.
+
+### 11.3 Automação e evidências
+
+- Integração contínua deve executar as validações aplicáveis antes da promoção de alterações, quando utilizada pelo projeto.
+- Validações essenciais devem possuir forma documentada de execução local ou equivalente.
+- Ausência de execução, resultado indisponível ou status desconhecido não equivale a aprovação.
+- Declarações de validação devem identificar o escopo, a revisão verificada, os procedimentos executados, os resultados obtidos e as limitações existentes.
+
 ---
 
-## 12. Refatoração e manutenção
+## 12. Versionamento e integração
+
+### 12.1 Branches
+
+- Todo projeto deve identificar os papéis de suas branches estáveis, de integração e de trabalho, quando existirem.
+- Alterações devem ocorrer fora da branch estável quando o projeto possuir fluxo de integração ou revisão.
+- Os nomes concretos das branches e as exceções permitidas devem ser registrados em `regrasProjeto.md`.
+- Atualizações forçadas devem ser evitadas e somente podem ocorrer quando explicitamente autorizadas e sem perda de histórico relevante.
+
+### 12.2 Promoção e integração
+
+Uma alteração somente pode ser promovida para uma branch mais estável quando:
+
+- o diff corresponder ao escopo autorizado;
+- build, testes e validações aplicáveis estiverem aprovados;
+- contratos e comportamentos protegidos permanecerem preservados;
+- a documentação afetada estiver atualizada;
+- não existirem resíduos, caminhos antigos ou implementações concorrentes;
+- limitações e exceções restantes estiverem documentadas;
+- a branch de destino não tiver recebido alterações incompatíveis.
+
+A estratégia de integração deve preservar rastreabilidade suficiente para auditoria e reversão e ser definida em `regrasProjeto.md`.
+
+### 12.3 Artefatos e automações temporárias
+
+- Arquivos, scripts, workflows, branches, pacotes e fragmentos criados exclusivamente para transporte, migração, montagem ou auditoria devem possuir finalidade temporária explícita.
+- Artefatos temporários não devem tornar-se dependências da arquitetura final nem permanecer acionáveis após a conclusão.
+- Automações com permissão de escrita devem possuir escopo mínimo, resultado determinístico e proteção contra ciclos de alteração.
+- Todo resíduo temporário deve ser removido antes da validação final.
+
+---
+
+## 13. Refatoração e manutenção
 
 Toda refatoração estrutural deve ocorrer das folhas para a raiz:
 
@@ -778,9 +830,9 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 
 ---
 
-## 13. Verificação de estrutura e modularização
+## 14. Verificação de estrutura e modularização
 
-### 13.1 Modelo da árvore
+### 14.1 Modelo da árvore
 
 - [ ] A raiz considerada é o diretório raiz do projeto.
 - [ ] As folhas consideradas são os menores blocos lógicos indivisíveis do código.
@@ -789,7 +841,7 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] Cada nó possui responsabilidade identificável.
 - [ ] Cada folha permanece indivisível sem misturar responsabilidades.
 
-### 13.2 Progressão das folhas para a raiz
+### 14.2 Progressão das folhas para a raiz
 
 - [ ] Os menores blocos lógicos foram avaliados primeiro.
 - [ ] Nenhuma função foi validada antes de seus blocos internos.
@@ -801,7 +853,7 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] Cada avanço ocorreu apenas depois da conformidade integral do nível atual.
 - [ ] Ramos afetados por alterações superiores foram reavaliados das folhas para a raiz.
 
-### 13.3 Balanceamento
+### 14.3 Balanceamento
 
 - [ ] Filhos do mesmo nó são semanticamente relacionados.
 - [ ] Responsabilidades diferentes foram separadas ou realocadas.
@@ -814,7 +866,7 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] A navegação não é maior que o ganho de clareza.
 - [ ] A árvore é a menor estrutura semanticamente suficiente.
 
-### 13.4 Modularização
+### 14.4 Modularização
 
 - [ ] A modularização começou pelos blocos lógicos internos.
 - [ ] Funções, métodos e componentes foram organizados antes da extração de arquivos.
@@ -824,7 +876,7 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] A arquitetura global surgiu das responsabilidades reais do código.
 - [ ] Nenhuma pasta ou camada foi criada preventivamente.
 
-### 13.5 Nomenclatura
+### 14.5 Nomenclatura
 
 - [ ] Cada nó possui nome correspondente à sua responsabilidade real.
 - [ ] A leitura do caminho da raiz até a folha forma uma sequência semântica coerente.
@@ -836,7 +888,7 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] Convenções prevaleceram somente quando necessárias ou mais eficientes.
 - [ ] Nomes foram reavaliados após mudanças de responsabilidade.
 
-### 13.6 Arquivos e código interno
+### 14.6 Arquivos e código interno
 
 - [ ] Cada arquivo possui responsabilidade principal.
 - [ ] Cada função possui responsabilidade principal.
@@ -846,7 +898,7 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] Auxiliares locais permanecem próximos de seus consumidores.
 - [ ] Exports representam interface pública intencional.
 
-### 13.7 Migrações e refatorações
+### 14.7 Migrações e refatorações
 
 - [ ] Todo conteúdo necessário foi colocado na árvore final antes da remoção.
 - [ ] Imports e referências foram atualizados.
@@ -854,3 +906,13 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] Não restaram caminhos obsoletos ou duplicados.
 - [ ] O comportamento foi validado após a reorganização.
 - [ ] Contratos e regras de negócio foram preservados.
+
+### 14.8 Versionamento e validação
+
+- [ ] Os papéis das branches estão definidos no projeto.
+- [ ] A alteração foi realizada fora da branch estável quando aplicável.
+- [ ] A promoção ocorreu somente após as validações obrigatórias.
+- [ ] Resultados declarados como aprovados possuem evidência verificável.
+- [ ] Testes permanentes continuam vinculados ao projeto.
+- [ ] Artefatos e automações temporárias foram removidos.
+- [ ] A origem e a revisão das regras gerais adotadas são identificáveis.
