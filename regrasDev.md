@@ -10,6 +10,8 @@ A estrutura concreta deve ser registrada em `regrasProjeto.md`, respeitando inte
 
 As regras gerais aplicam-se a todo o código. As regras específicas de front-end e back-end complementam as regras gerais somente nos contextos correspondentes.
 
+Cada regra definida em `regrasDev.md`, `regrasProjeto.md` e `regrasUxUi.md` deve ser analisada, aplicada e validada de forma independente das demais. O atendimento a uma regra não implica o atendimento, a substituição ou a dispensa de qualquer outra; todas as regras aplicáveis devem ser satisfeitas cumulativamente, salvo quando algum dos próprios documentos estabelecer explicitamente dependência, precedência ou exceção.
+
 As decisões específicas de cada projeto, como stack, arquitetura adotada, estrutura concreta de diretórios, bibliotecas, integrações e restrições, devem ser registradas em `regrasProjeto.md`.
 
 Em caso de conflito, aplicar a seguinte precedência:
@@ -744,6 +746,9 @@ Camadas que apenas encaminham argumentos devem ser removidas ou incorporadas ao 
 ### 11.1 Cobertura e comportamento
 
 - Alterações devem ser acompanhadas por validação proporcional ao risco.
+- A estratégia de testes deve mapear e cobrir integralmente o grafo de casos de uso do projeto, incluindo cada caso de uso e as conexões relevantes entre eles.
+- A cobertura deve combinar testes unitários, de integração e de ponta a ponta conforme a responsabilidade, o risco e a necessidade real de cada parte do projeto.
+- Fluxos principais, alternativos, de erro, limites e transições relevantes do grafo devem ser validados no nível de teste mais adequado, sem exigir uma categoria de teste quando ela não agregar proteção ao projeto.
 - Regras de negócio devem possuir testes quando relevantes e estáveis.
 - Testes devem verificar comportamento observável.
 - Refatorações devem preservar contratos e comportamento.
