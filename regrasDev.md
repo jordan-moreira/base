@@ -697,6 +697,37 @@ Quando existirem, distinguir:
 
 Nenhuma dessas divisões deve ser criada automaticamente.
 
+### 9.1.1 Normalização global de estilos
+
+Todo projeto front-end deve possuir uma base global de estilos carregada na inicialização da aplicação para neutralizar diferenças desnecessárias entre os estilos padrão dos navegadores suportados.
+
+O reset mínimo obrigatório é:
+
+```css
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+```
+
+A base global também deve, quando aplicável ao projeto:
+
+- fazer controles de formulário herdarem tipografia e cor do contexto;
+- impedir que imagens, vídeos, SVGs e canvases ultrapassem o contêiner;
+- definir comportamento previsível para elementos de mídia e conteúdo substituído;
+- normalizar altura mínima, renderização de texto e outros padrões que variem entre navegadores suportados;
+- remover estilos padrão adicionais somente quando houver necessidade real e substituição intencional no design system ou no componente correspondente.
+
+O reset global não deve:
+
+- remover foco visível sem substituição acessível equivalente;
+- eliminar semântica ou comportamento nativo necessário;
+- remover globalmente marcadores de listas, decoração de links, bordas de controles ou outros sinais de interação sem que o projeto defina uma alternativa clara;
+- introduzir regras específicas de componentes ou funcionalidades na base global.
+
 ### 9.2 Componentes
 
 Componentes usados por uma única página ou funcionalidade devem permanecer próximos dela.
@@ -953,3 +984,44 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] Testes permanentes continuam vinculados ao projeto.
 - [ ] Artefatos e automações temporárias foram removidos.
 - [ ] A origem e a revisão das regras gerais adotadas são identificáveis.
+
+---
+
+## Apêndice normativo — Relações entre regras de desenvolvimento
+
+Este apêndice torna explícitas relações anteriormente implícitas ou necessárias. Todos os itens abaixo possuem força normativa equivalente às demais regras deste documento. Os identificadores preservam a origem da relação para auditoria: `I` indica relação anteriormente implícita e `N` indica relação necessária adicionada nesta revisão.
+
+### Dependências
+
+- [DEP-I-07] A nomenclatura de qualquer nó deve ser definida somente depois que sua responsabilidade real tiver sido identificada e estabilizada no escopo analisado.
+- [DEP-I-08] Contratos públicos e fronteiras abstratas devem ser definidos antes das implementações concretas que os satisfazem.
+- [DEP-I-15] A taxonomia interna de erros deve ser definida antes da conversão desses erros em mensagens externas, respostas de transporte, logs ou métricas.
+- [DEP-I-16] Requisitos de segurança e privacidade devem ser definidos antes de decisões sobre logs, persistência, valores padrão, preenchimento automático ou tratamento de dados.
+- [DEP-N-01] Toda regra que funcione como pré-condição de outra deve declarar expressamente a relação, o escopo afetado e a evidência necessária para considerar a pré-condição satisfeita.
+- [DEP-N-02] A alteração de uma regra antecedente invalida a conformidade das regras dependentes afetadas e exige sua reavaliação antes da continuidade.
+- [DEP-N-05] A baseline de comportamento, contratos, formatos e resultados observáveis deve ser registrada antes de qualquer normalização, migração ou refatoração estrutural.
+- [DEP-N-06] A árvore final planejada deve ser validada contra responsabilidades, contratos, dependências e casos de uso antes do início da migração estrutural.
+
+### Precedências
+
+- [PRE-I-01] Corretude, segurança e preservação de comportamento prevalecem sobre simplificação, redução estrutural, desempenho ou conveniência de implementação quando não for possível satisfazer simultaneamente esses objetivos.
+- [PRE-I-02] Contratos públicos e comportamentos protegidos prevalecem sobre conveniências de refatoração, reorganização ou redução de código.
+- [PRE-I-03] Segurança e integridade dos dados prevalecem sobre eficiência, continuidade operacional ou conveniência de interface.
+- [PRE-I-05] Estrutura semântica e responsabilidade real prevalecem sobre simetria visual da árvore, uniformidade artificial ou aparência de organização.
+- [PRE-I-06] Responsabilidade, coesão e fronteira prevalecem sobre tamanho físico, quantidade de linhas, número de arquivos ou limites numéricos arbitrários.
+- [PRE-I-07] Contrato, significado e comportamento compartilhados prevalecem sobre semelhança visual, nominal ou estrutural.
+- [PRE-N-01] A precedência deve ser aplicada somente ao trecho e ao escopo em conflito; todas as regras não afetadas continuam cumulativamente obrigatórias.
+- [PRE-N-02] Um conflito normativo só existe quando duas regras aplicáveis não podem ser satisfeitas simultaneamente no mesmo escopo.
+- [PRE-N-03] Preferência pessoal, custo, prazo, hábito ou conveniência não constituem conflito normativo.
+- [PRE-N-04] Nenhuma decisão local pode prevalecer sobre exigência legal, requisito técnico obrigatório, segurança mínima ou integridade de dados.
+- [PRE-N-05] Quando regras do mesmo nível entrarem em conflito, deve prevalecer a solução que melhor preserve comportamento, segurança, acessibilidade e contratos, com decisão explícita e documentada.
+
+### Exceções
+
+- [EXC-I-01] Código compartilhado deve retornar ao contexto específico quando seus consumidores deixarem de possuir significado, contrato ou ciclo de mudança equivalentes.
+- [EXC-I-02] Uma abstração deve ser removida quando deixar de representar contrato, responsabilidade, fronteira ou reutilização real.
+- [EXC-I-03] Uma camada deve ser incorporada ao nó semanticamente correto quando passar a apenas encaminhar dados sem transformação, proteção, coordenação ou adaptação.
+- [EXC-N-03] Uma exceção não dispensa regras que não sejam diretamente afetadas pelo motivo que a originou.
+- [EXC-N-04] Uma exceção local não cria convenção geral e não pode alterar o comportamento normativo dos documentos canônicos sem revisão formal.
+- [EXC-N-06] A omissão de uma categoria de teste deve registrar qual proteção ela não agregaria, quais comportamentos permanecem cobertos e por quais níveis de teste.
+- [EXC-N-10] Toda exceção deve ser reavaliada quando mudar a regra afetada, sua dependência, a tecnologia, o risco ou o contexto de aplicação.
