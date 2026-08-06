@@ -10,6 +10,8 @@ O `regrasDev.md` deve concentrar regras gerais e reutilizáveis de desenvolvimen
 
 Este arquivo deve conter apenas definições, convenções, restrições e decisões próprias deste projeto.
 
+Cada regra definida em `regrasDev.md`, `regrasProjeto.md` e `regrasUxUi.md` deve ser analisada, aplicada e validada de forma independente das demais. O atendimento a uma regra não implica o atendimento, a substituição ou a dispensa de qualquer outra; todas as regras aplicáveis devem ser satisfeitas cumulativamente, salvo quando algum dos próprios documentos estabelecer explicitamente dependência, precedência ou exceção.
+
 ## Regras de preenchimento
 
 - Cada campo deve representar uma única decisão.
