@@ -41,3 +41,5 @@ jobs:
           git add regrasDev.md regrasProjeto.md regrasUxUi.md .github/scripts/apply-rule-relations.py .github/workflows/apply-rule-relations.yml
           git commit -m "docs: explicitar relações normativas entre regras"
           git push
+
+# Disparo controlado após o workflow já existir na branch padrão.
