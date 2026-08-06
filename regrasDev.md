@@ -191,6 +191,32 @@ Em cada nível:
 
 A arquitetura global deve emergir das responsabilidades reais do código organizado. Não deve ser imposta antecipadamente por meio de pastas, camadas ou módulos vazios.
 
+### 2.12 Ordem operacional entre modularização e balanceamento
+
+A modularização e o balanceamento devem ser aplicados de forma independente, cumulativa e em uma ordem operacional obrigatória dentro de cada nó da árvore.
+
+Para cada nó:
+
+1. modularizar e validar primeiro o conteúdo interno e todos os seus filhos, começando pelas folhas;
+2. somente depois da conformidade interna, avaliar o balanceamento do nó quanto à responsabilidade, coesão, alocação, largura, profundidade e relação semântica entre os filhos;
+3. dividir, agrupar, mover, promover, incorporar ou remover filhos somente quando o balanceamento demonstrar necessidade semântica;
+4. quando o balanceamento modificar a estrutura ou a responsabilidade de qualquer filho, retornar ao menor nível afetado;
+5. modularizar e validar novamente todos os ramos afetados das folhas para a raiz;
+6. considerar o nó concluído somente quando sua modularização interna e seu balanceamento estrutural estiverem simultaneamente conformes.
+
+A sequência operacional obrigatória é:
+
+```text
+modularizar o nó e seus filhos
+→ validar a modularização interna
+→ balancear o nó
+→ identificar alterações estruturais
+→ remodularizar os ramos afetados
+→ revalidar das folhas para a raiz
+```
+
+Não é permitido tratar a modularização de toda a árvore e o balanceamento de toda a árvore como duas etapas globais independentes executadas uma única vez. O processo deve ser iterativo por nó, nível e ramo até que nenhuma alteração de balanceamento produza nova necessidade de modularização.
+
 ---
 
 ## 3. Critérios universais de divisão e alocação
@@ -819,6 +845,8 @@ Toda refatoração estrutural deve ocorrer das folhas para a raiz:
 10. remover estruturas antigas;
 11. validar comportamento, build e testes.
 
+Em cada passo estrutural, primeiro modularizar e validar internamente o nó atual; depois avaliar seu balanceamento. Se o balanceamento alterar a estrutura ou a responsabilidade de qualquer filho, retornar ao menor nível afetado e repetir a modularização e a validação das folhas para a raiz.
+
 A passagem de uma etapa estrutural para a seguinte só pode ocorrer quando o nível atual estiver em conformidade com estas regras.
 
 Se uma alteração em etapa posterior afetar um nível anteriormente validado, o ramo afetado deve retornar ao menor nível modificado e ser novamente validado das folhas para a raiz.
@@ -855,8 +883,10 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] Nenhum módulo foi validado antes de seus nós internos.
 - [ ] Nenhum domínio foi validado antes de seus módulos.
 - [ ] A raiz só foi validada após todos os níveis inferiores.
+- [ ] Cada nó foi modularizado internamente antes da avaliação de seu balanceamento.
 - [ ] Cada avanço ocorreu apenas depois da conformidade integral do nível atual.
-- [ ] Ramos afetados por alterações superiores foram reavaliados das folhas para a raiz.
+- [ ] Ramos afetados por alterações de balanceamento retornaram ao menor nível modificado.
+- [ ] Ramos afetados por alterações superiores foram remodularizados e reavaliados das folhas para a raiz.
 
 ### 14.3 Balanceamento
 
@@ -880,6 +910,8 @@ Mover código desorganizado para uma nova árvore apenas transfere o problema. A
 - [ ] Módulos só foram criados após consolidação das responsabilidades internas.
 - [ ] A arquitetura global surgiu das responsabilidades reais do código.
 - [ ] Nenhuma pasta ou camada foi criada preventivamente.
+- [ ] O balanceamento de cada nó ocorreu somente depois de sua modularização interna.
+- [ ] Alterações de balanceamento que afetaram filhos provocaram nova modularização dos ramos correspondentes.
 
 ### 14.5 Nomenclatura
 
