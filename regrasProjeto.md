@@ -1972,3 +1972,38 @@ Ex.:
 - [ ] Verificação de tipos foi executada com sucesso.
 - [ ] Testes afetados foram executados com sucesso.
 - [ ] Build foi executado com sucesso.
+
+---
+
+## Apêndice normativo — Relações entre decisões do projeto
+
+Este apêndice torna explícitas relações anteriormente implícitas ou necessárias. Todos os itens abaixo devem ser preenchidos e aplicados junto às decisões correspondentes deste documento. Os identificadores preservam a origem da relação para auditoria: `I` indica relação anteriormente implícita e `N` indica relação necessária adicionada nesta revisão.
+
+### Dependências
+
+- [DEP-I-01] A arquitetura adotada deve ser definida somente depois de objetivo, escopo, requisitos, restrições, premissas e natureza do sistema estarem suficientemente definidos.
+- [DEP-I-02] Os módulos e suas fronteiras devem ser definidos somente depois da arquitetura, das responsabilidades e da direção de dependências estarem estabelecidas.
+- [DEP-I-03] A árvore concreta de diretórios deve ser definida a partir da arquitetura, dos módulos, dos fluxos técnicos e da direção permitida das dependências.
+- [DEP-I-04] Regras de imports e reexports devem ser definidas a partir das fronteiras, interfaces públicas e dependências permitidas entre módulos.
+- [DEP-I-05] A escolha da tecnologia de persistência deve depender da existência, propriedade, volume, ciclo de vida, integridade e requisitos de recuperação dos dados.
+- [DEP-I-06] A escolha entre estado local, de feature, global ou remoto deve depender da propriedade, dos consumidores, da origem, da duração e da necessidade de sincronização do estado.
+- [DEP-I-09] A implementação dos testes deve ocorrer depois que comportamentos observáveis, contratos, casos de uso, conexões, riscos e critérios de sucesso estiverem definidos.
+- [DEP-N-03] Uma decisão pendente bloqueia somente os ramos que dependem dela; atividades independentes podem prosseguir desde que não antecipem a decisão.
+- [DEP-N-04] O grafo de casos de uso deve estar formalizado antes de qualquer declaração de cobertura integral de testes.
+- [DEP-N-07] A documentação afetada deve ser identificada antes da implementação e atualizada antes da conclusão ou promoção da alteração.
+- [DEP-N-08] As revisões canônicas de `regrasDev.md`, `regrasProjeto.md` e `regrasUxUi.md` adotadas pelo projeto devem estar identificadas antes de declarar conformidade normativa.
+
+### Precedências
+
+- [PRE-N-06] Quando não for possível determinar a precedência entre regras aplicáveis, a implementação do escopo afetado deve permanecer bloqueada até que a decisão seja registrada explicitamente neste documento.
+
+### Exceções
+
+- [EXC-I-04] Uma compatibilidade existente somente pode ser alterada mediante decisão explícita que autorize a quebra, identifique consumidores afetados e defina estratégia de migração.
+- [EXC-N-01] Toda exceção deve registrar a regra afetada, motivo, escopo, responsável, data, impacto, riscos, medidas compensatórias e critério de encerramento.
+- [EXC-N-02] Toda exceção temporária deve possuir prazo ou condição objetiva de revisão e remoção.
+- [EXC-N-05] O estado `Não se aplica.` exige justificativa verificável baseada na natureza e no escopo do projeto, e não apenas na ausência atual de implementação.
+- [EXC-N-08] Exceções relacionadas à segurança exigem análise de risco, autorização explícita e medida compensatória proporcional.
+- [EXC-N-09] Exceções que afetem contratos públicos, formatos persistidos ou comportamento observável exigem autorização explícita do responsável pelo projeto e plano de compatibilidade ou migração.
+- [EXC-N-11] A conformidade integral só pode ser declarada quando não existirem exceções incompatíveis com o nível de conformidade pretendido.
+- [EXC-N-12] Exceções encerradas devem ser removidas da implementação e da documentação normativa ativa, preservando apenas o histórico da decisão no local apropriado.
