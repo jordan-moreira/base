@@ -1,0 +1,43 @@
+name: Aplicar relações normativas explícitas
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/scripts/apply-rule-relations.py
+      - .github/workflows/apply-rule-relations.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Aplicar e validar relações normativas
+        run: python .github/scripts/apply-rule-relations.py
+
+      - name: Remover automação temporária
+        run: |
+          rm .github/scripts/apply-rule-relations.py
+          rm .github/workflows/apply-rule-relations.yml
+
+      - name: Registrar alterações
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add regrasDev.md regrasProjeto.md regrasUxUi.md .github/scripts/apply-rule-relations.py .github/workflows/apply-rule-relations.yml
+          git commit -m "docs: explicitar relações normativas entre regras"
+          git push
