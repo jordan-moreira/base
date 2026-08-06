@@ -1,24 +1,30 @@
 name: Aplicar relações normativas explícitas
 
 on:
-  push:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
     branches:
       - master
     paths:
-      - .github/scripts/apply-rule-relations.py
-      - .github/workflows/apply-rule-relations.yml
+      - .github/apply-rule-relations.trigger
 
 permissions:
   contents: write
+  pull-requests: read
 
 jobs:
   apply:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'aplicar-relacoes-normativas'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Obter repositório
+      - name: Obter branch da atualização
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
       - name: Configurar Python
@@ -33,13 +39,12 @@ jobs:
         run: |
           rm .github/scripts/apply-rule-relations.py
           rm .github/workflows/apply-rule-relations.yml
+          rm .github/apply-rule-relations.trigger
 
-      - name: Registrar alterações
+      - name: Registrar alterações na branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add regrasDev.md regrasProjeto.md regrasUxUi.md .github/scripts/apply-rule-relations.py .github/workflows/apply-rule-relations.yml
+          git add regrasDev.md regrasProjeto.md regrasUxUi.md .github/
           git commit -m "docs: explicitar relações normativas entre regras"
-          git push
-
-# Disparo controlado após o workflow já existir na branch padrão.
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
