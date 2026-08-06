@@ -1163,3 +1163,28 @@ Uma interface só pode ser considerada concluída quando:
 - [ ] Problemas encontrados foram corrigidos ou documentados com justificativa.
 - [ ] O nível de validação declarado corresponde às evidências obtidas.
 - [ ] A interface atende aos critérios de sucesso definidos para o produto.
+
+---
+
+## Apêndice normativo — Relações entre regras de UX e UI
+
+Este apêndice torna explícitas relações anteriormente implícitas ou necessárias. Todos os itens abaixo possuem força normativa equivalente às demais regras deste documento. Os identificadores preservam a origem da relação para auditoria: `I` indica relação anteriormente implícita e `N` indica relação necessária adicionada nesta revisão.
+
+### Dependências
+
+- [DEP-I-10] A arquitetura da informação deve ser definida antes da navegação, da hierarquia visual, da divulgação progressiva e da adaptação responsiva.
+- [DEP-I-11] A necessidade de um dado deve ser confirmada antes da criação do campo, da escolha do controle, da validação e da mensagem de erro correspondente.
+- [DEP-I-12] Os estados relevantes de uma tela, região ou componente devem ser definidos antes de sua implementação ser considerada funcionalmente completa.
+- [DEP-I-13] Plataformas, navegadores, dimensões, métodos de entrada e níveis de acessibilidade suportados devem ser definidos antes da validação de responsividade, acessibilidade e compatibilidade.
+- [DEP-I-14] O risco, o impacto e a reversibilidade da ação devem ser avaliados antes da escolha entre confirmação, possibilidade de desfazer ou execução direta.
+- [DEP-N-09] A acessibilidade deve participar da definição da estrutura, componentes, estados, conteúdo e interação desde o início, não podendo ser tratada apenas como validação posterior.
+
+### Precedências
+
+- [PRE-I-04] Acessibilidade prevalece sobre identidade visual, animações, densidade, personalização estética e convenções locais quando não for possível satisfazê-las simultaneamente.
+
+### Exceções
+
+- [EXC-I-05] A preservação de contexto ou dados pode ser limitada quando segurança, privacidade ou integridade exigirem descarte, desde que a consequência seja informada e proporcional.
+- [EXC-I-06] A continuidade de tarefas independentes pode ser temporariamente bloqueada quando a operação em andamento comprometer consistência, segurança ou integridade global.
+- [EXC-N-07] Nenhuma exceção de acessibilidade pode reduzir a conformidade abaixo de exigências legais, técnicas obrigatórias ou requisitos mínimos definidos para a plataforma.
