@@ -99,6 +99,42 @@ Este apêndice torna explícitas relações anteriormente implícitas ou necess�
 - [EXC-N-07] Nenhuma exceção de acessibilidade pode reduzir a conformidade abaixo de exigências legais, técnicas obrigatórias ou requisitos mínimos definidos para a plataforma.''',
 }
 
+FRONTEND_STYLE_ANCHOR = "Nenhuma dessas divisões deve ser criada automaticamente.\n\n### 9.2 Componentes"
+FRONTEND_STYLE_REPLACEMENT = r'''Nenhuma dessas divisões deve ser criada automaticamente.
+
+### 9.1.1 Normalização global de estilos
+
+Todo projeto front-end deve possuir uma base global de estilos carregada na inicialização da aplicação para neutralizar diferenças desnecessárias entre os estilos padrão dos navegadores suportados.
+
+O reset mínimo obrigatório é:
+
+```css
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+```
+
+A base global também deve, quando aplicável ao projeto:
+
+- fazer controles de formulário herdarem tipografia e cor do contexto;
+- impedir que imagens, vídeos, SVGs e canvases ultrapassem o contêiner;
+- definir comportamento previsível para elementos de mídia e conteúdo substituído;
+- normalizar altura mínima, renderização de texto e outros padrões que variem entre navegadores suportados;
+- remover estilos padrão adicionais somente quando houver necessidade real e substituição intencional no design system ou no componente correspondente.
+
+O reset global não deve:
+
+- remover foco visível sem substituição acessível equivalente;
+- eliminar semântica ou comportamento nativo necessário;
+- remover globalmente marcadores de listas, decoração de links, bordas de controles ou outros sinais de interação sem que o projeto defina uma alternativa clara;
+- introduzir regras específicas de componentes ou funcionalidades na base global.
+
+### 9.2 Componentes'''
+
 EXPECTED_IDS = {
     *(f"DEP-I-{index:02d}" for index in range(1, 17)),
     *(f"DEP-N-{index:02d}" for index in range(1, 10)),
@@ -109,6 +145,12 @@ EXPECTED_IDS = {
 }
 
 MARKER = "## Apêndice normativo — Relações"
+
+dev_path = Path("regrasDev.md")
+dev_content = dev_path.read_text(encoding="utf-8")
+if FRONTEND_STYLE_ANCHOR not in dev_content:
+    raise RuntimeError("Âncora da seção de front-end não encontrada em regrasDev.md")
+dev_path.write_text(dev_content.replace(FRONTEND_STYLE_ANCHOR, FRONTEND_STYLE_REPLACEMENT, 1), encoding="utf-8")
 
 for file_name, section in SECTIONS.items():
     path = Path(file_name)
@@ -133,4 +175,15 @@ if set(found_ids) != EXPECTED_IDS:
     extra = sorted(set(found_ids) - EXPECTED_IDS)
     raise RuntimeError(f"Inventário divergente; ausentes={missing}; extras={extra}")
 
-print("56 relações normativas explicitadas e validadas nos três documentos")
+updated_dev = dev_path.read_text(encoding="utf-8")
+required_style_tokens = [
+    "### 9.1.1 Normalização global de estilos",
+    "box-sizing: border-box;",
+    "margin: 0;",
+    "padding: 0;",
+]
+for token in required_style_tokens:
+    if token not in updated_dev:
+        raise RuntimeError(f"Regra de estilos incompleta; ausente: {token}")
+
+print("56 relações normativas e baseline global de estilos explicitadas e validadas")
