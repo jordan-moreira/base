@@ -10,6 +10,8 @@ As decisões concretas de cada projeto, como público-alvo, plataformas suportad
 
 Este documento define resultados e critérios universais. Não determina soluções visuais específicas quando a decisão depender do contexto do produto.
 
+Cada regra definida em `regrasDev.md`, `regrasProjeto.md` e `regrasUxUi.md` deve ser analisada, aplicada e validada de forma independente das demais. O atendimento a uma regra não implica o atendimento, a substituição ou a dispensa de qualquer outra; todas as regras aplicáveis devem ser satisfeitas cumulativamente, salvo quando algum dos próprios documentos estabelecer explicitamente dependência, precedência ou exceção.
+
 As regras deste documento complementam `regrasDev.md`:
 
 - `regrasDev.md` define como o sistema deve ser estruturado e implementado;
