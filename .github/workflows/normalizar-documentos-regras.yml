@@ -1,0 +1,548 @@
+name: Normalizar documentos de regras
+
+on:
+  push:
+    paths:
+      - '.github/workflows/normalizar-documentos-regras.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  normalizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Aplicar normas documentais explícitas
+        shell: python
+        run: |
+          from pathlib import Path
+
+          def replace_once(text: str, old: str, new: str, label: str) -> str:
+              count = text.count(old)
+              if count != 1:
+                  raise RuntimeError(f"{label}: esperado 1 marcador, encontrado {count}")
+              return text.replace(old, new, 1)
+
+          def insert_before(text: str, marker: str, addition: str, label: str) -> str:
+              if addition.strip() in text:
+                  return text
+              return replace_once(text, marker, addition + "\n\n" + marker, label)
+
+          # regrasDev.md
+          path = Path('regrasDev.md')
+          text = path.read_text(encoding='utf-8')
+
+          old = """Em caso de conflito, aplicar a seguinte precedência:
+
+1. exigências técnicas obrigatórias da linguagem, framework ou ferramenta;
+2. `regrasProjeto.md`;
+3. este documento;
+4. convenções já consolidadas no projeto.
+
+Exceções devem ser explícitas, justificadas e restritas ao menor escopo possível.
+
+Os documentos gerais adotados por um projeto devem possuir origem e revisão identificáveis. Cópias locais não devem divergir silenciosamente da fonte canônica; divergências necessárias devem ser registradas como decisões ou exceções específicas do projeto."""
+          new = """## Natureza normativa e mutabilidade
+
+Este documento é normativo, universal e imutável no contexto de qualquer projeto que o adote.
+
+Durante a criação, manutenção ou normalização de um projeto:
+
+- este documento não pode ser adaptado ao projeto;
+- regras não aplicáveis não podem ser removidas;
+- regras específicas do projeto não podem ser adicionadas localmente;
+- o conteúdo deve corresponder integralmente à revisão oficial adotada do repositório `base`;
+- incompatibilidades devem ser resolvidas no projeto ou registradas como não conformidades;
+- uma incompatibilidade local não autoriza modificar, ignorar ou suspender a regra universal.
+
+Este documento somente pode ser alterado quando o objeto da alteração for o próprio padrão universal mantido no repositório `base`.
+
+Em caso de conflito, aplicar a seguinte precedência:
+
+1. exigências legais e restrições técnicas incontornáveis da plataforma;
+2. `regrasDev.md` e `regrasUxUi.md`, quando aplicável, de forma cumulativa;
+3. `regrasProjeto.md`;
+4. código-fonte e convenções já consolidadas no projeto.
+
+A precedência deve ser aplicada somente ao escopo incompatível. Todas as demais regras continuam obrigatórias.
+
+`regrasProjeto.md` pode concretizar, restringir ou especializar decisões que os documentos universais delegarem ao projeto, mas não pode contradizê-los, dispensá-los ou reduzir seus critérios mínimos.
+
+Preferência pessoal, custo, prazo, hábito, conveniência ou limitação evitável de implementação não constituem conflito normativo.
+
+Os documentos universais adotados por um projeto devem possuir origem e revisão identificáveis. Cópias locais não podem divergir da fonte canônica.
+
+Quando o projeto não puder satisfazer uma regra universal, a situação deve ser registrada em `regrasProjeto.md` como não conformidade conhecida, contendo a regra afetada, causa, escopo, impacto, risco, tratamento planejado e condição necessária para correção. O registro não substitui, modifica ou suspende a regra."""
+          text = replace_once(text, old, new, 'regrasDev natureza e precedência')
+
+          old = """### 3.6 Criar uma abstração
+
+Criar uma abstração somente quando ela:
+
+- eliminar repetição relevante;
+- estabilizar um contrato;
+- isolar uma dependência;
+- representar conceito real do domínio;
+- proteger uma fronteira;
+- simplificar consumidores.
+
+Não abstrair apenas para antecipar necessidades futuras."""
+          new = """### 3.6 Menor abstração semanticamente suficiente
+
+A implementação deve utilizar a menor abstração capaz de tornar responsabilidades, estados, variantes, contratos e dependências compreensíveis, sem privilegiar apenas a menor quantidade de código.
+
+Criar uma abstração somente quando ela reduzir pelo menos um destes custos:
+
+- compreensão;
+- localização;
+- alteração;
+- validação;
+- reutilização;
+- acoplamento;
+- risco de erro.
+
+Uma abstração pode, entre outros benefícios:
+
+- eliminar repetição relevante;
+- estabilizar um contrato;
+- isolar uma dependência;
+- representar conceito real do domínio;
+- proteger uma fronteira;
+- simplificar consumidores.
+
+A menor abstração não corresponde necessariamente à menor quantidade de código. Uma solução mais curta pode ser semanticamente pior quando ocultar estados, responsabilidades, contratos ou dependências.
+
+Uma abstração que apenas acrescente nomes, arquivos, níveis ou indireções sem reduzir algum dos custos anteriores deve ser evitada.
+
+Não abstrair apenas para antecipar necessidades futuras."""
+          text = replace_once(text, old, new, 'regrasDev abstração')
+
+          addition = """### 3.9 Unidade de modularização
+
+A unidade de modularização é a responsabilidade, não o tipo técnico nem a quantidade física de elementos.
+
+A existência de múltiplos componentes, estilos, funções, tipos, constantes ou contratos não justifica isoladamente a criação de múltiplos arquivos, diretórios, módulos ou camadas.
+
+Não se deve criar automaticamente:
+
+- um arquivo por função;
+- um arquivo por componente visual;
+- um arquivo por estilo;
+- um diretório por arquivo;
+- um módulo por tipo técnico;
+- uma abstração por elemento de marcação.
+
+A separação exige responsabilidade, contrato, consumidor, ciclo de mudança, teste ou evolução independente real."""
+          text = insert_before(text, "---\n\n## 4. Organização e arquitetura", addition, 'regrasDev unidade de modularização')
+
+          addition = """### 6.6 Semântica e contratos nativos da plataforma
+
+Abstrações, wrappers e componentes devem preservar a semântica, os contratos e os comportamentos nativos adequados da linguagem, plataforma ou ambiente.
+
+Não se deve substituir um recurso nativo adequado por uma abstração genérica que exija reconstrução manual de comportamento, integração, estado, valor, foco, teclado, acessibilidade, ciclo de vida ou compatibilidade com ferramentas.
+
+Quando uma abstração sobre recurso nativo for necessária, ela deve preservar os contratos observáveis relevantes e acrescentar responsabilidade real, sem ocultar capacidades necessárias dos consumidores."""
+          text = insert_before(text, "---\n\n## 7. Dependências, imports e configuração", addition, 'regrasDev semântica nativa')
+
+          old = """### 9.2 Componentes
+
+Componentes usados por uma única página ou funcionalidade devem permanecer próximos dela.
+
+Mover para área compartilhada somente com reutilização real e contrato estável.
+
+Não manter simultaneamente `src/components` e `src/shared/components` quando ambas representarem a mesma responsabilidade."""
+          new = old + """
+
+### 9.2.1 Responsabilidades estruturais e visuais
+
+Elementos estruturais ou visuais com responsabilidade identificável podem possuir representação nomeada no código, mesmo quando não possuem comportamento próprio.
+
+A nomeação é justificável quando reduz o custo de compreender a composição, a hierarquia, os estados ou as variantes da interface.
+
+A existência de responsabilidade visual identificável não exige isoladamente novo componente, arquivo, diretório, API pública ou abstração reutilizável.
+
+Elementos incidentais utilizados apenas como marcação, texto ou agrupamento circunstancial devem permanecer na estrutura local quando sua abstração apenas aumentar o vocabulário ou a navegação.
+
+Nomear uma responsabilidade, extraí-la para uma abstração, separá-la em arquivo e compartilhá-la são decisões independentes, cada uma sujeita aos próprios critérios."""
+          text = replace_once(text, old, new, 'regrasDev responsabilidades visuais')
+
+          old = """### 9.4 Estado
+
+Estado local deve permanecer próximo do consumidor.
+
+Promover para store, contexto ou equivalente somente quando houver múltiplos consumidores, sobrevivência entre componentes ou atualização coordenada."""
+          new = old + """
+
+### 9.4.1 Fonte canônica de estados semânticos
+
+Cada estado semântico deve possuir uma representação canônica.
+
+Lógica, apresentação, comportamento e acessibilidade devem derivar dessa mesma representação sempre que possível.
+
+Não devem ser mantidas fontes independentes equivalentes, como estado selecionado, estado ativo, classe visual selecionada, propriedade visual selecionada e atributo acessível selecionado.
+
+Quando a plataforma ou integração exigir representações duplicadas, sua derivação e sincronização devem ser explícitas, determinísticas e testáveis.
+
+### 9.4.2 Condições no nível responsável
+
+Toda condição deve ser representada no menor nível que possua responsabilidade e informação suficientes para avaliá-la.
+
+- condições de negócio pertencem ao domínio ou caso de uso;
+- condições derivadas de dados pertencem à transformação ou contrato responsável;
+- estados funcionais pertencem ao componente ou módulo que os controla;
+- condições exclusivamente apresentacionais pertencem à camada visual;
+- características do ambiente pertencem aos mecanismos próprios da plataforma.
+
+Condições apresentacionais não devem introduzir estado de aplicação, eventos, listeners ou processamento de runtime quando o mecanismo visual da plataforma for suficiente.
+
+A camada visual não deve reconstruir decisões de negócio a partir de sinais indiretos de apresentação.
+
+### 9.4.3 Contratos de variantes
+
+Parâmetros de componentes devem representar conceitos semanticamente coerentes, como tamanho, densidade, ênfase, intenção, orientação, estado ou variante.
+
+Parâmetros públicos não devem funcionar como transporte genérico de detalhes visuais arbitrários, como margens, paddings, cores ou posicionamentos.
+
+Detalhes concretos de apresentação devem permanecer na camada visual ou no sistema de estilos adotado pelo projeto.
+
+Uma exceção exige que o valor represente parte real, estável e justificável do contrato público, e não apenas conveniência de implementação."""
+          text = replace_once(text, old, new, 'regrasDev estado condições variantes')
+
+          old = """Além disso:
+
+- Refatorações não devem alterar comportamento sem autorização explícita.
+- Antes de remover código, confirmar que não existem referências ativas."""
+          new = """Além disso:
+
+- Refatorações não devem alterar comportamento sem autorização explícita.
+- A equivalência não pode ser presumida apenas pela semelhança visual, aprovação do build ou ausência de erros de tipagem.
+- Devem ser preservados e revalidados, quando aplicáveis, conteúdo, ordem lógica, semântica, foco, teclado, nomes acessíveis, estados, eventos, valores, contratos públicos e efeitos observáveis.
+- Antes de remover código, confirmar que não existem referências ativas."""
+          text = replace_once(text, old, new, 'regrasDev contratos observáveis')
+
+          path.write_text(text, encoding='utf-8')
+
+          # regrasUxUi.md
+          path = Path('regrasUxUi.md')
+          text = path.read_text(encoding='utf-8')
+
+          old = """Em caso de conflito, aplicar a seguinte precedência:
+
+1. exigências legais, técnicas ou obrigatórias da plataforma;
+2. requisitos explícitos de acessibilidade definidos para o projeto;
+3. `regrasProjeto.md`;
+4. este documento;
+5. convenções já consolidadas no produto.
+
+Exceções devem ser explícitas, justificadas, documentadas e restritas ao menor escopo possível."""
+          new = """## Natureza normativa e mutabilidade
+
+Este documento é normativo, universal e imutável no contexto de qualquer projeto que possua interface ou interação humana aplicável.
+
+Durante a criação, manutenção ou normalização de um projeto:
+
+- seu conteúdo não pode ser adaptado ao projeto;
+- regras não utilizadas não podem ser removidas;
+- decisões visuais específicas não podem ser incorporadas a este documento;
+- sua aplicabilidade e concretização devem ser registradas em `regrasProjeto.md`;
+- incompatibilidades devem ser registradas como não conformidades, sem modificação, dispensa ou suspensão da regra universal.
+
+Este documento somente pode ser alterado quando o objeto da alteração for o próprio padrão universal mantido no repositório `base`.
+
+Em caso de conflito, aplicar a seguinte precedência:
+
+1. exigências legais e restrições técnicas incontornáveis da plataforma;
+2. `regrasDev.md` e `regrasUxUi.md`, aplicados cumulativamente;
+3. requisitos e decisões específicas definidos em `regrasProjeto.md`;
+4. código-fonte e convenções já consolidadas no produto.
+
+`regrasProjeto.md` deve definir plataformas, níveis de acessibilidade, dispositivos, valores e estratégias concretas, mas não pode reduzir, contradizer ou dispensar os critérios universais deste documento.
+
+Exceções somente são válidas quando a própria regra universal as autorizar. Violações inevitáveis devem ser registradas como não conformidades."""
+          text = replace_once(text, old, new, 'regrasUxUi natureza e precedência')
+
+          old = """### 3.8 Densidade informacional
+
+- A densidade deve ser adequada à tarefa, ao dispositivo e à frequência de uso.
+- Interfaces operacionais podem apresentar maior densidade quando isso melhorar comparação e eficiência.
+- Interfaces introdutórias, críticas ou ocasionais devem priorizar orientação e compreensão.
+- A redução de espaços não deve comprometer legibilidade, agrupamento ou área de interação."""
+          new = """### 3.8 Densidade informacional
+
+Densidade representa a relação entre informação útil e espaço utilizado, e não apenas a redução de dimensões.
+
+- A densidade deve ser adequada à tarefa, ao dispositivo e à frequência de uso.
+- Interfaces operacionais podem apresentar maior densidade quando isso melhorar comparação e eficiência.
+- Interfaces introdutórias, críticas ou ocasionais devem priorizar orientação e compreensão.
+- A redução de espaços não deve comprometer legibilidade, agrupamento ou área de interação.
+- Uma interface não deve ser considerada melhor apenas por ocupar menos espaço quando isso aumentar esforço de leitura, ambiguidade, quantidade de ações, precisão motora exigida, quebras, rolagem horizontal ou perda de contexto.
+
+### 3.8.1 Ordem de compactação
+
+Quando for necessário aumentar a densidade, avaliar as alterações nesta ordem:
+
+1. remover informação redundante;
+2. eliminar contêineres sem função;
+3. reduzir margens externas excedentes;
+4. reduzir espaços entre elementos semanticamente relacionados;
+5. reduzir paddings excedentes;
+6. simplificar bordas, fundos e sombras;
+7. otimizar distribuição, alinhamento e grades;
+8. abreviar conteúdo redundante;
+9. ajustar tipografia auxiliar;
+10. reduzir áreas de interação somente quando os requisitos de acessibilidade, dispositivo e contexto permitirem.
+
+A sequência deve ser interrompida assim que a densidade necessária for atingida. Não é obrigatório aplicar todas as etapas."""
+          text = replace_once(text, old, new, 'regrasUxUi densidade')
+
+          addition = """### 5.8.1 Menor estrutura visual suficiente
+
+A interface deve utilizar o menor número de contêineres, níveis, separadores, fundos, bordas, sombras e estilos capaz de preservar:
+
+- compreensão;
+- agrupamento;
+- hierarquia;
+- operação;
+- acessibilidade;
+- recuperação de contexto.
+
+A redução estrutural não pode misturar responsabilidades, tornar agrupamentos ambíguos ou eliminar sinais necessários de estado e interação.
+
+### 5.8.2 Função dos contêineres visuais
+
+Bordas, fundos, sombras, raios e paddings devem existir somente quando contribuírem para agrupamento, separação, hierarquia, estado, interatividade, orientação ou legibilidade.
+
+Contêineres aninhados devem ser simplificados quando repetirem a mesma função visual.
+
+A remoção de um contêiner deve preservar a relação perceptível entre os elementos anteriormente agrupados."""
+          text = insert_before(text, "### 5.9 Identidade visual", addition, 'regrasUxUi estrutura visual')
+
+          old = """### 12.1 Conteúdo antes do dispositivo
+
+- A adaptação deve ser definida pela necessidade do conteúdo e da interação, não apenas por modelos específicos de aparelho.
+- Breakpoints devem existir quando o layout deixar de preservar compreensão, operação ou legibilidade.
+- Valores concretos devem ser registrados em `regrasProjeto.md` ou no design system."""
+          new = """### 12.1 Contexto responsável pela adaptação
+
+A adaptação deve ser controlada pelo menor contexto que possua informação suficiente para tomar a decisão.
+
+- condições globais pertencem ao ambiente, janela ou viewport;
+- condições locais pertencem ao espaço disponível do componente;
+- condições de dados pertencem ao estado ou contrato correspondente;
+- preferências do usuário pertencem ao mecanismo de preferência da plataforma.
+
+A tecnologia concreta deve ser definida em `regrasProjeto.md` conforme compatibilidade, clareza e suporte da plataforma.
+
+Não se deve observar o viewport global para controlar um comportamento que dependa exclusivamente do espaço local do componente quando a plataforma oferecer mecanismo adequado.
+
+### 12.1.1 Conteúdo antes do dispositivo
+
+- A adaptação deve ser definida pela necessidade do conteúdo e da interação, não apenas por modelos específicos de aparelho.
+- Breakpoints devem existir quando ocorrer necessidade observável, como mudança de composição, perda de legibilidade, quebra de controle, alteração de navegação, insuficiência de espaço ou necessidade de reorganização.
+- Breakpoints não devem ser criados apenas por convenção, modelo específico de dispositivo ou correção isolada sem justificativa.
+- Valores concretos e suas justificativas devem ser registrados em `regrasProjeto.md` ou no design system.
+
+### 12.1.2 Adaptação contínua e discreta
+
+Propriedades que possam variar continuamente sem mudança estrutural devem preferir comportamento fluido e previsível.
+
+Isso se aplica, quando adequado, a espaçamento, largura, altura, tipografia, distribuição, quantidade de colunas e proporções.
+
+Breakpoints ou estados discretos devem ser utilizados quando houver mudança real de composição, navegação, ordem, agrupamento ou comportamento interativo."""
+          text = replace_once(text, old, new, 'regrasUxUi responsividade')
+
+          addition = """### 13.9 Redução segura de informação redundante
+
+Conteúdo pode ser abreviado, combinado ou removido visualmente quando seu significado permanecer inequívoco pelo contexto.
+
+Quando a forma compacta não for suficiente para tecnologias assistivas, o nome ou a descrição acessível completa deve ser preservado.
+
+A redução visual não pode eliminar informação necessária à compreensão, decisão ou execução da tarefa."""
+          text = insert_before(text, "---\n\n## 14. Desempenho percebido", addition, 'regrasUxUi redundância')
+
+          addition = """### 15.11 Validação de densidade e responsividade
+
+Alterações de densidade, compactação, hierarquia visual ou responsividade devem ser verificadas considerando, quando aplicável:
+
+- menor espaço suportado;
+- maior ampliação suportada;
+- conteúdo mínimo;
+- conteúdo máximo;
+- textos extensos;
+- traduções;
+- erros;
+- estados vazios;
+- estados selecionados;
+- navegação por teclado;
+- toque;
+- diferentes orientações;
+- preferências de acessibilidade;
+- mudanças dinâmicas de conteúdo.
+
+Os limites concretos obrigatórios devem ser registrados em `regrasProjeto.md`."""
+          text = insert_before(text, "---\n\n## 16. Verificação de conformidade", addition, 'regrasUxUi validação densidade')
+
+          path.write_text(text, encoding='utf-8')
+
+          # regrasProjeto.md
+          path = Path('regrasProjeto.md')
+          text = path.read_text(encoding='utf-8')
+
+          marker = "Este arquivo deve conter apenas definições, convenções, restrições e decisões próprias deste projeto."
+          addition = """Este documento é normativo, específico e plástico. Ele deve ser atualizado sempre que mudar o estado válido das decisões próprias do projeto.
+
+Ele concretiza as normas universais de `regrasDev.md` e `regrasUxUi.md`, mas não pode modificá-las, dispensá-las, repeti-las como decisões locais ou reduzir seus critérios mínimos.
+
+Uma incompatibilidade com regra universal deve ser registrada como não conformidade, e não convertida silenciosamente em exceção."""
+          text = replace_once(text, marker, marker + "\n\n" + addition, 'regrasProjeto natureza')
+
+          old = """Divergências ou exceções locais conhecidas:
+
+Ex.: Não se aplica."""
+          new = """Não conformidades conhecidas em relação às regras universais:
+
+Para cada não conformidade, registrar:
+
+- documento e regra afetada;
+- causa;
+- escopo;
+- impacto;
+- risco;
+- tratamento planejado;
+- condição necessária para correção.
+
+Ex.: Não se aplica.
+
+Exceções autorizadas explicitamente pelas regras universais:
+
+Ex.: Não se aplica."""
+          text = replace_once(text, old, new, 'regrasProjeto não conformidades')
+
+          addition = """## 5.1 Concretização de UX e UI
+
+Aplicabilidade de `regrasUxUi.md`:
+
+Ex.: Aplicável integralmente à interface web ou `Não se aplica.`.
+
+Público e contextos principais de uso:
+
+Ex.:
+
+- operadores em desktop;
+- uso recorrente em ambiente administrativo.
+
+Densidades adotadas por contexto:
+
+Ex.:
+
+- compacta em tabelas e painéis operacionais;
+- normal em formulários;
+- ampliada em onboarding e avisos críticos.
+
+Estratégia de responsividade global:
+
+Ex.: Media queries baseadas nos pontos reais de mudança de composição.
+
+Estratégia de responsividade local:
+
+Ex.: Container queries nos componentes cujo comportamento dependa do espaço local disponível.
+
+Breakpoints ou limiares adotados e suas justificativas:
+
+Ex.:
+
+- `44rem`: alteração da navegação;
+- `68rem`: mudança da grade principal.
+
+Estratégia de comportamento fluido:
+
+Ex.: Espaçamento e tipografia auxiliar variam fluidamente dentro dos limites do design system.
+
+Escala de espaçamento:
+
+Ex.: Valores derivados de uma base de `0.25rem`.
+
+Dimensões mínimas de interação:
+
+Ex.: Definidas conforme o nível de acessibilidade e os dispositivos suportados.
+
+Critérios para informação essencial e secundária:
+
+Ex.: Identificação e estado atual são essenciais; detalhes históricos podem utilizar divulgação progressiva.
+
+Condições limite obrigatórias para validação:
+
+Ex.:
+
+- largura mínima suportada;
+- ampliação suportada;
+- textos extensos e traduções;
+- navegação por teclado;
+- toque;
+- orientações suportadas.
+"""
+          text = insert_before(text, "# Parte II — Decisões técnicas", addition, 'regrasProjeto UX UI')
+
+          path.write_text(text, encoding='utf-8')
+
+          # README.md
+          path = Path('README.md')
+          text = path.read_text(encoding='utf-8')
+
+          old = """As decisões arquiteturais específicas do projeto pertencem ao `regrasProjeto.md`.
+
+Os padrões gerais de desenvolvimento pertencem ao `regrasDev.md`."""
+          new = """As decisões específicas do projeto pertencem ao `regrasProjeto.md`.
+
+Os padrões universais de engenharia e arquitetura pertencem ao `regrasDev.md`.
+
+Os padrões universais de experiência e interface pertencem ao `regrasUxUi.md`, quando aplicável.
+
+## Natureza do documento
+
+Este documento é descritivo, específico e plástico.
+
+Ele deve acompanhar continuamente o estado válido e efetivamente implementado do projeto.
+
+O README não define normas universais nem substitui `regrasProjeto.md`. Quando houver divergência entre este documento e o estado válido do projeto, a divergência deve ser investigada e corrigida.
+
+O README deve descrever o que o projeto é, qual problema resolve, seu estado atual, como executar, como validar, como navegar pela arquitetura e como retomar o desenvolvimento.
+
+Decisões temporárias, hipóteses e implementações acidentais não devem ser transformadas em regras arquiteturais."""
+          text = replace_once(text, old, new, 'README natureza')
+
+          old = """- Não repetir decisões presentes no `regrasProjeto.md`.
+- Não repetir padrões presentes no `regrasDev.md`."""
+          new = """- Não repetir decisões normativas presentes no `regrasProjeto.md`.
+- Não repetir padrões presentes no `regrasDev.md`.
+- Não repetir padrões presentes no `regrasUxUi.md`.
+- Referenciar os documentos normativos quando o leitor precisar consultá-los."""
+          text = replace_once(text, old, new, 'README não repetição')
+
+          path.write_text(text, encoding='utf-8')
+
+      - name: Validar alterações
+        run: |
+          set -euo pipefail
+          grep -q "Natureza normativa e mutabilidade" regrasDev.md
+          grep -q "Menor abstração semanticamente suficiente" regrasDev.md
+          grep -q "Fonte canônica de estados semânticos" regrasDev.md
+          grep -q "Natureza normativa e mutabilidade" regrasUxUi.md
+          grep -q "Ordem de compactação" regrasUxUi.md
+          grep -q "Contexto responsável pela adaptação" regrasUxUi.md
+          grep -q "normativo, específico e plástico" regrasProjeto.md
+          grep -q "Não conformidades conhecidas" regrasProjeto.md
+          grep -q "descritivo, específico e plástico" README.md
+          git diff --check
+
+      - name: Commitar documentos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add regrasDev.md regrasUxUi.md regrasProjeto.md README.md
+          git commit -m "docs: explicitar natureza e normas dos documentos" || exit 0
+          git push
