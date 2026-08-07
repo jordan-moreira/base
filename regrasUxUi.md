@@ -1,119 +1,232 @@
 # Regras de UX e UI
 
-## 1. Objetivo e aplicação
+## 1. Objetivo
 
-Este documento define os padrões permanentes de experiência do usuário, interface, interação, acessibilidade, responsividade, conteúdo e validação aplicáveis a projetos que possuam interface com usuários.
+Este documento define as normas universais de experiência do usuário, interface, interação, acessibilidade, responsividade, conteúdo e validação aplicáveis a projetos que possuam interação humana.
 
-Todo projeto derivado deste repositório deve utilizar estas regras como base para organizar informações, estruturar fluxos, apresentar estados, permitir interações e comunicar resultados.
+Seu objetivo é garantir que a interface utilize a menor estrutura visual e informacional suficiente para permitir compreensão, operação, orientação, acessibilidade e recuperação de contexto.
 
-As decisões concretas de cada projeto, como público-alvo, plataformas suportadas, design system, identidade visual, paleta, tipografia, escala de espaçamento, breakpoints, bibliotecas, componentes, padrões de navegação e nível de acessibilidade exigido, devem ser registradas em `regrasProjeto.md`.
-
-Este documento define resultados e critérios universais. Não determina soluções visuais específicas quando a decisão depender do contexto do produto.
-
-Cada regra definida em `regrasDev.md`, `regrasProjeto.md` e `regrasUxUi.md` deve ser analisada, aplicada e validada de forma independente das demais. O atendimento a uma regra não implica o atendimento, a substituição ou a dispensa de qualquer outra; todas as regras aplicáveis devem ser satisfeitas cumulativamente, salvo quando algum dos próprios documentos estabelecer explicitamente dependência, precedência ou exceção.
-
-As regras deste documento complementam `regrasDev.md`:
-
-- `regrasDev.md` define como o sistema deve ser estruturado e implementado;
-- `regrasUxUi.md` define como a interface deve comunicar, responder e permitir interação;
-- `regrasProjeto.md` define as decisões concretas aplicáveis ao projeto.
-
-Em caso de conflito, aplicar a seguinte precedência:
-
-1. exigências legais, técnicas ou obrigatórias da plataforma;
-2. requisitos explícitos de acessibilidade definidos para o projeto;
-3. `regrasProjeto.md`;
-4. este documento;
-5. convenções já consolidadas no produto.
-
-Exceções devem ser explícitas, justificadas, documentadas e restritas ao menor escopo possível.
+As decisões concretas de cada projeto, como público, plataformas, design system, identidade visual, paleta, tipografia, espaçamento, breakpoints, bibliotecas, componentes, dispositivos e nível de acessibilidade, pertencem ao `regrasProjeto.md`.
 
 ---
 
-## 2. Princípios fundamentais
+## 2. Natureza normativa e mutabilidade
 
-### 2.1 Clareza
+Este documento é:
 
-- A interface deve permitir que o usuário identifique onde está, o que está acontecendo, o que pode fazer e qual será o resultado provável de cada ação.
-- A ação principal de cada contexto deve ser identificável sem exploração desnecessária.
-- Informações essenciais não devem depender de interpretação subjetiva, conhecimento interno do sistema ou tentativa e erro.
-- Elementos visuais, textos e comportamentos devem comunicar a mesma intenção.
+- normativo;
+- universal;
+- canônico;
+- imutável no contexto de um projeto.
 
-### 2.2 Simplicidade
+Durante a criação, manutenção ou normalização de um projeto:
 
-- A interface deve utilizar a menor quantidade de elementos, etapas e decisões necessária para permitir que o usuário conclua seu objetivo com segurança.
-- Elementos que não contribuam para compreensão, orientação, execução ou confiança devem ser removidos ou reduzidos.
-- Simplificação não deve ocultar informações necessárias, eliminar controle relevante ou aumentar risco.
-- Opções avançadas devem ser apresentadas somente quando forem necessárias ao contexto.
+- seu conteúdo não pode ser adaptado ao projeto;
+- regras não utilizadas não podem ser removidas;
+- decisões visuais específicas não podem ser incorporadas localmente;
+- sua aplicabilidade e concretização devem ser registradas em `regrasProjeto.md`;
+- incompatibilidades devem ser registradas como não conformidades;
+- uma incompatibilidade não autoriza modificar, ignorar, reduzir ou suspender a regra universal.
 
-### 2.3 Consistência
+Este documento somente pode ser alterado quando o objeto da alteração for o próprio padrão universal mantido no repositório `base`.
+
+---
+
+## 3. Relação entre os documentos
+
+- `regrasDev.md` define como o sistema deve ser estruturado e implementado.
+- `regrasUxUi.md` define como a interface deve comunicar, responder e permitir interação.
+- `regrasProjeto.md` concretiza as decisões específicas do produto.
+- o código implementa essas decisões.
+- o `README.md` descreve o estado efetivamente implementado.
+
+`regrasDev.md` e `regrasUxUi.md` devem ser aplicados cumulativamente.
+
+`regrasProjeto.md` pode escolher tecnologias, valores e estratégias, mas não pode reduzir, contradizer ou dispensar os critérios universais.
+
+---
+
+## 4. Aplicação independente e cumulativa
+
+Cada regra deve ser analisada, aplicada e validada independentemente das demais.
+
+O atendimento a uma regra não implica atendimento, substituição ou dispensa de outra.
+
+As regras são cumulativas, salvo dependência, precedência, exceção ou não aplicabilidade declarada explicitamente.
+
+Cada regra universal deve ser:
+
+- independente;
+- objetiva;
+- afirmativa;
+- verificável;
+- tecnologicamente neutra;
+- semanticamente singular.
+
+Quando uma interpretação divergente já tiver ocorrido, a norma correspondente não pode permanecer apenas implícita.
+
+---
+
+## 5. Precedência e conflitos
+
+Em caso de conflito real:
+
+1. exigências legais e restrições técnicas incontornáveis da plataforma;
+2. `regrasDev.md` e `regrasUxUi.md`, aplicados cumulativamente;
+3. requisitos e decisões específicas de `regrasProjeto.md`;
+4. código-fonte e convenções consolidadas no produto.
+
+A precedência aplica-se somente ao escopo incompatível.
+
+Não constituem conflito normativo:
+
+- preferência estética;
+- hábito;
+- conveniência;
+- prazo;
+- custo evitável;
+- tecnologia escolhida sem obrigatoriedade;
+- convenção de dispositivo específico.
+
+Acessibilidade prevalece sobre identidade visual, animações, densidade, personalização estética e convenções locais quando não for possível satisfazê-las simultaneamente.
+
+---
+
+## 6. Não conformidades e exceções
+
+Uma violação inevitável deve ser registrada em `regrasProjeto.md` como não conformidade, contendo:
+
+- regra afetada;
+- causa;
+- escopo;
+- impacto;
+- risco;
+- medida compensatória;
+- tratamento planejado;
+- critério ou prazo para correção.
+
+O registro não modifica nem suspende a regra.
+
+Uma exceção somente é válida quando a própria norma universal a autorizar.
+
+Nenhuma exceção pode reduzir conformidade abaixo de exigências legais, técnicas obrigatórias ou requisitos mínimos de acessibilidade da plataforma.
+
+---
+
+# Parte I — Princípios fundamentais
+
+## 7. Clareza
+
+A interface deve permitir que o usuário identifique:
+
+- onde está;
+- o que está acontecendo;
+- o que pode fazer;
+- sobre qual objeto atua;
+- qual resultado provável ocorrerá;
+- como recuperar-se de falhas.
+
+Informações essenciais não devem depender de tentativa e erro, conhecimento interno ou interpretação subjetiva.
+
+## 8. Simplicidade
+
+A interface deve utilizar a menor quantidade de elementos, etapas e decisões capaz de permitir conclusão segura da tarefa.
+
+Simplificação não pode:
+
+- ocultar informação necessária;
+- eliminar controle relevante;
+- aumentar risco;
+- destruir agrupamentos;
+- remover contexto;
+- prejudicar acessibilidade.
+
+## 9. Consistência
 
 - Elementos com o mesmo significado devem possuir comportamento, nomenclatura e apresentação equivalentes.
 - Elementos com significados diferentes não devem ser apresentados de forma indistinguível.
-- Padrões consolidados da plataforma devem ser preservados quando melhorarem reconhecimento e previsibilidade.
-- Exceções visuais ou comportamentais devem possuir motivo funcional claro.
+- Padrões nativos da plataforma devem ser preservados quando melhorarem reconhecimento e previsibilidade.
+- Exceções visuais e comportamentais exigem motivo funcional.
 
-### 2.4 Previsibilidade
+## 10. Previsibilidade
 
-- O usuário deve conseguir antecipar o resultado de uma ação a partir de seu rótulo, contexto e estado.
-- Ações não devem produzir efeitos adicionais relevantes sem indicação explícita.
-- Mudanças de contexto, navegação, persistência, publicação, exclusão ou envio devem ser comunicadas de forma proporcional ao impacto.
+- O resultado de uma ação deve ser antecipável por rótulo, contexto e estado.
+- Ações não devem produzir efeitos adicionais relevantes sem indicação.
+- Mudanças de navegação, persistência, publicação, exclusão ou envio devem ser comunicadas proporcionalmente ao impacto.
 - O mesmo fluxo deve responder de forma estável às mesmas condições.
 
-### 2.5 Eficiência
+## 11. Eficiência
 
-- A interface deve reduzir cliques, digitação, memorização, repetição e deslocamentos desnecessários.
-- Dados já conhecidos pelo sistema não devem ser solicitados novamente sem justificativa.
-- Ações frequentes devem permanecer acessíveis e não ser ocultadas por estruturas excessivamente profundas.
-- Atalhos podem ser oferecidos para usuários recorrentes, desde que não prejudiquem o fluxo principal.
+A interface deve reduzir:
 
-### 2.6 Reconhecimento antes de memorização
+- cliques;
+- digitação;
+- memorização;
+- repetição;
+- deslocamento;
+- espera;
+- retomadas desnecessárias.
 
-- Informações, opções e ações necessárias devem permanecer visíveis ou facilmente recuperáveis no contexto em que são utilizadas.
-- O usuário não deve precisar memorizar dados, códigos, etapas anteriores ou convenções internas para concluir uma tarefa.
-- Rótulos, exemplos, histórico e valores atuais devem ser apresentados quando reduzirem carga cognitiva.
+Dados já conhecidos não devem ser solicitados novamente sem justificativa.
 
-### 2.7 Tolerância a erros
+## 12. Reconhecimento antes de memorização
 
-- A interface deve prevenir erros previsíveis antes de depender de mensagens de correção.
-- Quando um erro ocorrer, o sistema deve preservar o contexto e orientar a recuperação.
-- A consequência de uma ação deve ser proporcionalmente protegida por restrições, confirmação ou possibilidade de desfazer.
+Informações, opções e ações necessárias devem permanecer visíveis ou facilmente recuperáveis no contexto de uso.
+
+O usuário não deve precisar memorizar dados, códigos, etapas anteriores ou convenções internas para concluir uma tarefa.
+
+## 13. Tolerância a erros
+
+- Erros previsíveis devem ser prevenidos antes de depender de mensagens de correção.
+- Falhas devem preservar contexto e orientar recuperação.
+- Consequências devem ser protegidas conforme risco e reversibilidade.
 - Erros do sistema não devem ser apresentados como culpa do usuário.
 
-### 2.8 Controle do usuário
+## 14. Controle do usuário
 
-- O usuário deve manter controle sobre ações relevantes e compreender processos automáticos que afetem seus dados ou resultados.
-- Fluxos devem permitir cancelar, voltar, revisar ou desfazer quando técnica e semanticamente viável.
-- A interface não deve prender o usuário em processos sem saída clara.
-- Preferências e decisões explícitas não devem ser alteradas silenciosamente.
+- O usuário deve compreender processos automáticos que afetem dados ou resultados.
+- Fluxos devem permitir cancelar, voltar, revisar ou desfazer quando viável.
+- A interface não deve prender o usuário em processo sem saída clara.
+- Preferências explícitas não devem ser alteradas silenciosamente.
 
-### 2.9 Proporcionalidade
+## 15. Proporcionalidade
 
-- A complexidade visual, informacional e interativa deve ser proporcional à complexidade e ao risco da tarefa.
-- Tarefas simples não devem exigir fluxos extensos.
-- Tarefas críticas não devem ser simplificadas a ponto de ocultar consequências ou remover validações necessárias.
-- Nenhum padrão de interface deve ser aplicado apenas por hábito, simetria ou aparência.
+A complexidade visual, informacional e interativa deve ser proporcional:
 
-### 2.10 Inclusão
+- à tarefa;
+- à frequência de uso;
+- ao risco;
+- ao impacto;
+- à experiência do público;
+- ao dispositivo;
+- ao contexto operacional.
 
-- A interface deve considerar diferentes capacidades, dispositivos, métodos de entrada, níveis de experiência e condições de uso.
-- Funcionalidades essenciais não devem depender exclusivamente de visão, audição, precisão motora, percepção de cor ou uso de mouse.
-- A experiência principal deve permanecer compreensível e operável sem exigir adaptações improvisadas do usuário.
+## 16. Inclusão
+
+A interface deve considerar diferentes:
+
+- capacidades;
+- dispositivos;
+- métodos de entrada;
+- níveis de experiência;
+- condições ambientais;
+- tecnologias assistivas.
+
+Funcionalidades essenciais não podem depender exclusivamente de visão, audição, precisão motora, percepção de cor, mouse ou hover.
 
 ---
 
-## 3. Arquitetura da informação
+# Parte II — Arquitetura da informação
 
-### 3.1 Organização semântica
+## 17. Organização semântica
 
-- Conteúdos e funcionalidades devem ser organizados de acordo com os objetivos e o vocabulário do usuário.
-- Categorias técnicas internas não devem determinar a organização visível quando não corresponderem ao modelo mental do usuário.
-- Informações relacionadas devem permanecer próximas.
-- Informações com motivos de uso distintos devem ser separadas quando sua combinação prejudicar compreensão ou operação.
+Conteúdos e funcionalidades devem ser organizados conforme objetivos e vocabulário do usuário.
 
-### 3.2 Hierarquia da informação
+Categorias técnicas internas não devem determinar a organização visível quando não corresponderem ao modelo mental do público.
 
-A informação deve ser estruturada em níveis proporcionais à complexidade real do conteúdo.
+## 18. Hierarquia informacional
+
+A informação deve utilizar somente os níveis necessários.
 
 Exemplo conceitual:
 
@@ -126,178 +239,237 @@ produto
                 └── informação, campo ou ação
 ```
 
-Nem todos os níveis precisam existir. Cada nível deve possuir função real de agrupamento, orientação ou progressão.
+Cada nível deve possuir função real de agrupamento, orientação ou progressão.
 
-### 3.3 Menor estrutura informacional suficiente
+## 19. Menor estrutura informacional suficiente
 
-A interface deve utilizar a menor quantidade de níveis, grupos, páginas e etapas capaz de preservar:
+A interface deve utilizar a menor quantidade de páginas, níveis, grupos e etapas capaz de preservar:
 
 - compreensão;
 - localização;
-- distinção entre responsabilidades;
+- distinção de responsabilidades;
 - progressão lógica;
 - segurança;
 - recuperação de contexto.
 
-A redução de níveis não deve resultar em telas sobrecarregadas, informações misturadas ou ações concorrentes.
+A redução não pode produzir telas sobrecarregadas, informação misturada ou ações concorrentes.
 
-### 3.4 Agrupamento
+## 20. Agrupamento perceptível
 
-- Elementos pertencentes à mesma tarefa ou decisão devem permanecer visual e semanticamente relacionados.
-- O agrupamento deve ser comunicado por proximidade, título, contêiner, alinhamento ou outra relação perceptível.
-- Elementos não relacionados não devem compartilhar grupo apenas por conveniência de layout.
-- Grupos excessivamente amplos devem ser avaliados para subdivisão quando prejudicarem localização ou compreensão.
+A relação entre elementos deve permanecer perceptível, especialmente entre:
 
-### 3.5 Nomenclatura
+- rótulo e controle;
+- título e conteúdo;
+- ação e objeto afetado;
+- erro e campo;
+- legenda e dado;
+- estado e componente;
+- grupo e seus elementos.
 
-- Títulos, rótulos, categorias e ações devem utilizar termos compreendidos pelo público do produto.
-- Nomes internos de tabelas, entidades, APIs, classes ou processos não devem aparecer sem necessidade.
-- O mesmo conceito deve utilizar a mesma denominação em toda a interface.
-- Abreviações devem ser evitadas quando não forem amplamente compreendidas pelo público.
+O agrupamento pode ser comunicado por:
 
-### 3.6 Localização previsível
+- proximidade;
+- alinhamento;
+- título;
+- separador;
+- fundo;
+- contêiner;
+- outro recurso proporcional.
+
+## 21. Nomenclatura
+
+- Títulos, rótulos, categorias e ações devem utilizar termos compreendidos pelo público.
+- Nomes internos de tabelas, entidades, APIs e classes não devem aparecer sem necessidade.
+- O mesmo conceito deve utilizar a mesma denominação.
+- Abreviações devem ser evitadas quando não forem conhecidas pelo público.
+
+## 22. Localização previsível
 
 - Funcionalidades semelhantes devem aparecer em locais equivalentes.
-- Ações devem permanecer próximas do conteúdo que afetam.
-- Filtros, ordenações e buscas devem permanecer associados ao conjunto de dados controlado.
+- Ações devem permanecer próximas do conteúdo afetado.
+- Filtros, ordenações e buscas devem permanecer associados ao conjunto controlado.
 - Informações globais e locais devem ser diferenciadas.
 
-### 3.7 Divulgação progressiva
+## 23. Divulgação progressiva
 
-- Conteúdo secundário, técnico ou avançado deve ser apresentado somente quando necessário.
-- Informações ocultadas devem continuar localizáveis e possuir indicação clara de existência.
-- Divulgação progressiva não deve esconder requisitos, custos, riscos ou consequências relevantes.
-- A expansão de conteúdo deve preservar o contexto e a posição do usuário.
+Conteúdo secundário, técnico ou avançado pode permanecer oculto até ser necessário quando:
 
-### 3.8 Densidade informacional
+- sua existência continuar perceptível;
+- sua recuperação for direta;
+- sua ocultação não aumentar risco;
+- o contexto for preservado.
 
-- A densidade deve ser adequada à tarefa, ao dispositivo e à frequência de uso.
-- Interfaces operacionais podem apresentar maior densidade quando isso melhorar comparação e eficiência.
-- Interfaces introdutórias, críticas ou ocasionais devem priorizar orientação e compreensão.
-- A redução de espaços não deve comprometer legibilidade, agrupamento ou área de interação.
+Divulgação progressiva não pode esconder requisitos, custos, riscos, consequências ou informação essencial.
 
-### 3.9 Ordem do conteúdo
+## 24. Ordem do conteúdo
 
-- A ordem visual deve acompanhar a ordem lógica de leitura, decisão e execução.
-- Informações necessárias para uma ação devem aparecer antes ou junto da ação.
-- Conteúdo prioritário deve preceder conteúdo complementar.
-- A ordem visual não deve divergir da ordem semântica acessível sem justificativa técnica inevitável.
+A ordem visual deve acompanhar a ordem lógica de:
 
----
+- leitura;
+- foco;
+- decisão;
+- navegação;
+- execução.
 
-## 4. Navegação e orientação
+Informações necessárias devem aparecer antes ou junto da ação correspondente.
 
-### 4.1 Localização atual
-
-- A interface deve indicar claramente a página, seção, etapa, aba ou contexto atual.
-- O estado ativo da navegação deve ser perceptível visualmente e por tecnologias assistivas.
-- Títulos devem descrever o conteúdo ou objetivo atual.
-- Quando a profundidade justificar, deve existir mecanismo de orientação entre níveis.
-
-### 4.2 Estrutura de navegação
-
-- A navegação deve representar a arquitetura da informação do produto.
-- Itens devem ser agrupados por objetivo, domínio ou contexto compreendido pelo usuário.
-- A navegação principal não deve funcionar como depósito de todas as funcionalidades existentes.
-- Funcionalidades ocasionais podem permanecer em contextos secundários quando continuarem localizáveis.
-
-### 4.3 Profundidade
-
-- A quantidade de níveis deve ser a menor possível sem misturar contextos diferentes.
-- Níveis intermediários sem função de orientação ou agrupamento devem ser removidos.
-- Cadeias de páginas que apenas encaminham para uma única opção devem ser evitadas.
-- O usuário não deve precisar retornar repetidamente à raiz para acessar funções relacionadas.
-
-### 4.4 Continuidade
-
-- Mudanças de página, etapa ou contexto devem preservar informações necessárias para a continuidade da tarefa.
-- Filtros, posição de rolagem, seleção e dados não enviados devem ser preservados quando isso corresponder à expectativa do usuário.
-- A perda de contexto deve ser explícita quando for inevitável.
-- O retorno deve levar ao contexto anterior de forma previsível.
-
-### 4.5 Retorno e cancelamento
-
-- O usuário deve conseguir voltar ou cancelar sem perda inesperada de dados.
-- Quando existirem alterações não salvas, a interface deve preservá-las ou comunicar claramente a consequência da saída.
-- Cancelar deve interromper a operação atual sem produzir efeitos ocultos.
-- Voltar não deve executar ações equivalentes a excluir ou descartar sem confirmação proporcional.
-
-### 4.6 Links e botões
-
-- Links devem ser utilizados para navegação.
-- Botões devem ser utilizados para executar ações.
-- Elementos com aparência de link ou botão devem possuir comportamento correspondente.
-- A ação deve ser identificável pelo rótulo sem depender apenas de ícone.
-
-### 4.7 Navegação por teclado
-
-- Todos os fluxos essenciais devem ser acessíveis por teclado quando a plataforma oferecer esse método de entrada.
-- A ordem de foco deve acompanhar a ordem lógica da interface.
-- Não devem existir regiões ou controles inacessíveis por teclado.
-- Atalhos não devem impedir comandos consolidados da plataforma.
-
-### 4.8 Navegação em fluxos
-
-- Fluxos com múltiplas etapas devem indicar etapa atual, progresso e possibilidade de retorno quando aplicável.
-- Cada etapa deve conter apenas decisões semanticamente relacionadas.
-- A divisão em etapas deve reduzir carga cognitiva ou risco, não apenas distribuir visualmente campos.
-- O usuário deve poder revisar informações antes de ações irreversíveis ou de alto impacto.
+A ordem visual não deve divergir da ordem semântica acessível sem justificativa técnica inevitável.
 
 ---
 
-## 5. Hierarquia visual
+# Parte III — Densidade e compactação
 
-### 5.1 Prioridade visual
+## 25. Densidade informacional
+
+Densidade é a relação entre informação útil e espaço utilizado, não apenas redução de dimensões.
+
+Uma interface não é melhor apenas por possuir menor altura ou largura quando isso aumentar:
+
+- esforço de leitura;
+- ambiguidade;
+- quantidade de ações;
+- precisão motora exigida;
+- quebras;
+- rolagem horizontal;
+- perda de contexto.
+
+## 26. Densidade conforme a natureza do conteúdo
+
+Podem aceitar maior densidade:
+
+- tabelas;
+- métricas;
+- comparações;
+- painéis operacionais;
+- listas repetitivas;
+- dados estruturados.
+
+Devem priorizar maior orientação e espaçamento:
+
+- formulários críticos;
+- conteúdo narrativo;
+- onboarding;
+- avisos;
+- decisões de risco;
+- tarefas ocasionais.
+
+A aplicação não precisa utilizar uma única densidade em todos os contextos.
+
+## 27. Ordem de compactação
+
+Ao aumentar densidade, avaliar na seguinte ordem:
+
+1. remover informação redundante;
+2. eliminar contêineres sem função;
+3. reduzir margens externas excedentes;
+4. reduzir espaços entre elementos relacionados;
+5. reduzir paddings excedentes;
+6. simplificar bordas, fundos e sombras;
+7. otimizar distribuição, alinhamento e grades;
+8. abreviar conteúdo redundante;
+9. ajustar tipografia auxiliar;
+10. reduzir dimensões interativas somente quando acessibilidade, dispositivo e contexto permitirem.
+
+A sequência deve parar assim que a densidade necessária for alcançada.
+
+## 28. Informação redundante
+
+Conteúdo pode ser abreviado, combinado ou removido visualmente quando o significado permanecer inequívoco.
+
+Quando a forma compacta não for suficiente para tecnologias assistivas, o nome ou a descrição acessível completa deve ser preservado.
+
+## 29. Informação essencial
+
+Dados necessários para compreender ou executar a tarefa devem permanecer disponíveis no momento adequado.
+
+A classificação entre essencial e secundário deve ser definida em `regrasProjeto.md` quando depender do produto.
+
+---
+
+# Parte IV — Hierarquia visual
+
+## 30. Menor estrutura visual suficiente
+
+A interface deve utilizar o menor número de:
+
+- contêineres;
+- níveis;
+- separadores;
+- fundos;
+- bordas;
+- sombras;
+- estilos;
+
+capaz de preservar:
+
+- compreensão;
+- agrupamento;
+- hierarquia;
+- operação;
+- acessibilidade;
+- recuperação de contexto.
+
+Redução estrutural não pode misturar responsabilidades, tornar agrupamentos ambíguos ou eliminar sinais necessários.
+
+## 31. Função dos contêineres visuais
+
+Bordas, fundos, sombras, raios e paddings devem existir somente quando contribuírem para:
+
+- agrupamento;
+- separação;
+- hierarquia;
+- estado;
+- interatividade;
+- orientação;
+- legibilidade.
+
+Contêineres aninhados devem ser simplificados quando repetirem a mesma função visual.
+
+A remoção de um contêiner deve preservar a relação perceptível dos elementos agrupados.
+
+## 32. Prioridade visual
 
 - A prioridade visual deve corresponder à prioridade funcional e informacional.
-- A ação principal deve possuir destaque suficiente para ser localizada sem competir com múltiplas ações equivalentes.
+- A ação principal deve ser localizável sem competir com várias ações equivalentes.
 - Ações secundárias, auxiliares e destrutivas devem possuir diferenciação proporcional.
-- Destaque visual não deve ser usado apenas para preencher espaço ou produzir impacto estético.
+- Destaque não deve existir apenas para produzir impacto estético.
 
-### 5.2 Tipografia
+## 33. Tipografia
 
-- A tipografia deve estabelecer níveis claros entre títulos, subtítulos, texto principal, texto auxiliar, rótulos e mensagens de estado.
-- A quantidade de estilos tipográficos deve ser limitada ao necessário para comunicar hierarquia.
+- A tipografia deve estabelecer níveis claros.
+- A quantidade de estilos deve ser limitada ao necessário.
 - Texto essencial deve permanecer legível nos tamanhos e ampliações suportados.
-- Diferenças de hierarquia não devem depender apenas de tamanho quando peso, posição ou estrutura puderem reforçar o significado.
+- Hierarquia não deve depender somente de tamanho.
 
-### 5.3 Espaçamento
+## 34. Espaçamento
 
-- O espaçamento deve representar relações semânticas.
-- Elementos do mesmo grupo devem possuir proximidade maior que elementos de grupos distintos.
-- Valores concretos devem seguir uma escala consistente definida no projeto.
-- Espaçamento não deve ser utilizado para compensar agrupamentos incorretos ou estrutura informacional confusa.
+- Espaçamento deve representar relações semânticas.
+- Elementos do mesmo grupo devem possuir proximidade maior que grupos distintos.
+- Valores concretos devem seguir escala definida no projeto.
+- Espaçamento não deve compensar estrutura informacional incorreta.
 
-### 5.4 Alinhamento
+## 35. Alinhamento
 
 - Elementos relacionados devem utilizar alinhamento consistente.
-- Colunas, rótulos, valores e ações comparáveis devem favorecer leitura e varredura.
-- Alinhamentos arbitrários devem ser evitados.
-- Mudanças de alinhamento devem possuir justificativa funcional ou responsiva.
+- Colunas, rótulos, valores e ações comparáveis devem favorecer varredura.
+- Mudanças de alinhamento exigem justificativa funcional ou responsiva.
 
-### 5.5 Cor
+## 36. Cor e contraste
 
-- A cor deve possuir função de hierarquia, identidade, estado ou orientação.
-- A mesma cor funcional deve manter o mesmo significado no mesmo contexto.
-- Informações não devem depender exclusivamente de cor.
-- Estados podem combinar fundo, borda, espessura, forma, símbolo, posição ou texto; a distinção não deve depender apenas do reconhecimento de uma tonalidade.
-- Cores decorativas não devem competir com estados, alertas ou ações.
+- Cor deve possuir função de hierarquia, identidade, estado ou orientação.
+- Informação não pode depender exclusivamente de cor.
+- Texto, ícones, foco e controles devem possuir contraste suficiente.
+- Estados desabilitados devem permanecer legíveis.
+- Valores concretos pertencem ao padrão de acessibilidade definido no projeto.
 
-### 5.6 Contraste
+## 37. Ícones
 
-- Texto, ícones, bordas necessárias, foco e controles devem possuir contraste suficiente em relação ao fundo e aos estados adjacentes.
-- O contraste deve atender ao padrão de acessibilidade definido em `regrasProjeto.md`.
-- Estados desabilitados não devem se tornar ilegíveis.
-- Imagens de fundo não devem comprometer a leitura do conteúdo sobreposto.
-
-### 5.7 Ícones
-
-- Ícones devem representar conceitos reconhecíveis no contexto do público.
-- Ícones ambíguos devem possuir rótulo textual ou descrição acessível.
+- Ícones devem representar conceitos reconhecíveis.
+- Ícones ambíguos devem possuir rótulo ou descrição acessível.
 - O mesmo ícone não deve representar ações diferentes no mesmo produto.
 - Ícones decorativos devem ser ignorados por tecnologias assistivas.
 
-### 5.8 Ruído visual
+## 38. Ruído visual
 
 Evitar:
 
@@ -310,38 +482,43 @@ Evitar:
 - animações sem propósito;
 - variações tipográficas sem significado.
 
-### 5.9 Identidade visual
+## 39. Identidade visual
 
-- A identidade visual deve reforçar reconhecimento sem prejudicar compreensão, acessibilidade ou eficiência.
-- Elementos de marca não devem ocupar prioridade superior à tarefa principal sem motivo de produto.
-- Variações visuais devem permanecer dentro dos contratos do design system adotado.
+A identidade visual deve reforçar reconhecimento sem prejudicar compreensão, acessibilidade ou eficiência.
+
+Elementos de marca não devem superar a prioridade da tarefa principal sem motivo de produto.
 
 ---
 
-## 6. Componentes e consistência
+# Parte V — Componentes e estados
 
-### 6.1 Responsabilidade do componente
+## 40. Responsabilidade do componente
 
-- Cada componente deve representar um elemento, padrão informacional ou comportamento identificável.
+- Cada componente deve representar elemento, padrão informacional ou comportamento identificável.
 - Um componente não deve assumir comportamentos incompatíveis sob a mesma aparência.
-- Componentes complexos devem ser compostos por partes coerentes quando isso melhorar clareza, manutenção ou acessibilidade.
-- A composição não deve produzir APIs visuais difíceis de prever.
+- Componentes complexos devem ser compostos quando isso melhorar clareza, manutenção ou acessibilidade.
+- A composição não deve produzir APIs imprevisíveis.
 
-### 6.2 Reutilização semântica
+## 41. Reutilização semântica
 
-- Componentes devem ser compartilhados quando representarem o mesmo significado, comportamento e expectativa de uso.
-- Semelhança visual isolada não justifica compartilhamento.
-- Componentes específicos devem permanecer próximos do contexto que lhes dá significado.
-- Um componente compartilhado não deve acumular exceções incompatíveis para atender casos não relacionados.
+Compartilhar componente somente quando ele representar:
 
-### 6.3 Variantes
+- mesmo significado;
+- mesmo comportamento;
+- mesmo contrato;
+- mesma expectativa de uso;
+- evolução previsivelmente conjunta.
 
-- Cada variante deve possuir finalidade clara e nome semanticamente coerente.
-- Variantes devem representar diferenças reais de prioridade, estado, comportamento ou contexto.
-- Não criar variantes apenas para alterar valores visuais isolados que possam ser resolvidos por composição ou token.
-- A quantidade de variantes deve permanecer administrável e previsível.
+Semelhança visual isolada não justifica compartilhamento.
 
-### 6.4 Estados obrigatórios
+## 42. Variantes
+
+- Cada variante deve possuir finalidade clara e nome semântico.
+- Variantes devem representar prioridade, estado, comportamento, intenção ou contexto.
+- Não criar variante apenas para transportar valor visual isolado.
+- A quantidade de variantes deve permanecer previsível.
+
+## 43. Estados obrigatórios
 
 Componentes interativos devem prever, quando aplicável:
 
@@ -356,449 +533,519 @@ Componentes interativos devem prever, quando aplicável:
 - erro;
 - sucesso.
 
-A ausência de um estado deve ser deliberada e não consequência de implementação incompleta.
+A ausência de estado deve ser deliberada.
 
-Textos visuais como `Selecionado`, `Ativo` ou equivalentes não são obrigatórios quando o estado já estiver perceptível por sinais visuais não dependentes apenas de cor e exposto programaticamente por semântica nativa ou atributos acessíveis.
+Textos como `Selecionado` ou `Ativo` não são obrigatórios quando o estado já for perceptível sem depender apenas de cor e estiver exposto programaticamente.
 
-### 6.5 Elementos nativos
+## 44. Elementos nativos
 
-- Elementos nativos da plataforma devem ser preferidos quando atenderem à necessidade.
+- Elementos nativos devem ser preferidos quando atenderem à necessidade.
 - Semântica e comportamento nativos não devem ser recriados sem justificativa.
-- Componentes personalizados devem preservar operação por teclado, foco, nome, função, estado e valor acessíveis.
-- Aparência personalizada não deve remover sinais necessários de interação.
+- Componentes personalizados devem preservar teclado, foco, nome, função, estado e valor acessíveis.
+- Aparência personalizada não deve remover sinais necessários.
 
-### 6.6 Área de interação
+## 45. Área de interação
 
-- Controles devem possuir área de clique ou toque adequada ao dispositivo e ao contexto.
+- Controles devem possuir área adequada ao dispositivo e contexto.
 - Elementos adjacentes não devem exigir precisão excessiva.
-- A área interativa não deve divergir de forma confusa da área visual do controle.
-- O tamanho mínimo concreto deve ser definido pelo padrão de acessibilidade e pelos dispositivos suportados no projeto.
+- Área interativa não deve divergir de forma confusa da área visual.
+- Dimensões mínimas concretas pertencem ao `regrasProjeto.md`.
 
-### 6.7 Indicação de interação
+## 46. Indicação de interação
 
 - Elementos interativos devem parecer interativos.
-- Elementos não interativos não devem parecer controles acionáveis.
-- Estados de seleção, expansão, edição e arraste devem ser perceptíveis.
-- Dependência exclusiva de hover deve ser evitada.
+- Elementos não interativos não devem parecer controles.
+- Seleção, expansão, edição e arraste devem ser perceptíveis.
+- Funcionalidade essencial não deve depender exclusivamente de hover.
 
-### 6.8 Design system
+## 47. Design system
 
-Quando existir design system:
+Quando existir:
 
 - componentes, tokens e padrões aprovados devem ser reutilizados;
 - variações locais devem ser justificadas;
-- novos padrões devem ser incorporados somente após demonstrarem reutilização real;
+- novos padrões devem demonstrar reutilização real;
 - inconsistências entre implementação e documentação devem ser corrigidas;
-- componentes obsoletos não devem permanecer em uso após migração concluída.
+- componentes obsoletos devem ser removidos após migração.
 
 ---
 
-## 7. Interação e feedback
+# Parte VI — Navegação e orientação
 
-### 7.1 Feedback imediato
+## 48. Localização atual
 
-- Toda ação deve produzir resposta perceptível em tempo compatível com a expectativa do usuário.
-- O feedback pode ocorrer por mudança de estado, atualização de conteúdo, indicador de progresso ou mensagem.
-- A ausência de resposta não deve fazer o usuário repetir a ação por incerteza.
-- Feedback visual deve possuir equivalente acessível quando necessário.
+A interface deve indicar claramente página, seção, etapa, aba ou contexto atual.
 
-### 7.2 Correspondência entre ação e resposta
+Estado ativo deve ser perceptível visualmente e por tecnologias assistivas.
 
-- O feedback deve aparecer próximo da ação ou do conteúdo afetado.
-- Erros locais devem permanecer associados ao elemento que precisa de correção.
-- Resultados globais devem ser comunicados em região adequada ao escopo da mudança.
-- A posição do feedback deve permanecer previsível.
+## 49. Estrutura de navegação
 
-### 7.3 Operações demoradas
+- A navegação deve representar a arquitetura da informação.
+- Itens devem ser agrupados por objetivo, domínio ou contexto do usuário.
+- A navegação principal não deve ser depósito de todas as funcionalidades.
+- Funções ocasionais podem permanecer em contextos secundários quando localizáveis.
 
-- Operações perceptivelmente demoradas devem indicar que estão em andamento.
-- Quando o progresso for mensurável, deve ser apresentado de forma determinada.
-- Quando não for mensurável, deve existir indicação de atividade e contexto.
-- Estimativas só devem ser apresentadas quando forem suficientemente confiáveis.
+## 50. Profundidade
 
-### 7.4 Ações duplicadas
+- A quantidade de níveis deve ser a menor possível sem misturar contextos.
+- Níveis intermediários sem função devem ser removidos.
+- Páginas que apenas encaminham para uma única opção devem ser evitadas.
+- O usuário não deve retornar repetidamente à raiz para acessar funções relacionadas.
 
-- A interface deve impedir submissões repetidas ou operações conflitantes enquanto uma ação estiver em processamento.
-- O bloqueio deve ser limitado ao escopo necessário.
-- O usuário deve compreender por que um controle está temporariamente indisponível.
-- A conclusão ou falha deve restaurar o estado apropriado.
+## 51. Continuidade
 
-### 7.5 Confirmações
+Mudanças de página, etapa ou contexto devem preservar, quando esperado:
 
-Solicitar confirmação quando:
+- filtros;
+- rolagem;
+- seleção;
+- dados não enviados;
+- contexto da tarefa.
 
-- a ação for destrutiva;
-- houver impacto relevante em dados ou pessoas;
-- a reversão for difícil ou impossível;
-- o resultado não for evidente;
-- existir risco razoável de acionamento acidental.
+Perda inevitável de contexto deve ser explícita.
 
-Não solicitar confirmação para ações triviais, frequentes e facilmente reversíveis.
+## 52. Retorno e cancelamento
 
-### 7.6 Animações e transições
+- Voltar ou cancelar não deve causar perda inesperada.
+- Alterações não salvas devem ser preservadas ou ter consequência comunicada.
+- Cancelar deve interromper a operação atual sem efeitos ocultos.
 
-- Animações devem explicar mudança, indicar continuidade, orientar atenção ou comunicar progresso.
-- Não devem atrasar operações, bloquear interação ou competir com conteúdo principal.
-- A duração deve ser proporcional à mudança.
-- Preferências de redução de movimento devem ser respeitadas.
+## 53. Links e botões
 
-### 7.7 Feedback persistente
+- Links representam navegação.
+- Botões executam ações.
+- Aparência e comportamento devem corresponder.
+- A intenção não deve depender apenas de ícone.
 
-- Resultados importantes devem permanecer visíveis até que possam ser compreendidos ou dispensados.
-- Mensagens temporárias devem possuir duração proporcional ao conteúdo e ao impacto.
-- Informações necessárias para recuperação não devem desaparecer automaticamente.
-- O histórico da operação deve permanecer acessível quando fizer parte da tarefa.
+## 54. Fluxos com etapas
 
-### 7.8 Processos automáticos
+Fluxos de múltiplas etapas devem indicar:
 
-- Processos automáticos que alterem dados, decisões ou resultados devem ser comunicados quando afetarem a compreensão ou o controle do usuário.
-- A interface deve diferenciar recomendação, automação e decisão confirmada.
-- O usuário deve conseguir revisar ou corrigir resultados automáticos quando o risco justificar.
+- etapa atual;
+- progresso;
+- possibilidade de retorno;
+- consequência da continuidade.
+
+Cada etapa deve conter decisões semanticamente relacionadas.
 
 ---
 
-## 8. Estados da interface
+# Parte VII — Interação e feedback
 
-### 8.1 Cobertura de estados
+## 55. Feedback imediato
+
+Toda ação deve produzir resposta perceptível em tempo compatível com a expectativa.
+
+A ausência de resposta não deve induzir repetição por incerteza.
+
+## 56. Correspondência entre ação e resposta
+
+- Feedback deve aparecer próximo da ação ou conteúdo afetado.
+- Erros locais permanecem associados ao elemento corrigível.
+- Resultados globais devem ser comunicados em região correspondente ao escopo.
+
+## 57. Operações demoradas
+
+- Operações perceptíveis devem indicar atividade.
+- Progresso mensurável deve ser apresentado quando útil.
+- Estimativas só devem ser exibidas quando confiáveis.
+
+## 58. Ações duplicadas
+
+- Submissões repetidas ou operações conflitantes devem ser impedidas quando necessário.
+- O bloqueio deve ser limitado ao escopo afetado.
+- Conclusão ou falha deve restaurar estado apropriado.
+
+## 59. Confirmações e desfazer
+
+Solicitar confirmação quando houver:
+
+- destruição;
+- impacto relevante;
+- reversão difícil;
+- resultado não evidente;
+- risco de acionamento acidental.
+
+Preferir desfazer a confirmações repetitivas em ações reversíveis.
+
+## 60. Animações
+
+Animações devem explicar mudança, continuidade, atenção ou progresso.
+
+Não devem atrasar operações, bloquear interação ou competir com conteúdo.
+
+Preferências de redução de movimento devem ser respeitadas.
+
+## 61. Processos automáticos
+
+A interface deve diferenciar:
+
+- recomendação;
+- automação;
+- decisão confirmada.
+
+Resultados automáticos devem poder ser revisados ou corrigidos quando o risco justificar.
+
+---
+
+# Parte VIII — Estados da interface
+
+## 62. Cobertura de estados
 
 Toda tela, região ou componente dependente de dados deve considerar, quando aplicável:
 
-- estado inicial;
+- inicial;
 - carregamento;
 - conteúdo disponível;
-- conteúdo vazio;
+- vazio;
 - erro;
-- conteúdo parcial;
+- parcial;
 - sucesso;
 - desabilitado;
 - somente leitura;
 - offline ou degradado.
 
-Estados não devem ser tratados como casos posteriores à implementação principal.
+Estados não devem ser tratados somente depois da implementação principal.
 
-### 8.2 Estado inicial
+## 63. Estado inicial
 
-- O estado inicial deve indicar o objetivo da tela e as ações disponíveis.
-- Configurações ou dados necessários devem ser solicitados de forma orientada.
-- A interface não deve parecer quebrada antes da primeira interação.
+Deve indicar objetivo e ações disponíveis sem parecer quebrado antes da primeira interação.
 
-### 8.3 Estado de carregamento
+## 64. Carregamento
 
-- O indicador deve ser compatível com a estrutura e duração esperada.
-- Conteúdo previsível pode utilizar representação estrutural temporária.
-- Operações breves e indeterminadas podem utilizar indicador simples.
-- Operações mensuráveis devem apresentar progresso quando isso ajudar o usuário.
-- O carregamento não deve causar mudanças desnecessárias de layout.
+- O indicador deve ser compatível com estrutura e duração.
+- Conteúdo previsível pode usar representação estrutural temporária.
+- Carregamento não deve causar mudanças desnecessárias de layout.
 
-### 8.4 Estado vazio
+## 65. Estado vazio
 
-O estado vazio deve explicar, quando aplicável:
+Deve explicar, quando aplicável:
 
 - o que está ausente;
-- por que a ausência pode ocorrer;
-- se existe problema ou condição normal;
+- por que a ausência ocorre;
+- se é condição normal ou problema;
 - qual ação pode ser realizada.
 
-Mensagens genéricas como `Nenhum dado` devem ser evitadas quando houver orientação mais útil.
+## 66. Estado de erro
 
-### 8.5 Estado de erro
-
-O estado de erro deve informar:
+Deve informar:
 
 - o que não foi concluído;
-- o impacto da falha;
-- como tentar novamente;
-- como corrigir dados, quando aplicável;
-- como buscar suporte, quando necessário.
+- impacto;
+- forma de tentar novamente;
+- forma de corrigir;
+- suporte, quando necessário.
 
-Detalhes internos, códigos e rastreamentos não devem substituir uma explicação compreensível.
+Detalhes técnicos não substituem explicação compreensível.
 
-### 8.6 Estado parcial
+## 67. Estado parcial
 
-- Conteúdo válido deve permanecer disponível quando uma falha parcial não comprometer segurança ou consistência.
-- A região afetada deve indicar a falha sem bloquear áreas independentes.
-- O usuário deve compreender quais informações estão completas e quais estão indisponíveis.
+Conteúdo válido deve permanecer disponível quando uma falha parcial não comprometer segurança ou consistência.
 
-### 8.7 Estado desabilitado
+A região afetada deve indicar a falha sem bloquear áreas independentes.
 
-- Controles desabilitados devem possuir motivo compreensível quando esse motivo não for evidente.
-- A interface deve informar o requisito necessário para habilitação quando aplicável.
-- Controles não devem ser desabilitados apenas para ocultar erro de validação que poderia ser explicado.
+## 68. Estado desabilitado
 
-### 8.8 Estado de sucesso
+- O motivo deve ser compreensível quando não for evidente.
+- O requisito para habilitação deve ser informado quando aplicável.
+- Desabilitação não deve ocultar erro que poderia ser explicado.
 
-- A conclusão deve ser confirmada quando a mudança não for imediatamente visível.
-- A mensagem deve informar o que foi concluído.
-- Próximas ações devem ser apresentadas quando forem relevantes.
-- Confirmações genéricas como `Sucesso` devem ser evitadas quando um resultado específico puder ser informado.
+## 69. Estado de sucesso
 
-### 8.9 Estado offline ou degradado
+A conclusão deve ser confirmada quando não for imediatamente visível.
+
+A mensagem deve identificar o resultado e próximas ações relevantes.
+
+## 70. Estado offline ou degradado
 
 - Limitações de conexão devem ser comunicadas.
-- Conteúdo disponível localmente deve permanecer acessível quando seguro.
-- Ações pendentes devem indicar seu estado e possibilidade de retomada.
-- O sistema não deve simular conclusão de operações que ainda não foram confirmadas.
+- Conteúdo local seguro deve permanecer acessível.
+- Ações pendentes devem indicar estado.
+- O sistema não deve simular conclusão não confirmada.
 
 ---
 
-## 9. Formulários e entrada de dados
+# Parte IX — Formulários e entrada
 
-### 9.1 Necessidade dos campos
+## 71. Necessidade dos campos
 
-- Solicitar apenas dados necessários para a tarefa atual ou para uma consequência explicitamente informada.
-- Informações já conhecidas pelo sistema devem ser preenchidas ou reutilizadas quando seguro.
-- Campos futuros, especulativos ou sem uso definido não devem ser adicionados.
-- Dados sensíveis devem possuir justificativa e proteção proporcionais.
+Solicitar somente dados necessários à tarefa atual ou consequência explicitamente informada.
 
-### 9.2 Rótulos
+Dados já conhecidos devem ser reutilizados quando seguro.
 
-- Todo campo deve possuir rótulo persistente e associado semanticamente ao controle.
-- Placeholder não deve substituir rótulo.
-- Rótulos devem descrever o dado esperado, não a implementação interna.
-- Instruções complementares devem permanecer próximas do campo correspondente.
+## 72. Rótulos
 
-### 9.3 Formato esperado
+- Todo campo deve possuir rótulo persistente e semanticamente associado.
+- Placeholder não substitui rótulo.
+- Rótulos descrevem o dado, não a implementação.
+- Instruções permanecem próximas ao campo.
+
+## 73. Formato esperado
 
 - Formatos específicos devem ser comunicados por exemplo, máscara, unidade ou instrução.
-- Valores compostos reconhecíveis, como duração em `minutos:segundos`, podem utilizar um único campo quando isso reduzir esforço sem comprometer clareza.
-- A interface deve aceitar variações razoáveis quando puder normalizá-las com segurança.
-- Restrições devem ser apresentadas antes do envio quando forem conhecidas.
-- Máscaras e formatações automáticas devem preservar cursor, seleção, exclusão, colagem, teclado virtual e tecnologias assistivas; quando isso não puder ser garantido, a normalização deve ocorrer após a conclusão da entrada.
-- Máscaras não devem impedir edição, colagem ou uso de tecnologias assistivas.
+- Variações razoáveis devem ser aceitas quando puderem ser normalizadas com segurança.
+- Restrições devem ser apresentadas antes do envio quando conhecidas.
+- Máscaras devem preservar cursor, seleção, exclusão, colagem, teclado virtual e tecnologias assistivas.
 
-### 9.4 Tipo de controle
+## 74. Tipo de controle
 
-Utilizar o controle mais adequado à natureza da entrada:
+Utilizar o controle adequado à natureza da entrada:
 
 - checkbox para opções independentes;
-- radio para escolha exclusiva entre poucas opções visíveis;
+- radio para escolha exclusiva entre poucas opções;
 - select ou busca para conjuntos maiores;
 - campo numérico para números;
-- seletor de data para datas quando melhorar a entrada;
-- campo de texto quando a resposta não puder ser representada adequadamente por opções.
+- seletor de data quando melhorar entrada;
+- texto livre quando opções não forem adequadas.
 
-### 9.5 Ordem de preenchimento
+## 75. Ordem de preenchimento
 
-- A ordem dos campos deve acompanhar o fluxo mental e operacional da tarefa.
-- Campos relacionados devem permanecer agrupados.
-- Dependências entre campos devem ser apresentadas de forma progressiva.
-- A ordem visual e a ordem de foco devem permanecer coerentes.
+- A ordem deve acompanhar o fluxo mental e operacional.
+- Campos relacionados permanecem agrupados.
+- Dependências aparecem progressivamente.
+- Ordem visual e de foco permanecem coerentes.
 
-### 9.6 Obrigatoriedade
+## 76. Obrigatoriedade
 
-- Campos obrigatórios e opcionais devem ser identificados de forma consistente.
-- O padrão adotado deve ser documentado no projeto.
-- Campos condicionais só devem aparecer como obrigatórios quando a condição estiver ativa.
-- A obrigatoriedade não deve depender apenas de cor.
+- Campos obrigatórios e opcionais devem ser identificados consistentemente.
+- O padrão concreto pertence ao projeto.
+- Obrigatoriedade condicional só existe quando a condição estiver ativa.
+- Não depender apenas de cor.
 
-### 9.7 Validação
+## 77. Validação
 
-- A validação deve ocorrer no momento mais útil para prevenção ou correção.
-- Erros não devem ser apresentados antes de o usuário ter oportunidade razoável de preencher o campo.
-- Validações locais e de servidor devem produzir mensagens coerentes.
-- A validação não deve remover ou modificar silenciosamente dados válidos.
+- Deve ocorrer no momento mais útil para prevenção ou correção.
+- Erros não devem aparecer antes de oportunidade razoável de preenchimento.
+- Cliente e servidor devem produzir mensagens coerentes.
+- Dados válidos não devem ser removidos silenciosamente.
 
-### 9.8 Mensagens de erro
+## 78. Mensagens de erro
 
-Mensagens devem:
+Devem:
 
-- identificar o campo ou problema;
-- explicar a restrição;
-- indicar como corrigir;
+- identificar problema;
+- explicar restrição;
+- indicar correção;
 - utilizar linguagem não acusatória;
-- permanecer disponíveis até a correção ou dispensa adequada.
+- permanecer até correção ou dispensa adequada.
 
-Mensagens genéricas como `Valor inválido` devem ser evitadas quando a regra puder ser especificada.
+## 79. Preservação de dados
 
-### 9.9 Preservação de dados
+Dados preenchidos não devem ser apagados após falha de validação, conexão ou processamento, salvo exigência de segurança explicitamente comunicada.
 
-- Dados preenchidos não devem ser apagados após falha de validação, conexão ou processamento.
-- Mudanças de etapa devem preservar informações quando fizerem parte do mesmo fluxo.
-- Descarte deliberado deve ser comunicado e confirmado quando houver perda relevante.
-- Dados sensíveis podem exigir tratamento diferente por segurança, desde que o comportamento seja informado.
+## 80. Ações do formulário
 
-### 9.10 Ações do formulário
+- A ação principal deve indicar resultado concreto.
+- Ações secundárias não devem competir com a principal.
+- Envio duplicado deve ser impedido quando causar inconsistência.
+- Enter deve possuir comportamento previsível e seguro.
 
-- A ação principal deve indicar o resultado, como `Salvar treino` ou `Enviar convite`.
-- Ações secundárias não devem competir visualmente com a principal.
-- Envio deve ser impedido quando produzir duplicação ou inconsistência.
-- A tecla Enter deve possuir comportamento previsível e seguro.
+## 81. Formulários extensos
 
-### 9.11 Formulários extensos
+Dividir ou agrupar somente quando isso reduzir carga cognitiva ou risco.
 
-- Formulários extensos devem ser agrupados ou divididos somente quando isso reduzir carga cognitiva ou risco.
-- A divisão não deve ocultar dependências entre campos.
-- Progresso e possibilidade de retorno devem ser apresentados quando existirem múltiplas etapas.
-- Resumos devem ser fornecidos antes de confirmações de alto impacto.
+A divisão não deve ocultar dependências entre campos.
 
 ---
 
-## 10. Prevenção e recuperação de erros
+# Parte X — Prevenção e recuperação de erros
 
-### 10.1 Prevenção
+## 82. Prevenção
 
 - Restrições conhecidas devem ser aplicadas antes do envio quando possível.
-- Valores impossíveis ou incompatíveis devem ser impedidos ou claramente sinalizados.
+- Valores impossíveis devem ser impedidos ou sinalizados.
 - Opções indisponíveis não devem parecer executáveis.
-- A prevenção não deve impedir entradas válidas por excesso de restrição.
+- Prevenção não pode bloquear entradas válidas por excesso de restrição.
 
-### 10.2 Valores padrão
+## 83. Valores padrão
 
-- Valores padrão devem ser seguros, previsíveis e adequados à maioria dos casos.
-- Padrões não devem autorizar, publicar, excluir ou compartilhar dados sem decisão explícita quando houver impacto relevante.
+- Devem ser seguros, previsíveis e adequados à maioria dos casos.
+- Não devem autorizar, publicar, excluir ou compartilhar dados sem decisão explícita quando houver impacto.
 - Valores herdados ou calculados devem ser identificáveis quando puderem causar interpretação incorreta.
 
-### 10.3 Ações destrutivas
+## 84. Ações destrutivas
 
-Ações destrutivas devem possuir:
+Devem possuir:
 
 - rótulo explícito;
-- diferenciação visual proporcional;
+- diferenciação proporcional;
 - indicação do objeto afetado;
 - confirmação quando necessária;
 - possibilidade de desfazer quando viável.
 
-Rótulos genéricos como `Confirmar` devem ser substituídos pelo resultado concreto, como `Excluir treino`.
+## 85. Recuperação
 
-### 10.4 Desfazer
+Após erro, preservar:
 
-- Desfazer deve ser preferido a confirmações repetitivas em ações reversíveis.
-- A possibilidade de desfazer deve permanecer disponível por tempo suficiente para uso razoável.
-- O escopo da reversão deve ser claro.
-- O sistema deve informar quando a ação não puder mais ser desfeita.
+- contexto;
+- dados válidos;
+- caminho de continuidade;
+- proteção contra duplicação de efeitos.
 
-### 10.5 Recuperação
+## 86. Erros locais e globais
 
-- Após um erro, a interface deve preservar contexto, dados válidos e caminho de continuidade.
-- A correção não deve exigir reiniciar todo o fluxo quando apenas uma etapa falhar.
-- Tentativas novamente executadas devem evitar duplicação de efeitos.
-- O sistema deve distinguir falha temporária, erro de entrada e indisponibilidade permanente quando isso alterar a ação recomendada.
+- Erros locais aparecem próximos ao elemento afetado.
+- Erros globais são usados somente quando afetarem toda a operação ou não puderem ser associados.
+- Mensagem global não substitui mensagens locais necessárias.
 
-### 10.6 Erros locais e globais
+## 87. Mensagens técnicas
 
-- Erros locais devem aparecer próximos do elemento afetado.
-- Erros globais devem ser utilizados somente quando afetarem a operação inteira ou não puderem ser associados a um elemento específico.
-- Uma mensagem global não deve substituir mensagens locais necessárias.
-- Múltiplos erros devem ser apresentados de forma que permitam correção previsível.
+Detalhes técnicos devem permanecer no diagnóstico interno e não constituir explicação principal ao usuário.
 
-### 10.7 Mensagens técnicas
-
-- Detalhes técnicos devem ser registrados para diagnóstico, mas não apresentados como explicação principal ao usuário.
-- Mensagens externas não devem expor segredos, infraestrutura, rastreamentos ou dados sensíveis.
-- Identificadores de suporte podem ser apresentados quando ajudarem o diagnóstico sem comprometer segurança.
+Não expor segredos, infraestrutura, rastreamentos ou dados sensíveis.
 
 ---
 
-## 11. Acessibilidade
+# Parte XI — Acessibilidade
 
-### 11.1 Princípio geral
+## 88. Princípio geral
 
-- Acessibilidade deve ser considerada desde a estrutura inicial da interface e não apenas após sua conclusão.
-- Funcionalidades essenciais devem permanecer perceptíveis, operáveis, compreensíveis e robustas nos contextos definidos pelo projeto.
-- O padrão e o nível de conformidade adotados devem ser registrados em `regrasProjeto.md`.
+Acessibilidade deve participar da definição da estrutura, componentes, estados, conteúdo e interação desde o início.
 
-### 11.2 Estrutura semântica
+Não pode ser tratada somente como validação posterior.
 
-- Elementos devem utilizar semântica correspondente à sua função.
+## 89. Estrutura semântica
+
+- Elementos devem utilizar semântica correspondente à função.
 - Títulos devem formar hierarquia coerente.
-- Botões devem representar ações, links devem representar navegação e tabelas devem representar dados tabulares.
-- Semântica nativa deve ser preferida a atributos adicionais que tentem recriá-la.
+- Botões representam ações, links representam navegação e tabelas representam dados tabulares.
+- Semântica nativa deve ser preferida.
 
-### 11.3 Teclado
+## 90. Teclado
 
-- Toda funcionalidade essencial deve ser operável por teclado quando aplicável à plataforma.
+- Toda funcionalidade essencial deve ser operável por teclado quando aplicável.
 - Não devem existir armadilhas de foco.
-- A ordem de navegação deve acompanhar a sequência lógica.
-- Controles personalizados devem possuir interação equivalente ao padrão que representam.
+- A ordem deve acompanhar a sequência lógica.
+- Controles personalizados devem possuir interação equivalente ao padrão representado.
 
-### 11.4 Foco
+## 91. Foco
 
-- O foco deve ser visível em todos os elementos interativos.
-- Mudanças de contexto devem mover o foco deliberadamente quando necessário para compreensão.
-- Ao fechar elementos temporários, o foco deve retornar ao contexto anterior quando apropriado.
-- O estilo de foco não deve ser removido sem substituição perceptível.
+- Foco deve ser visível.
+- Mudanças de contexto devem mover foco deliberadamente quando necessário.
+- Ao fechar elementos temporários, foco deve retornar ao contexto apropriado.
+- Estilo de foco não pode ser removido sem substituição perceptível.
 
-### 11.5 Tecnologias assistivas
+## 92. Tecnologias assistivas
 
-- Controles devem expor nome, função, estado e valor compreensíveis.
-- Mudanças importantes de estado devem ser comunicadas quando não forem identificáveis pela estrutura normal.
-- Conteúdo oculto visualmente não deve permanecer acessível quando estiver inativo.
-- Atributos de acessibilidade devem complementar a semântica, não substituir elementos adequados.
+Controles devem expor:
 
-### 11.6 Contraste e cor
+- nome;
+- função;
+- estado;
+- valor.
 
-- Informações não devem depender exclusivamente de cor.
-- Texto e controles devem atender aos critérios de contraste adotados pelo projeto.
-- Estados de foco, erro, sucesso, seleção e desabilitação devem continuar distinguíveis.
-- Gráficos e visualizações devem possuir distinções adicionais quando as cores representarem categorias ou valores.
+Mudanças importantes devem ser comunicadas quando não forem identificáveis pela estrutura normal.
 
-### 11.7 Texto alternativo
+## 93. Contraste e cor
 
-- Imagens informativas devem possuir alternativa que comunique sua função ou conteúdo relevante.
-- Imagens decorativas devem ser ignoradas por tecnologias assistivas.
-- Alternativas não devem repetir texto adjacente sem necessidade.
-- Gráficos complexos devem possuir resumo ou representação alternativa dos dados essenciais.
+- Informação não depende exclusivamente de cor.
+- Texto e controles devem atender aos critérios adotados pelo projeto.
+- Foco, erro, sucesso, seleção e desabilitação devem permanecer distinguíveis.
 
-### 11.8 Movimento e tempo
+## 94. Texto alternativo e mídia
+
+- Imagens informativas possuem alternativa adequada.
+- Imagens decorativas são ignoradas.
+- Gráficos complexos possuem resumo ou representação alternativa.
+- Conteúdo audiovisual possui alternativas conforme natureza e nível de conformidade.
+
+## 95. Movimento e tempo
 
 - Preferências de redução de movimento devem ser respeitadas.
-- Conteúdo não deve piscar ou mover-se de forma que comprometa segurança ou leitura.
-- Limites de tempo devem ser evitados quando não forem necessários.
-- Quando houver limite, o usuário deve ser informado e possuir extensão ou recuperação quando viável.
+- Conteúdo não deve piscar ou mover-se de forma insegura.
+- Limites de tempo devem ser evitados quando desnecessários.
+- Quando existirem, devem ser informados e permitir extensão ou recuperação quando viável.
 
-### 11.9 Ampliação e redimensionamento
+## 96. Ampliação e redimensionamento
 
-- A interface deve permanecer utilizável com ampliação de texto e zoom dentro dos requisitos adotados.
-- Conteúdo não deve ser cortado, sobreposto ou depender de rolagem em duas direções sem necessidade.
-- A ordem e o significado devem ser preservados após reorganização responsiva.
+A interface deve permanecer utilizável com ampliação de texto e zoom nos limites definidos pelo projeto.
 
-### 11.10 Mídia
-
-- Conteúdo audiovisual deve possuir alternativas adequadas ao tipo de informação.
-- Controles de mídia devem ser acessíveis por teclado e tecnologias assistivas.
-- Reprodução automática com som deve ser evitada.
-- Legendas, transcrições ou descrições devem ser fornecidas quando exigidas pelo conteúdo e pelo nível de conformidade adotado.
+Conteúdo não deve ser cortado, sobreposto ou exigir rolagem bidirecional sem necessidade.
 
 ---
 
-## 12. Responsividade e dispositivos
+# Parte XII — Responsividade e dispositivos
 
-### 12.1 Conteúdo antes do dispositivo
+## 97. Contexto responsável pela adaptação
 
-- A adaptação deve ser definida pela necessidade do conteúdo e da interação, não apenas por modelos específicos de aparelho.
-- Breakpoints devem existir quando o layout deixar de preservar compreensão, operação ou legibilidade.
-- Valores concretos devem ser registrados em `regrasProjeto.md` ou no design system.
+A adaptação deve ser controlada pelo menor contexto que possua informação suficiente.
 
-### 12.2 Fluxo responsivo
+- condições globais pertencem ao ambiente, janela ou viewport;
+- condições locais pertencem ao espaço disponível do componente;
+- condições de dados pertencem ao estado ou contrato;
+- preferências do usuário pertencem ao mecanismo da plataforma.
+
+A tecnologia concreta pertence ao `regrasProjeto.md`.
+
+Não observar o viewport global para controlar comportamento que dependa exclusivamente do espaço local quando a plataforma oferecer mecanismo adequado.
+
+## 98. Conteúdo antes do dispositivo
+
+A adaptação deve ser definida pela necessidade do conteúdo e da interação, não por modelos específicos de aparelho.
+
+## 99. Breakpoints justificados
+
+Um breakpoint deve representar necessidade observável, como:
+
+- mudança de composição;
+- perda de legibilidade;
+- quebra de controle;
+- alteração de navegação;
+- insuficiência de espaço;
+- necessidade de reorganização.
+
+Não criar breakpoint apenas por convenção, dispositivo específico ou ajuste isolado.
+
+Valores e justificativas pertencem ao `regrasProjeto.md`.
+
+## 100. Adaptação contínua e discreta
+
+Propriedades que variem continuamente sem mudança estrutural devem preferir comportamento fluido e previsível.
+
+Isso se aplica, quando adequado, a:
+
+- espaçamento;
+- largura;
+- altura;
+- tipografia;
+- distribuição;
+- colunas;
+- proporções.
+
+Breakpoints ou estados discretos devem ser usados quando houver mudança real de composição ou comportamento.
+
+## 101. Fluxo responsivo
 
 - Elementos devem reorganizar-se sem perder ordem semântica ou relações essenciais.
 - A interface deve evitar cortes, sobreposições e rolagens desnecessárias.
-- Mudanças de disposição não devem alterar o significado das ações.
-- Conteúdo principal deve permanecer acessível antes de conteúdo complementar.
+- Mudanças de disposição não podem alterar significado das ações.
+- Conteúdo principal deve preceder conteúdo complementar.
 
-### 12.3 Prioridade de conteúdo
+## 102. Prioridade de conteúdo
 
-- Em espaços reduzidos, conteúdo secundário pode ser recolhido ou movido para acesso sob demanda.
-- Ações essenciais não devem desaparecer sem alternativa equivalente.
-- Ocultação responsiva não deve remover informações necessárias à decisão atual.
-- A prioridade deve ser definida pelo objetivo do usuário, não pela conveniência do layout.
+Em espaços reduzidos, conteúdo secundário pode ser recolhido quando:
 
-### 12.4 Toque e ponteiro
+- ações essenciais permanecerem disponíveis;
+- informação necessária não desaparecer;
+- a alternativa for equivalente;
+- a prioridade seguir o objetivo do usuário.
 
-- Áreas de toque devem ser adequadas e possuir espaçamento suficiente.
-- A interface não deve depender exclusivamente de hover.
-- Ações de arraste devem possuir alternativa quando forem essenciais.
-- Gestos não evidentes devem ser evitados ou acompanhados por indicação e alternativa.
+## 103. Toque e ponteiro
 
-### 12.5 Teclados e entradas móveis
+- Áreas de toque devem ser adequadas.
+- Não depender exclusivamente de hover.
+- Arraste essencial deve possuir alternativa.
+- Gestos não evidentes devem possuir indicação e alternativa.
 
-- Campos devem utilizar tipos de entrada adequados para facilitar teclados virtuais e preenchimento.
-- A abertura do teclado não deve ocultar o campo, a mensagem de erro ou a ação principal sem possibilidade de acesso.
-- Autocompletar deve ser utilizado quando melhorar eficiência e privacidade for preservada.
+## 104. Teclados móveis
 
-### 12.6 Tabelas e dados densos
+- Campos devem utilizar tipos de entrada adequados.
+- O teclado não deve ocultar campo, erro ou ação principal sem possibilidade de acesso.
+- Autocompletar pode ser usado quando melhorar eficiência e preservar privacidade.
 
-Tabelas e visualizações densas devem adotar estratégia proporcional ao conteúdo, como:
+## 105. Tabelas e dados densos
+
+Podem utilizar:
 
 - rolagem horizontal controlada;
 - colunas prioritárias;
@@ -806,220 +1053,196 @@ Tabelas e visualizações densas devem adotar estratégia proporcional ao conte�
 - visualização alternativa;
 - agrupamento por cartões quando não comprometer comparação.
 
-A estratégia não deve destruir relações tabulares importantes.
+A estratégia não pode destruir relações tabulares importantes.
 
-### 12.7 Orientação e redimensionamento
+## 106. Orientação e métodos de entrada
 
-- A interface deve permanecer funcional nas orientações e dimensões suportadas.
-- Mudanças de tamanho da janela não devem exigir recarregamento ou perda de contexto.
-- Restrições de orientação devem existir somente quando forem indispensáveis à tarefa.
-
-### 12.8 Diferentes métodos de entrada
-
-- A interface deve considerar mouse, teclado, toque, caneta e tecnologias assistivas quando aplicáveis.
-- Um método não deve bloquear o uso dos demais sem necessidade técnica.
-- Estados de foco, hover, toque e seleção devem permanecer coerentes.
+- A interface deve permanecer funcional nas orientações suportadas.
+- Redimensionamento não deve exigir recarregamento ou perda de contexto.
+- Mouse, teclado, toque, caneta e tecnologias assistivas devem coexistir quando aplicáveis.
 
 ---
 
-## 13. Conteúdo e linguagem
+# Parte XIII — Conteúdo e linguagem
 
-### 13.1 Linguagem direta
+## 107. Linguagem direta
 
-- Textos devem ser claros, específicos e orientados à tarefa.
-- Construções excessivamente formais, ambíguas ou indiretas devem ser evitadas.
-- Informações essenciais devem aparecer antes de explicações complementares.
-- Frases devem ser tão curtas quanto possível sem perder precisão.
+Textos devem ser claros, específicos e orientados à tarefa.
 
-### 13.2 Vocabulário do usuário
+Informações essenciais devem aparecer antes de explicações complementares.
 
-- A interface deve utilizar termos conhecidos pelo público e pelo domínio.
-- Termos internos de implementação devem ser traduzidos para o conceito compreendido pelo usuário.
-- Vocabulário especializado pode ser utilizado quando fizer parte do conhecimento esperado do público.
-- Termos potencialmente desconhecidos devem possuir explicação quando forem necessários.
+## 108. Vocabulário do usuário
 
-### 13.3 Consistência terminológica
+Termos internos de implementação devem ser traduzidos para conceitos compreendidos pelo público.
 
-- O mesmo conceito deve possuir o mesmo nome em toda a interface e documentação de uso.
-- Sinônimos não devem ser alternados quando puderem sugerir entidades ou ações diferentes.
-- Mudanças terminológicas devem ser aplicadas integralmente aos fluxos afetados.
-- Glossários podem ser utilizados quando o domínio possuir termos específicos relevantes.
+Vocabulário especializado pode ser usado quando fizer parte do conhecimento esperado.
 
-### 13.4 Rótulos de ação
+## 109. Consistência terminológica
 
-- Botões e comandos devem indicar a ação ou o resultado concreto.
-- Rótulos genéricos como `OK`, `Confirmar` ou `Continuar` devem ser evitados quando o resultado não estiver evidente.
-- A mesma ação deve manter o mesmo verbo.
-- Ações destrutivas devem nomear explicitamente a consequência.
+- O mesmo conceito deve possuir o mesmo nome.
+- Sinônimos não devem sugerir entidades diferentes.
+- Mudanças terminológicas devem ser aplicadas integralmente.
 
-### 13.5 Mensagens de estado
+## 110. Rótulos de ação
 
-- Mensagens devem informar o que aconteceu, o impacto e a próxima ação quando necessária.
-- Mensagens de sucesso devem identificar o resultado concluído.
-- Mensagens de erro devem orientar correção ou recuperação.
-- Mensagens de carregamento devem identificar a operação quando a espera for relevante.
+- Botões e comandos devem indicar ação ou resultado concreto.
+- Rótulos genéricos devem ser evitados quando o resultado não for evidente.
+- Ações destrutivas devem nomear a consequência.
 
-### 13.6 Tom
+## 111. Mensagens de estado
 
-- O tom deve ser coerente com o público, o domínio e a gravidade do contexto.
-- Situações críticas devem priorizar precisão e ação, sem humor ou linguagem promocional.
-- A interface não deve culpar, constranger ou manipular o usuário.
-- Textos comerciais não devem ocultar consequências ou reduzir clareza operacional.
+Mensagens devem informar:
 
-### 13.7 Datas, números e unidades
+- o que aconteceu;
+- impacto;
+- próxima ação, quando necessária.
 
-- Datas, horários, números, moedas e unidades devem seguir o contexto regional e o domínio do usuário.
-- Unidades devem ser apresentadas junto aos valores quando necessárias à interpretação.
-- Precisão numérica deve ser proporcional à decisão realizada.
+## 112. Tom
+
+O tom deve ser coerente com público, domínio e gravidade.
+
+Situações críticas priorizam precisão e ação.
+
+A interface não deve culpar, constranger ou manipular.
+
+## 113. Datas, números e unidades
+
+- Devem seguir contexto regional e domínio.
+- Unidades devem acompanhar valores quando necessárias.
+- Precisão numérica deve ser proporcional à decisão.
 - Formatos ambíguos devem ser evitados.
 
-### 13.8 Internacionalização
+## 114. Internacionalização
 
 Quando aplicável:
 
-- textos não devem estar concatenados de forma que impeça tradução correta;
+- textos não devem ser concatenados de forma que impeça tradução;
 - layouts devem suportar variação de comprimento;
-- pluralização, gênero, datas, números e unidades devem respeitar a localização;
-- conteúdo inserido por usuários deve permanecer distinto do texto traduzido da interface.
+- pluralização, gênero, datas e números devem respeitar localização;
+- conteúdo do usuário deve permanecer distinto do texto traduzido.
 
 ---
 
-## 14. Desempenho percebido
+# Parte XIV — Desempenho percebido
 
-### 14.1 Resposta à interação
+## 115. Resposta à interação
 
-- A interface deve responder visualmente assim que uma ação for reconhecida.
-- Processamento posterior não deve impedir a confirmação de que a interação ocorreu.
-- Interações essenciais não devem ser bloqueadas por tarefas secundárias.
+A interface deve responder visualmente assim que a ação for reconhecida.
 
-### 14.2 Carregamento progressivo
+Tarefas secundárias não devem bloquear interações independentes sem necessidade.
 
-- Conteúdo prioritário deve ser apresentado antes de conteúdo secundário quando possível.
-- Partes independentes da interface devem carregar sem bloquear o conjunto inteiro.
-- A ordem de carregamento deve preservar compreensão e estabilidade.
+## 116. Carregamento progressivo
 
-### 14.3 Estabilidade visual
+- Conteúdo prioritário deve aparecer antes do secundário quando possível.
+- Regiões independentes devem carregar sem bloquear o conjunto.
+- A ordem deve preservar compreensão e estabilidade.
 
-- Espaço deve ser reservado para conteúdo assíncrono previsível.
-- Elementos não devem mudar de posição inesperadamente durante leitura ou interação.
-- Atualizações devem preservar a posição do usuário quando possível.
-- Indicadores temporários não devem alterar desnecessariamente as dimensões dos controles.
+## 117. Estabilidade visual
 
-### 14.4 Atualizações otimistas
+- Reservar espaço para conteúdo assíncrono previsível.
+- Elementos não devem mudar de posição inesperadamente.
+- Atualizações devem preservar posição do usuário quando possível.
+- Indicadores temporários não devem alterar dimensões dos controles sem necessidade.
 
-Atualizações otimistas podem ser utilizadas quando:
+## 118. Atualizações otimistas
 
-- a probabilidade de sucesso for alta;
-- a reversão for segura;
-- a falha puder ser comunicada claramente;
-- a interface não representar como definitivo um resultado ainda incerto de alto impacto.
+Podem ser utilizadas quando:
 
-### 14.5 Indicadores proporcionais
+- probabilidade de sucesso for alta;
+- reversão for segura;
+- falha puder ser comunicada;
+- resultado incerto de alto impacto não for apresentado como definitivo.
 
-- Operações instantâneas não devem exibir indicadores que introduzam atraso perceptível.
+## 119. Indicadores proporcionais
+
+- Operações instantâneas não devem receber indicadores que introduzam atraso.
 - Operações demoradas não devem permanecer sem feedback.
-- Indicadores devem corresponder ao escopo da região afetada.
-- Carregamento global só deve bloquear toda a interface quando a operação realmente impedir qualquer continuidade segura.
-
-### 14.6 Continuidade
-
-- Atualizações parciais devem evitar recarregar toda a interface quando apenas uma região mudou.
-- Navegação e filtros devem preservar dados já disponíveis quando adequado.
-- O usuário deve poder continuar tarefas independentes durante processamentos secundários.
-
-### 14.7 Métricas
-
-Quando houver necessidade operacional real, acompanhar métricas relacionadas a:
-
-- tempo até conteúdo útil;
-- resposta à interação;
-- estabilidade visual;
-- conclusão de tarefas;
-- abandono de fluxo;
-- repetição de ações por falta de feedback;
-- falhas e tentativas de recuperação.
-
-Métricas devem apoiar decisões e não substituir observação do comportamento real.
+- Indicadores devem corresponder ao escopo afetado.
+- Carregamento global só deve bloquear tudo quando necessário para consistência ou segurança.
 
 ---
 
-## 15. Validação e testes de usabilidade
+# Parte XV — Validação
 
-### 15.1 Validação funcional
+## 120. Validação funcional
 
-- Fluxos principais devem ser executados integralmente nos contextos suportados.
-- Estados de sucesso, erro, vazio, carregamento e recuperação devem ser verificados.
-- A validação deve considerar o comportamento observável, não apenas a renderização da tela.
+Fluxos principais devem ser executados integralmente nos contextos suportados.
 
-### 15.2 Inspeção heurística
+Verificar estados de sucesso, erro, vazio, carregamento e recuperação.
 
-A interface deve ser avaliada considerando, quando aplicável:
+A validação deve considerar comportamento observável, não apenas renderização.
 
-- visibilidade do estado do sistema;
-- correspondência com o modelo mental do usuário;
+## 121. Inspeção heurística
+
+Avaliar, quando aplicável:
+
+- visibilidade do estado;
+- correspondência com modelo mental;
 - controle e liberdade;
 - consistência;
 - prevenção de erros;
 - reconhecimento antes de memorização;
 - eficiência;
 - clareza visual;
-- recuperação de falhas;
-- disponibilidade de ajuda necessária.
+- recuperação;
+- ajuda necessária.
 
-### 15.3 Testes com usuários
+## 122. Testes com usuários
 
-- Testes devem utilizar participantes ou perfis representativos quando o risco e o estágio do produto justificarem.
-- As tarefas devem reproduzir objetivos reais sem instruir o caminho exato.
-- O comportamento observado deve ter prioridade sobre opiniões genéricas.
-- O facilitador não deve ensinar a interface durante a execução da tarefa.
+Quando risco e estágio justificarem:
 
-### 15.4 Critérios de sucesso
+- utilizar participantes representativos;
+- reproduzir objetivos reais;
+- não ensinar o caminho durante a tarefa;
+- priorizar comportamento observado sobre opinião genérica.
 
-Fluxos relevantes devem possuir critérios mensuráveis, como:
+## 123. Critérios de sucesso
 
-- conclusão da tarefa;
-- quantidade e gravidade de erros;
-- tempo necessário;
+Fluxos relevantes podem medir:
+
+- conclusão;
+- erros;
+- tempo;
 - necessidade de ajuda;
 - abandono;
 - retrabalho;
-- confiança no resultado.
+- confiança.
 
-Os valores esperados devem ser definidos em `regrasProjeto.md` ou na documentação do produto quando necessários.
+Valores concretos pertencem ao `regrasProjeto.md`.
 
-### 15.5 Testes de acessibilidade
+## 124. Testes de acessibilidade
 
-A validação deve combinar, quando aplicável:
+Combinar, quando aplicável:
 
 - ferramentas automáticas;
 - inspeção semântica;
-- navegação por teclado;
+- teclado;
 - tecnologias assistivas;
-- ampliação e redimensionamento;
-- verificação de contraste;
+- ampliação;
+- contraste;
 - testes com pessoas com deficiência.
 
 Ferramentas automáticas não são suficientes para declarar conformidade integral.
 
-### 15.6 Dispositivos e contextos
+## 125. Dispositivos e contextos
 
-- A interface deve ser validada nas plataformas, navegadores, dimensões e métodos de entrada definidos em `regrasProjeto.md`.
-- Simulação não deve substituir integralmente testes em dispositivos reais quando existirem riscos específicos.
-- Conexões lentas, falhas parciais e dados extremos devem ser considerados quando fizerem parte do uso esperado.
+Validar nas plataformas, navegadores, dimensões e métodos de entrada definidos no projeto.
 
-### 15.7 Regressão visual e comportamental
+Simulação não substitui integralmente dispositivo real quando existirem riscos específicos.
 
-- Alterações em componentes compartilhados devem ser verificadas nos principais consumidores.
-- Mudanças visuais não devem alterar comportamento, ordem de foco ou acessibilidade sem decisão explícita.
-- Referências visuais podem ser utilizadas para detectar alterações, mas devem ser acompanhadas por validação semântica e funcional.
+## 126. Regressão visual e comportamental
 
-### 15.8 Registro de problemas
+- Alterações em componente compartilhado devem ser verificadas nos consumidores principais.
+- Mudanças visuais não devem alterar comportamento, foco ou acessibilidade sem decisão explícita.
+- Referências visuais devem ser acompanhadas por validação semântica e funcional.
 
-Problemas encontrados devem registrar:
+## 127. Registro de problemas
+
+Problemas devem registrar:
 
 - contexto;
-- objetivo do usuário;
-- ação executada;
+- objetivo;
+- ação;
 - resultado observado;
 - resultado esperado;
 - impacto;
@@ -1027,164 +1250,122 @@ Problemas encontrados devem registrar:
 - correção proposta;
 - prioridade.
 
-### 15.9 Níveis de validação
+## 128. Níveis de validação
 
-O nível alcançado deve ser declarado conforme as evidências disponíveis:
+O nível alcançado deve ser declarado conforme evidências:
 
-- estrutural: implementação, semântica, estados e contratos inspecionados;
-- automatizado: verificações automáticas aplicáveis aprovadas;
-- operacional: fluxos executados nos navegadores, dispositivos e métodos de entrada definidos;
-- empírico: uso observado com tecnologias assistivas ou perfis representativos quando aplicável;
-- integral: todos os níveis exigidos pelo projeto foram concluídos.
+- estrutural;
+- automatizado;
+- operacional;
+- empírico;
+- integral.
 
-O nível exigido deve ser proporcional ao risco e ao estágio do produto e registrado em `regrasProjeto.md`. Um nível não deve ser declarado quando suas evidências não tiverem sido obtidas.
+O nível exigido pertence ao `regrasProjeto.md`.
 
-### 15.10 Critério de conclusão
+Não declarar nível sem evidência correspondente.
 
-Uma interface só pode ser considerada concluída quando:
+## 129. Validação de densidade e responsividade
 
-- os fluxos principais funcionarem nos contextos suportados;
+Alterações de densidade, compactação, hierarquia visual ou responsividade devem ser verificadas considerando, quando aplicável:
+
+- menor espaço suportado;
+- maior ampliação suportada;
+- conteúdo mínimo;
+- conteúdo máximo;
+- textos extensos;
+- traduções;
+- erros;
+- estados vazios;
+- estados selecionados;
+- navegação por teclado;
+- toque;
+- orientações;
+- preferências de acessibilidade;
+- mudanças dinâmicas de conteúdo.
+
+Limites concretos pertencem ao `regrasProjeto.md`.
+
+## 130. Critério de conclusão
+
+Uma interface somente pode ser considerada concluída quando:
+
+- fluxos principais funcionarem nos contextos suportados;
 - estados relevantes estiverem implementados;
 - problemas críticos de usabilidade e acessibilidade estiverem resolvidos;
-- exceções restantes estiverem documentadas e justificadas;
-- o comportamento observado corresponder aos objetivos definidos;
-- o nível de validação exigido pelo projeto tiver sido alcançado.
+- não conformidades restantes estiverem registradas;
+- comportamento observado corresponder aos objetivos;
+- nível de validação exigido tiver sido alcançado.
 
 ---
 
-## 16. Verificação de conformidade
+# Checklist de conformidade
 
-### 16.1 Princípios
+## Princípios
 
-- [ ] O usuário identifica onde está, o que pode fazer e o resultado provável das ações.
-- [ ] A interface utiliza a menor complexidade suficiente para a tarefa.
-- [ ] Padrões equivalentes mantêm nomenclatura, aparência e comportamento consistentes.
-- [ ] A complexidade da interação é proporcional ao risco e ao objetivo.
-- [ ] Funcionalidades essenciais não dependem de uma única capacidade ou método de entrada.
+- [ ] O usuário identifica contexto, ações e resultados prováveis.
+- [ ] A interface utiliza a menor complexidade suficiente.
+- [ ] Padrões equivalentes permanecem consistentes.
+- [ ] Complexidade é proporcional à tarefa e ao risco.
 
-### 16.2 Arquitetura da informação
+## Informação e navegação
 
-- [ ] Conteúdos e funcionalidades estão organizados segundo objetivos e vocabulário do usuário.
-- [ ] Elementos relacionados permanecem próximos.
-- [ ] Cada nível de hierarquia possui função real.
-- [ ] A quantidade de páginas, grupos e etapas é a menor semanticamente suficiente.
-- [ ] Opções avançadas permanecem localizáveis sem sobrecarregar o fluxo principal.
+- [ ] Conteúdo segue objetivos e vocabulário do usuário.
+- [ ] Agrupamentos permanecem perceptíveis.
+- [ ] Cada nível possui função real.
+- [ ] A ordem visual preserva leitura, foco e execução.
+- [ ] Informação essencial permanece disponível.
 
-### 16.3 Navegação
+## Densidade e estrutura visual
 
-- [ ] O contexto atual está claramente identificado.
-- [ ] A navegação representa a organização real do produto.
-- [ ] Não existem níveis intermediários sem função.
-- [ ] É possível voltar ou cancelar sem perda inesperada.
-- [ ] Fluxos essenciais podem ser percorridos por teclado quando aplicável.
+- [ ] Densidade aumenta informação útil, não apenas reduz dimensões.
+- [ ] A ordem de compactação foi respeitada.
+- [ ] Contêineres possuem função.
+- [ ] Não existem bordas, fundos ou sombras redundantes.
+- [ ] Áreas interativas não foram reduzidas indevidamente.
 
-### 16.4 Hierarquia visual
+## Componentes e estados
 
-- [ ] A prioridade visual acompanha a prioridade funcional.
-- [ ] Existe apenas uma ação principal por contexto quando aplicável.
-- [ ] Tipografia, espaçamento e alinhamento comunicam relações semânticas.
-- [ ] Cor não é o único meio de transmitir informação.
-- [ ] Não existem elementos decorativos competindo com conteúdo ou estados relevantes.
-
-### 16.5 Componentes
-
-- [ ] Componentes equivalentes possuem comportamento consistente.
-- [ ] Variantes representam diferenças semânticas reais.
-- [ ] Estados interativos necessários foram implementados.
-- [ ] Estados selecionados são perceptíveis visualmente e expostos programaticamente sem depender apenas de cor ou de texto redundante.
+- [ ] Componentes possuem responsabilidade identificável.
+- [ ] Compartilhamento possui equivalência semântica.
+- [ ] Variantes representam conceitos reais.
+- [ ] Estados necessários foram implementados.
 - [ ] Elementos nativos são utilizados quando adequados.
-- [ ] Controles possuem área de interação suficiente e indicação clara de uso.
 
-### 16.6 Feedback e estados
+## Interação
 
-- [ ] Toda ação relevante produz feedback perceptível.
-- [ ] Operações demoradas indicam atividade ou progresso.
-- [ ] Ações duplicadas ou conflitantes são impedidas quando necessário.
-- [ ] Estados inicial, vazio, carregando, erro e sucesso foram considerados.
-- [ ] Falhas parciais não bloqueiam regiões independentes sem necessidade.
+- [ ] Toda ação relevante produz feedback.
+- [ ] Operações demoradas indicam atividade.
+- [ ] Ações destrutivas comunicam consequência.
+- [ ] Processos automáticos são distinguíveis de decisões confirmadas.
 
-### 16.7 Formulários
+## Acessibilidade
 
-- [ ] Apenas dados necessários são solicitados.
-- [ ] Todos os campos possuem rótulo persistente.
-- [ ] Formatos e restrições são informados antes ou durante o preenchimento.
-- [ ] Campos de valores compostos e formatações automáticas preservam edição e métodos de entrada suportados.
-- [ ] Mensagens de erro explicam como corrigir.
-- [ ] Dados válidos são preservados após falhas.
-- [ ] A ação principal descreve o resultado concreto.
+- [ ] Estrutura utiliza semântica adequada.
+- [ ] Fluxos essenciais são operáveis por teclado.
+- [ ] Foco é visível e lógico.
+- [ ] Controles expõem nome, função, estado e valor.
+- [ ] Informação não depende apenas de cor.
+- [ ] Ampliação e redução de movimento foram consideradas.
 
-### 16.8 Erros
+## Responsividade
 
-- [ ] Erros previsíveis são prevenidos quando possível.
-- [ ] Ações destrutivas nomeiam explicitamente a consequência.
-- [ ] A possibilidade de desfazer é utilizada quando adequada.
-- [ ] Erros locais permanecem associados ao elemento afetado.
-- [ ] Mensagens externas não expõem detalhes internos ou dados sensíveis.
+- [ ] A adaptação ocorre no menor contexto suficiente.
+- [ ] Breakpoints representam mudanças justificáveis.
+- [ ] Variações contínuas utilizam comportamento fluido quando adequado.
+- [ ] Ordem semântica e ações essenciais foram preservadas.
+- [ ] Métodos de entrada suportados permanecem utilizáveis.
 
-### 16.9 Acessibilidade
+## Conteúdo
 
-- [ ] A estrutura utiliza semântica adequada.
-- [ ] Funcionalidades essenciais são operáveis por teclado.
-- [ ] O foco é visível e possui ordem lógica.
-- [ ] Controles expõem nome, função, estado e valor compreensíveis.
-- [ ] Contraste, cor, ampliação e redução de movimento foram considerados.
-- [ ] Imagens e mídias possuem alternativas adequadas quando necessárias.
-
-### 16.10 Responsividade
-
-- [ ] A interface funciona nas dimensões e dispositivos definidos pelo projeto.
-- [ ] A reorganização preserva ordem semântica e ações essenciais.
-- [ ] A interface não depende exclusivamente de hover ou gestos não evidentes.
-- [ ] Campos e controles permanecem utilizáveis com teclado virtual.
-- [ ] Conteúdo denso utiliza estratégia adequada sem destruir relações importantes.
-
-### 16.11 Conteúdo
-
-- [ ] O mesmo conceito utiliza o mesmo termo em toda a interface.
+- [ ] O mesmo conceito utiliza o mesmo termo.
 - [ ] Rótulos descrevem ações concretas.
-- [ ] Mensagens informam resultado, impacto e próxima ação quando necessária.
-- [ ] Datas, números, unidades e moedas seguem o contexto do usuário.
-- [ ] O tom é proporcional ao público e à gravidade da situação.
+- [ ] Mensagens informam resultado, impacto e próxima ação.
+- [ ] Datas, números e unidades seguem o contexto.
 
-### 16.12 Desempenho percebido
+## Validação
 
-- [ ] A interface responde imediatamente ao reconhecimento da interação.
-- [ ] Conteúdo prioritário é apresentado antes de conteúdo secundário quando possível.
-- [ ] O layout permanece estável durante carregamentos e atualizações.
-- [ ] Indicadores de progresso são proporcionais à duração e ao escopo da operação.
-- [ ] Tarefas secundárias não bloqueiam interações independentes sem necessidade.
-
-### 16.13 Validação
-
-- [ ] Os fluxos principais foram executados integralmente.
-- [ ] Cenários de erro, vazio, carregamento e recuperação foram testados.
+- [ ] Fluxos principais foram executados.
+- [ ] Estados de erro, vazio, carregamento e recuperação foram verificados.
+- [ ] Densidade e responsividade foram testadas em condições limite.
 - [ ] Navegação por teclado e estrutura acessível foram verificadas.
-- [ ] Contextos de dispositivo e entrada definidos no projeto foram validados.
-- [ ] Problemas encontrados foram corrigidos ou documentados com justificativa.
-- [ ] O nível de validação declarado corresponde às evidências obtidas.
-- [ ] A interface atende aos critérios de sucesso definidos para o produto.
-
----
-
-## Apêndice normativo — Relações entre regras de UX e UI
-
-Este apêndice torna explícitas relações anteriormente implícitas ou necessárias. Todos os itens abaixo possuem força normativa equivalente às demais regras deste documento. Os identificadores preservam a origem da relação para auditoria: `I` indica relação anteriormente implícita e `N` indica relação necessária adicionada nesta revisão.
-
-### Dependências
-
-- [DEP-I-10] A arquitetura da informação deve ser definida antes da navegação, da hierarquia visual, da divulgação progressiva e da adaptação responsiva.
-- [DEP-I-11] A necessidade de um dado deve ser confirmada antes da criação do campo, da escolha do controle, da validação e da mensagem de erro correspondente.
-- [DEP-I-12] Os estados relevantes de uma tela, região ou componente devem ser definidos antes de sua implementação ser considerada funcionalmente completa.
-- [DEP-I-13] Plataformas, navegadores, dimensões, métodos de entrada e níveis de acessibilidade suportados devem ser definidos antes da validação de responsividade, acessibilidade e compatibilidade.
-- [DEP-I-14] O risco, o impacto e a reversibilidade da ação devem ser avaliados antes da escolha entre confirmação, possibilidade de desfazer ou execução direta.
-- [DEP-N-09] A acessibilidade deve participar da definição da estrutura, componentes, estados, conteúdo e interação desde o início, não podendo ser tratada apenas como validação posterior.
-
-### Precedências
-
-- [PRE-I-04] Acessibilidade prevalece sobre identidade visual, animações, densidade, personalização estética e convenções locais quando não for possível satisfazê-las simultaneamente.
-
-### Exceções
-
-- [EXC-I-05] A preservação de contexto ou dados pode ser limitada quando segurança, privacidade ou integridade exigirem descarte, desde que a consequência seja informada e proporcional.
-- [EXC-I-06] A continuidade de tarefas independentes pode ser temporariamente bloqueada quando a operação em andamento comprometer consistência, segurança ou integridade global.
-- [EXC-N-07] Nenhuma exceção de acessibilidade pode reduzir a conformidade abaixo de exigências legais, técnicas obrigatórias ou requisitos mínimos definidos para a plataforma.
+- [ ] O nível declarado corresponde às evidências.
