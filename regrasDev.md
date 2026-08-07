@@ -1,80 +1,229 @@
 # Regras de Desenvolvimento
 
-## 1. Objetivo e aplicação
+## 1. Objetivo
 
-Este documento define os padrões permanentes de engenharia, organização, estruturação, modularização e qualidade aplicáveis a todos os projetos.
+Este documento define as normas universais de engenharia, arquitetura, organização, modularização, implementação, qualidade e validação aplicáveis a todos os projetos que o adotem.
 
-Todo projeto derivado deste repositório deve utilizar estas regras como base para organizar o código dentro dos arquivos e distribuir blocos lógicos, funções, arquivos, diretórios, módulos e domínios na árvore do projeto.
+Seu objetivo é garantir que o código e a árvore do projeto representem a menor arquitetura semanticamente suficiente para as responsabilidades reais do sistema.
 
-A estrutura concreta deve ser registrada em `regrasProjeto.md`, respeitando integralmente os critérios definidos neste documento.
-
-As regras gerais aplicam-se a todo o código. As regras específicas de front-end e back-end complementam as regras gerais somente nos contextos correspondentes.
-
-Cada regra definida em `regrasDev.md`, `regrasProjeto.md` e `regrasUxUi.md` deve ser analisada, aplicada e validada de forma independente das demais. O atendimento a uma regra não implica o atendimento, a substituição ou a dispensa de qualquer outra; todas as regras aplicáveis devem ser satisfeitas cumulativamente, salvo quando algum dos próprios documentos estabelecer explicitamente dependência, precedência ou exceção.
-
-As decisões específicas de cada projeto, como stack, arquitetura adotada, estrutura concreta de diretórios, bibliotecas, integrações e restrições, devem ser registradas em `regrasProjeto.md`.
-
-Em caso de conflito, aplicar a seguinte precedência:
-
-1. exigências técnicas obrigatórias da linguagem, framework ou ferramenta;
-2. `regrasProjeto.md`;
-3. este documento;
-4. convenções já consolidadas no projeto.
-
-Exceções devem ser explícitas, justificadas e restritas ao menor escopo possível.
-
-Os documentos gerais adotados por um projeto devem possuir origem e revisão identificáveis. Cópias locais não devem divergir silenciosamente da fonte canônica; divergências necessárias devem ser registradas como decisões ou exceções específicas do projeto.
+As decisões concretas de cada projeto, como stack, estrutura final, bibliotecas, valores, integrações, limites e estratégias, pertencem ao `regrasProjeto.md`.
 
 ---
 
-## 2. Princípios gerais
+## 2. Natureza normativa e mutabilidade
 
-### 2.1 Clareza
+Este documento é:
+
+- normativo;
+- universal;
+- canônico;
+- imutável no contexto de um projeto.
+
+Durante a criação, manutenção ou normalização de um projeto:
+
+- este documento não pode ser adaptado ao projeto;
+- regras não aplicáveis não podem ser removidas;
+- regras específicas do projeto não podem ser adicionadas localmente;
+- o conteúdo deve corresponder integralmente à revisão oficial adotada do repositório `base`;
+- incompatibilidades devem ser resolvidas no projeto ou registradas como não conformidades;
+- uma incompatibilidade local não autoriza modificar, ignorar, reduzir ou suspender uma regra universal.
+
+Este documento somente pode ser alterado quando o objeto da alteração for o próprio padrão universal mantido no repositório `base`.
+
+---
+
+## 3. Relação entre os documentos
+
+```text
+regrasDev.md + regrasUxUi.md
+            ↓
+       regrasProjeto.md
+            ↓
+         código-fonte
+            ↓
+          README.md
+```
+
+- `regrasDev.md` define critérios universais de engenharia e arquitetura.
+- `regrasUxUi.md` define critérios universais de experiência e interface.
+- `regrasProjeto.md` concretiza as normas universais para um projeto específico.
+- o código-fonte implementa a concretização válida.
+- o `README.md` descreve o estado efetivamente implementado.
+
+`regrasProjeto.md` pode concretizar, restringir ou especializar decisões que os documentos universais delegarem ao projeto, mas não pode contradizê-los, dispensá-los ou reduzir seus critérios mínimos.
+
+---
+
+## 4. Aplicação independente e cumulativa
+
+Cada regra definida em `regrasDev.md`, `regrasUxUi.md` e `regrasProjeto.md` deve ser analisada, aplicada e validada independentemente das demais.
+
+O atendimento a uma regra:
+
+- não implica atendimento a outra;
+- não substitui outra;
+- não dispensa outra;
+- não permite concluir conformidade integral sem avaliar todas as regras aplicáveis.
+
+As regras são cumulativas, salvo quando o próprio texto declarar explicitamente:
+
+- dependência;
+- precedência;
+- exceção;
+- não aplicabilidade.
+
+Cada regra universal deve ser:
+
+- independente;
+- objetiva;
+- afirmativa;
+- verificável;
+- tecnologicamente neutra;
+- semanticamente singular.
+
+Uma regra não deve depender de inferência quando uma interpretação divergente já tiver sido observada.
+
+---
+
+## 5. Precedência e conflitos
+
+Em caso de conflito real, aplicar a seguinte precedência:
+
+1. exigências legais e restrições técnicas incontornáveis da plataforma;
+2. `regrasDev.md` e `regrasUxUi.md`, aplicados cumulativamente;
+3. `regrasProjeto.md`;
+4. código-fonte e convenções já consolidadas no projeto.
+
+A precedência deve ser aplicada somente ao escopo incompatível. Todas as regras não afetadas permanecem obrigatórias.
+
+Um conflito normativo existe somente quando duas regras aplicáveis não podem ser satisfeitas simultaneamente no mesmo escopo.
+
+Não constituem conflito normativo:
+
+- preferência pessoal;
+- custo evitável;
+- prazo;
+- hábito;
+- conveniência;
+- estética;
+- limitação evitável da implementação;
+- convenção popular sem obrigatoriedade técnica.
+
+Quando regras universais do mesmo nível não puderem ser satisfeitas simultaneamente, deve prevalecer a solução que melhor preserve:
+
+1. corretude;
+2. segurança;
+3. integridade dos dados;
+4. acessibilidade;
+5. comportamento observável;
+6. contratos públicos.
+
+A decisão deve ser explícita e documentada.
+
+---
+
+## 6. Não conformidades e exceções
+
+Cópias locais deste documento não podem divergir da fonte canônica.
+
+Quando o projeto não puder satisfazer uma regra universal, a situação deve ser registrada em `regrasProjeto.md` como não conformidade conhecida, contendo:
+
+- documento e regra afetada;
+- causa;
+- escopo;
+- impacto;
+- risco;
+- responsável;
+- tratamento planejado;
+- medida compensatória, quando aplicável;
+- condição ou prazo para correção.
+
+O registro de uma não conformidade:
+
+- não substitui a regra;
+- não modifica a regra;
+- não suspende a regra;
+- não transforma a violação em conformidade.
+
+Uma exceção somente é válida quando a própria regra universal autorizar explicitamente a exceção.
+
+Toda exceção deve:
+
+- permanecer restrita ao menor escopo possível;
+- declarar a regra afetada;
+- possuir justificativa verificável;
+- registrar risco e impacto;
+- possuir critério de encerramento;
+- ser reavaliada quando mudar o contexto, a tecnologia, o risco ou a regra afetada.
+
+Uma exceção local não cria convenção geral.
+
+---
+
+# Parte I — Princípios universais
+
+## 7. Clareza
 
 - O código deve priorizar legibilidade, previsibilidade e manutenção.
+- Código explícito é preferível a comportamento implícito difícil de localizar.
+- Nomes, contratos, efeitos e dependências devem permitir compreender a intenção sem reconstruir mentalmente detalhes dispersos.
 - A solução mais simples que preserve corretude, segurança e capacidade de evolução deve ser preferida.
-- Código explícito é preferível a comportamento implícito difícil de identificar.
 
-### 2.2 Responsabilidade
+## 8. Responsabilidade
 
-- Cada nó estrutural deve possuir uma responsabilidade principal claramente identificável.
-- Uma responsabilidade representa um motivo para mudança.
-- Quando um nó tende a mudar por motivos distintos, ele deve ser avaliado para divisão.
+- Cada nó estrutural deve possuir uma responsabilidade principal identificável.
+- Uma responsabilidade representa um motivo coerente para mudança.
+- Quando um nó tende a mudar por motivos independentes, ele deve ser avaliado para divisão.
+- Responsabilidade é o critério principal de modularização.
 
-### 2.3 Coesão
+## 9. Coesão
 
 - Elementos que colaboram para resolver o mesmo problema devem permanecer próximos.
+- Elementos com o mesmo consumidor, contexto, finalidade e ciclo de mudança devem permanecer no mesmo módulo enquanto não possuírem independência real.
 - Código não relacionado deve permanecer separado, mesmo quando possa tecnicamente compartilhar o mesmo nó.
 
-### 2.4 Acoplamento
+## 10. Acoplamento
 
-- Dependências entre nós devem ser explícitas e reduzidas ao necessário.
+- Dependências devem ser explícitas e reduzidas ao necessário.
 - Alterações internas de um nó não devem exigir mudanças indiscriminadas em outros nós.
-- Um nó não deve depender de detalhes internos de outro nó fora de sua fronteira permitida.
+- Um nó não deve depender de detalhes internos de outro nó fora da fronteira pública permitida.
+- Dependências devem seguir direção previsível e evitar ciclos.
 
-### 2.5 Arquitetura proporcional
+## 11. Arquitetura proporcional
 
 - A arquitetura deve crescer conforme a complexidade real do projeto.
-- Projetos pequenos não devem reproduzir estruturas próprias de sistemas grandes sem necessidade.
-- Projetos maiores não devem permanecer em estruturas simples quando isso comprometer manutenção, testes ou evolução.
-- Nenhuma camada, abstração, arquivo ou diretório deve existir apenas para satisfazer um padrão teórico.
+- Projetos pequenos não devem reproduzir estruturas próprias de sistemas maiores sem necessidade.
+- Projetos maiores não devem permanecer em estruturas simples quando isso comprometer manutenção, testes, segurança ou evolução.
+- Nenhuma camada, abstração, arquivo ou diretório deve existir apenas para satisfazer um padrão teórico ou produzir simetria visual.
 
-### 2.6 Proximidade
+## 12. Proximidade
 
 - Código específico deve permanecer próximo do domínio, funcionalidade, página, módulo, arquivo ou função que o utiliza.
-- Código só deve ser promovido para áreas compartilhadas quando houver reutilização real, estável e semanticamente coerente.
+- Todo conteúdo deve começar no menor contexto semanticamente correto.
+- Código só deve ser promovido para uma área compartilhada quando houver reutilização real, estável e semanticamente equivalente.
 
-### 2.7 Modelo universal da árvore do projeto
+## 13. Corretude antes da simplificação
+
+Quando não for possível satisfazer simultaneamente todos os objetivos:
+
+- corretude prevalece sobre redução de código;
+- segurança prevalece sobre conveniência;
+- integridade dos dados prevalece sobre eficiência;
+- contratos públicos prevalecem sobre conveniências de refatoração;
+- responsabilidade e coesão prevalecem sobre tamanho físico;
+- estrutura semântica prevalece sobre simetria da árvore.
+
+---
+
+# Parte II — Modelo universal da árvore
+
+## 14. Projeto como árvore semântica
 
 A estrutura completa de um projeto deve ser compreendida como uma única árvore semântica.
 
 - A raiz é o diretório raiz do projeto.
-- Os nós intermediários podem ser contextos, domínios, módulos, diretórios, arquivos, funções, métodos, componentes ou blocos lógicos.
-- As folhas são os menores blocos lógicos indivisíveis do código.
-
-Um bloco lógico é indivisível quando sua separação não produzir responsabilidades independentes e apenas aumentar a navegação, o acoplamento ou a dificuldade de entendimento.
-
-A definição de folha não está limitada a arquivos ou funções. Ela representa o menor elemento lógico que ainda possui significado coeso dentro da implementação.
+- Os nós intermediários podem ser domínios, contextos, módulos, diretórios, arquivos, classes, componentes, funções, métodos ou blocos lógicos.
+- As folhas são os menores blocos lógicos indivisíveis.
 
 Exemplo conceitual:
 
@@ -88,34 +237,78 @@ raiz do projeto
                     └── bloco lógico indivisível
 ```
 
-Nem todos os níveis precisam existir. Cada nível deve ser criado somente quando representar uma responsabilidade real.
+Nem todos os níveis precisam existir. Cada nível deve ser criado somente quando representar responsabilidade real.
 
-### 2.8 Árvore mínima semanticamente suficiente
+## 15. Bloco lógico indivisível
 
-A estrutura deve utilizar o menor número possível de nós, folhas e níveis de profundidade capaz de preservar:
+Um bloco é indivisível quando sua separação:
+
+- não produz responsabilidades independentes;
+- não cria contrato próprio;
+- não permite teste independente relevante;
+- não reduz acoplamento;
+- apenas aumenta navegação, nomes ou indireções.
+
+Um bloco deixa de ser indivisível quando contém partes com:
+
+- responsabilidades distintas;
+- dependências independentes;
+- ciclos de mudança distintos;
+- consumidores distintos;
+- contratos próprios;
+- possibilidade real de teste independente.
+
+## 16. Menor árvore semanticamente suficiente
+
+A estrutura deve utilizar o menor número de nós, folhas e níveis capaz de preservar:
 
 - separação clara de responsabilidades;
-- localização intuitiva do código;
+- localização intuitiva;
 - coesão;
 - isolamento entre domínios;
 - manutenção independente;
 - testabilidade;
-- direção previsível das dependências.
+- direção previsível das dependências;
+- segurança;
+- contratos.
 
-A redução da quantidade de nós não deve resultar em responsabilidades misturadas, arquivos genéricos, funções extensas ou diretórios usados como depósitos.
+A menor árvore semanticamente suficiente não é a árvore com a menor quantidade absoluta de elementos.
 
-A estrutura correta é a menor árvore semanticamente suficiente, e não simplesmente a árvore com menor quantidade absoluta de elementos.
+Redução estrutural não pode produzir:
 
-### 2.9 Balanceamento recursivo das folhas para a raiz
+- responsabilidades misturadas;
+- arquivos genéricos;
+- funções extensas com múltiplas tarefas;
+- diretórios usados como depósitos;
+- fronteiras implícitas;
+- dependências imprevisíveis.
 
-As mesmas regras de balanceamento devem ser aplicadas recursivamente em todos os níveis da árvore, mas sua aplicação operacional deve ocorrer obrigatoriamente das folhas para a raiz.
+## 17. Balanceamento horizontal e vertical
 
-A análise deve começar nos menores blocos lógicos indivisíveis do código e avançar exatamente um nível em direção à raiz somente quando todos os nós relevantes do nível atual estiverem em conformidade com estas regras.
+O balanceamento horizontal controla a quantidade e a relação semântica dos filhos de um nó.
 
-A ordem obrigatória de avaliação é:
+O balanceamento vertical controla a profundidade entre a raiz e as folhas.
+
+A árvore está adequadamente balanceada quando:
+
+- cada nó possui filhos semanticamente relacionados;
+- nós sobrecarregados são subdivididos somente quando existem grupos reais;
+- não existem níveis intermediários sem responsabilidade própria;
+- não existem cadeias de filho único sem justificativa;
+- a profundidade é proporcional à complexidade;
+- a largura não impede localização direta;
+- nenhuma divisão existe apenas por simetria visual.
+
+Quantidade de filhos é indicador, não limite numérico automático.
+
+## 18. Modularização das folhas para a raiz
+
+Toda modularização deve ocorrer obrigatoriamente das folhas para a raiz.
+
+Ordem de análise:
 
 ```text
-menores blocos lógicos indivisíveis
+blocos lógicos indivisíveis
 → funções, métodos ou componentes
 → arquivos
 → diretórios
@@ -124,219 +317,183 @@ menores blocos lógicos indivisíveis
 → raiz do projeto
 ```
 
-Nenhum nó pai pode ser considerado corretamente balanceado enquanto seus filhos ainda apresentarem mistura de responsabilidades, fragmentação artificial, alocação incorreta, largura inadequada ou organização interna inconsistente.
-
-Em cada nível, todos os nós relevantes devem ser avaliados considerando:
-
-- a responsabilidade que representam;
-- as responsabilidades de seus filhos;
-- a quantidade de filhos;
-- a facilidade de localizar e compreender cada filho;
-- a profundidade necessária para alcançar suas folhas;
-- o custo de navegação criado pela estrutura;
-- o acoplamento e as dependências existentes;
-- os ciclos de mudança e os consumidores de cada parte.
-
-Um nó deve permanecer indiviso enquanto:
-
-- representar adequadamente uma única responsabilidade;
-- seus filhos forem semanticamente relacionados;
-- a quantidade de filhos permitir localização e manutenção previsíveis;
-- sua profundidade for proporcional à complexidade representada;
-- sua divisão não produzir responsabilidades independentes reais.
-
-Um nó deve ser dividido ou seus filhos devem ser realocados quando:
-
-1. seus filhos representarem responsabilidades diferentes que precisem ser isoladas;
-2. a quantidade de filhos prejudicar localização, compreensão, manutenção ou evolução;
-3. a responsabilidade do nó se tornar extensa a ponto de exigir sub-responsabilidades explícitas;
-4. a divisão reduzir acoplamento ou permitir testes independentes;
-5. a realocação reduzir profundidade desnecessária ou sobrecarga do nó atual.
-
-A quantidade de filhos é um indicador, não um limite numérico absoluto. A divisão só deve ocorrer quando essa quantidade causar prejuízo semântico ou operacional.
-
-Se uma alteração realizada em um nível superior afetar qualquer nível inferior já validado, todo o ramo afetado deve ser reavaliado novamente das folhas para a raiz antes de prosseguir.
-
-### 2.10 Balanceamento horizontal e vertical
-
-O balanceamento horizontal controla a quantidade e a relação semântica dos filhos de cada nó.
-
-O balanceamento vertical controla a profundidade entre a raiz e as folhas.
-
-A árvore está adequadamente balanceada quando:
-
-- cada nó possui filhos semanticamente relacionados;
-- nós sobrecarregados são subdivididos apenas quando existem grupos reais;
-- não existem níveis intermediários sem responsabilidade própria;
-- não existem cadeias de nós com filho único sem justificativa;
-- a profundidade é proporcional à complexidade;
-- a largura não impede localização direta;
-- nenhuma divisão existe apenas por simetria visual.
-
-### 2.11 Modularização progressiva de baixo para cima
-
-Toda modularização deve começar nas folhas e avançar progressivamente em direção à raiz.
-
-A progressão para o nível pai só é permitida quando o nível atual estiver integralmente de acordo com as regras de responsabilidade, coesão, divisão, alocação, largura, profundidade e dependências.
+O nível pai só pode ser considerado conforme depois que todos os filhos relevantes estiverem conformes.
 
 Em cada nível:
 
-1. identificar todos os nós relevantes;
-2. organizar os elementos existentes;
-3. avaliar responsabilidade, coesão, dependências, extensão, largura e profundidade;
-4. dividir, agrupar ou realocar apenas quando houver justificativa semântica;
-5. remover fragmentações, duplicações ou níveis artificiais;
-6. reavaliar o nível após as alterações;
-7. avançar um nível em direção à raiz somente depois de confirmar sua conformidade.
+1. identificar os nós relevantes;
+2. compreender suas responsabilidades;
+3. organizar o conteúdo interno;
+4. avaliar coesão, dependências, consumidores e ciclos de mudança;
+5. dividir, agrupar ou realocar somente quando houver justificativa semântica;
+6. remover duplicações, classificações concorrentes e níveis artificiais;
+7. revalidar o nível;
+8. avançar exatamente um nível em direção à raiz.
 
-A arquitetura global deve emergir das responsabilidades reais do código organizado. Não deve ser imposta antecipadamente por meio de pastas, camadas ou módulos vazios.
-
-### 2.12 Ordem operacional entre modularização e balanceamento
-
-A modularização e o balanceamento devem ser aplicados de forma independente, cumulativa e em uma ordem operacional obrigatória dentro de cada nó da árvore.
+## 19. Ordem entre modularização e balanceamento
 
 Para cada nó:
 
-1. modularizar e validar primeiro o conteúdo interno e todos os seus filhos, começando pelas folhas;
-2. somente depois da conformidade interna, avaliar o balanceamento do nó quanto à responsabilidade, coesão, alocação, largura, profundidade e relação semântica entre os filhos;
-3. dividir, agrupar, mover, promover, incorporar ou remover filhos somente quando o balanceamento demonstrar necessidade semântica;
-4. quando o balanceamento modificar a estrutura ou a responsabilidade de qualquer filho, retornar ao menor nível afetado;
-5. modularizar e validar novamente todos os ramos afetados das folhas para a raiz;
-6. considerar o nó concluído somente quando sua modularização interna e seu balanceamento estrutural estiverem simultaneamente conformes.
+1. modularizar e validar o conteúdo interno e os filhos;
+2. avaliar o balanceamento do nó;
+3. dividir, agrupar, mover, promover, incorporar ou remover filhos somente quando necessário;
+4. retornar ao menor nível afetado quando o balanceamento alterar a estrutura;
+5. remodularizar e revalidar o ramo das folhas para a raiz;
+6. concluir o nó somente quando modularização e balanceamento estiverem simultaneamente conformes.
 
-A sequência operacional obrigatória é:
+Não é permitido modularizar toda a árvore e balancear toda a árvore como duas etapas globais executadas uma única vez.
 
-```text
-modularizar o nó e seus filhos
-→ validar a modularização interna
-→ balancear o nó
-→ identificar alterações estruturais
-→ remodularizar os ramos afetados
-→ revalidar das folhas para a raiz
-```
+## 20. Revalidação do ramo afetado
 
-Não é permitido tratar a modularização de toda a árvore e o balanceamento de toda a árvore como duas etapas globais independentes executadas uma única vez. O processo deve ser iterativo por nó, nível e ramo até que nenhuma alteração de balanceamento produza nova necessidade de modularização.
+Quando uma alteração em nível superior afetar qualquer nível inferior já validado:
+
+- identificar o menor nível afetado;
+- retornar a esse nível;
+- reavaliar todos os descendentes relevantes;
+- subir novamente das folhas para a raiz.
+
+Uma validação anterior deixa de ser suficiente quando suas premissas estruturais forem modificadas.
 
 ---
 
-## 3. Critérios universais de divisão e alocação
+# Parte III — Divisão, alocação e abstração
 
-### 3.1 Regra de divisão de qualquer nó
+## 21. Unidade de modularização
+
+A unidade de modularização é a responsabilidade, não o tipo técnico nem a quantidade física de elementos.
+
+A existência de múltiplos componentes, estilos, funções, tipos, constantes ou contratos não justifica isoladamente a criação de múltiplos arquivos, diretórios, módulos ou camadas.
+
+Não criar automaticamente:
+
+- um arquivo por função;
+- um arquivo por componente visual;
+- um arquivo por estilo;
+- um diretório por arquivo;
+- um módulo por tipo técnico;
+- uma abstração por elemento de marcação;
+- uma camada por convenção arquitetural.
+
+A separação exige responsabilidade, contrato, consumidor, ciclo de mudança, teste ou evolução independente real.
+
+## 22. Regra de divisão
 
 Um nó deve ser dividido quando ocorrer pelo menos uma destas condições:
 
 - contém responsabilidades diferentes;
 - possui filhos com ciclos de mudança distintos;
 - mistura fronteiras técnicas incompatíveis;
-- sua responsabilidade única tornou-se extensa e possui sub-responsabilidades nomeáveis;
-- a quantidade de filhos dificulta localização, leitura, testes ou manutenção;
+- sua responsabilidade única possui sub-responsabilidades reais e nomeáveis;
+- a quantidade de filhos prejudica localização, compreensão, teste ou manutenção;
 - partes internas possuem dependências ou consumidores independentes;
 - a divisão reduz acoplamento relevante;
 - a divisão torna contratos ou limites mais claros.
 
-O tamanho físico, isoladamente, não justifica divisão.
+Quantidade de linhas, arquivos, funções ou diretórios nunca constitui critério isolado.
 
-Quantidade de linhas, funções, arquivos ou diretórios deve ser tratada como sinal para análise, nunca como regra automática.
-
-### 3.2 Regra de permanência no mesmo nó
+## 23. Regra de permanência
 
 Elementos devem permanecer no mesmo nó quando:
 
 - participam do mesmo fluxo;
 - possuem o mesmo motivo de mudança;
 - utilizam as mesmas dependências;
-- não possuem valor ou consumidores independentes;
-- sua separação aumentaria apenas a navegação;
-- o nó atual continua claro, coeso e previsível.
+- possuem o mesmo consumidor principal;
+- dependem do mesmo contexto;
+- não possuem valor independente;
+- sua separação apenas aumentaria navegação;
+- o nó atual permanece claro, coeso e previsível.
 
-### 3.3 Regra de alocação
+## 24. Regra de alocação
 
 Cada elemento deve ser alocado no menor nó semanticamente correto capaz de representá-lo.
 
-Ao dividir um nó:
+Ao reorganizar:
 
 - criar nós irmãos quando as responsabilidades estiverem no mesmo nível de abstração;
 - criar subnós quando representarem partes internas de uma responsabilidade maior;
-- realocar para outro ramo quando a responsabilidade pertencer a outro domínio ou contexto;
+- realocar para outro ramo quando a responsabilidade pertencer a outro domínio;
 - criar área compartilhada somente quando houver consumidores reais em ramos distintos;
-- preservar uma única localização canônica para cada responsabilidade.
+- preservar uma localização canônica para cada responsabilidade.
 
-A divisão não deve criar nós primos artificialmente apenas para distribuir visualmente a árvore.
+Não criar nós apenas para distribuir visualmente a árvore.
 
-### 3.4 Regra de avanço entre níveis
+## 25. Menor abstração semanticamente suficiente
 
-O nível pai só pode ser avaliado como unidade estrutural depois que todos os nós relevantes do nível filho estiverem conformes.
+A implementação deve utilizar a menor abstração capaz de tornar responsabilidades, estados, variantes, contratos e dependências compreensíveis, sem privilegiar apenas a menor quantidade de código.
 
-Antes de avançar para o nível pai, confirmar que no nível atual:
+Criar uma abstração somente quando ela reduzir pelo menos um destes custos:
 
-- cada nó possui responsabilidade clara;
-- responsabilidades independentes foram separadas;
-- elementos inseparáveis permanecem próximos;
-- a quantidade de filhos é administrável;
-- a alocação de cada filho é semanticamente correta;
-- não existem duplicações ou classificações concorrentes;
-- a navegação não supera o ganho de clareza;
-- não existem subdivisões preventivas ou artificiais.
+- compreensão;
+- localização;
+- alteração;
+- validação;
+- reutilização;
+- acoplamento;
+- risco de erro.
 
-A progressão é interrompida enquanto existir qualquer não conformidade relevante no nível atual.
-
-### 3.5 Regra de parada
-
-A modularização estará concluída somente quando a raiz e todos os níveis abaixo dela tiverem sido validados no percurso das folhas para a raiz.
-
-A modularização deve parar quando todos os nós avaliados:
-
-- representarem responsabilidades claras;
-- possuírem filhos semanticamente relacionados;
-- apresentarem quantidade administrável de filhos;
-- mantiverem profundidade proporcional;
-- não exigirem conhecimento excessivo para localização;
-- não puderem ser divididos sem criar fragmentação artificial.
-
-### 3.6 Criar uma abstração
-
-Criar uma abstração somente quando ela:
+Uma abstração pode:
 
 - eliminar repetição relevante;
 - estabilizar um contrato;
-- isolar uma dependência;
+- isolar dependência variável;
 - representar conceito real do domínio;
-- proteger uma fronteira;
+- proteger fronteira;
 - simplificar consumidores.
 
-Não abstrair apenas para antecipar necessidades futuras.
+A menor abstração não corresponde necessariamente à menor quantidade de código.
 
-### 3.7 Compartilhar código
+Uma abstração que apenas acrescente nomes, arquivos, níveis ou indireções sem reduzir algum custo deve ser evitada.
 
-Compartilhar somente quando os usos possuírem o mesmo significado e comportamento esperado.
+Não abstrair para antecipar necessidade futura sem evidência.
 
-Semelhança visual ou estrutural isolada não é suficiente para justificar compartilhamento.
+## 26. Compartilhamento exige equivalência semântica
 
-### 3.8 Adicionar uma camada
+Compartilhar somente quando os usos possuírem:
 
-Adicionar uma camada somente quando houver responsabilidade distinta, fronteira técnica ou regra de dependência que justifique sua existência.
+- mesma responsabilidade;
+- mesmo significado;
+- mesmo contrato;
+- mesmo comportamento esperado;
+- evolução previsivelmente conjunta;
+- consumidores reais em mais de um contexto ou necessidade arquitetural clara.
 
-Camadas que apenas repassam dados sem transformação, proteção, coordenação ou adaptação devem ser evitadas.
+Semelhança visual, nominal, estrutural ou técnica isolada não justifica compartilhamento.
+
+Código compartilhado deve retornar ao contexto específico quando os consumidores deixarem de possuir equivalência semântica.
+
+## 27. Camadas
+
+Adicionar camada somente quando houver:
+
+- responsabilidade distinta;
+- fronteira técnica;
+- regra de dependência;
+- coordenação;
+- proteção;
+- adaptação;
+- transformação.
+
+Camadas que apenas encaminham dados sem acrescentar responsabilidade devem ser incorporadas ao nó semanticamente correto.
 
 ---
 
-## 4. Organização e arquitetura
+# Parte IV — Organização da árvore
 
-### 4.1 Organização obrigatória
+## 28. Organização obrigatória
 
-- A estrutura deve ser organizada por responsabilidade, domínio ou funcionalidade, conforme a natureza do projeto.
+- A estrutura deve ser organizada por responsabilidade, domínio ou funcionalidade conforme a natureza do projeto.
 - Cada nó deve possuir propósito claro e nome semanticamente coerente.
-- A árvore deve permitir localizar um código sem conhecer previamente toda a implementação.
+- A árvore deve permitir localizar código sem conhecer previamente toda a implementação.
 - Elementos relacionados devem permanecer próximos.
-- Código compartilhado deve ser separado de código específico.
-- Não manter duas árvores concorrentes para a mesma responsabilidade.
-- Não preservar estruturas antigas após uma migração concluída.
-- Dependências devem seguir direção previsível e evitar ciclos.
+- Código compartilhado deve ser distinguido de código específico.
+- Não manter árvores concorrentes para a mesma responsabilidade.
+- Não preservar estrutura antiga após migração concluída.
 - Fronteiras entre módulos devem ser explícitas.
 
-A estrutura concreta de cada projeto deve ser definida em `regrasProjeto.md`.
+A estrutura concreta pertence ao `regrasProjeto.md`.
 
-### 4.2 Modelo abstrato da estrutura
+## 29. Modelo abstrato
 
 ```text
 projeto/
@@ -346,58 +503,54 @@ projeto/
 ├── código-fonte/
 │   ├── inicialização e composição
 │   ├── domínios ou funcionalidades
-│   │   └── módulo/
-│   │       ├── interface ou apresentação
-│   │       ├── aplicação ou coordenação
-│   │       ├── domínio ou regras
-│   │       ├── infraestrutura ou integrações
-│   │       └── contratos e testes específicos
 │   ├── compartilhado
 │   └── infraestrutura global
 ├── recursos estáticos
 └── testes externos, quando aplicável
 ```
 
-Esse modelo é conceitual. Nenhum diretório ou camada é obrigatório sem responsabilidade real.
+O modelo é conceitual. Nenhum diretório ou nível é obrigatório sem responsabilidade real.
 
-### 4.3 Profundidade controlada
+## 30. Profundidade
 
-A profundidade deve ser a menor possível sem comprometer a separação semântica.
-
-Um novo nível só deve ser criado quando:
+Criar novo nível somente quando ele:
 
 - representar responsabilidade própria;
 - agrupar múltiplos elementos relacionados;
 - separar conteúdo de natureza distinta;
-- reduzir sobrecarga real no nível atual;
+- reduzir sobrecarga real;
 - tornar localização mais previsível.
 
-Não criar níveis que:
+Não criar nível que:
 
-- apenas repitam o nome do nível anterior;
-- contenham um único filho sem justificativa;
-- representem somente categoria técnica desnecessária;
-- aumentem navegação sem melhorar entendimento.
+- repita o nome do pai;
+- contenha um único filho sem justificativa;
+- represente categoria técnica desnecessária;
+- aumente navegação sem melhorar entendimento.
 
-### 4.4 Largura controlada
+## 31. Largura
 
 Não existe quantidade máxima fixa de filhos por nó.
 
-Um nó deve ser avaliado para subdivisão quando:
+Avaliar subdivisão quando:
 
-- contém muitos elementos difíceis de localizar;
-- utiliza prefixos repetidos para simular agrupamentos;
-- mistura grupos semanticamente distintos;
-- novos elementos não possuem posição previsível;
-- sua manutenção exige busca frequente por conteúdo.
+- elementos forem difíceis de localizar;
+- prefixos repetidos simularem agrupamentos;
+- grupos semanticamente distintos estiverem misturados;
+- novos elementos não possuírem posição previsível;
+- manutenção exigir busca frequente.
 
 Não subdividir apenas para reduzir visualmente a quantidade de filhos.
 
-### 4.5 Promoção progressiva
+## 32. Diretórios genéricos
 
-Todo conteúdo deve começar na estrutura mais simples semanticamente correta.
+Diretórios como `components`, `utils`, `services`, `helpers`, `common`, `shared`, `types` e `hooks` devem possuir escopo claro.
 
-A promoção deve seguir, quando necessária:
+Não devem funcionar como depósitos classificados apenas por tipo técnico.
+
+## 33. Promoção progressiva
+
+A promoção estrutural deve seguir, quando necessária:
 
 ```text
 bloco lógico
@@ -411,74 +564,31 @@ bloco lógico
 
 Um elemento só deve subir de nível quando adquirir responsabilidade, dependências, consumidores, contrato ou ciclo de mudança próprios.
 
-A promoção estrutural e a validação do balanceamento devem respeitar o percurso obrigatório das folhas para a raiz.
-
-### 4.6 Proximidade antes do compartilhamento
-
-Todo código deve permanecer próximo do consumidor principal durante sua criação inicial.
-
-Mover para área compartilhada somente quando:
-
-- existirem consumidores reais em mais de um módulo;
-- o significado for igual em todos os usos;
-- o comportamento for estável;
-- o código não depender de detalhes internos de um módulo específico.
-
-### 4.7 Diretórios genéricos
-
-Diretórios como `components`, `utils`, `services`, `helpers`, `common`, `shared`, `types` e `hooks` devem possuir escopo claro.
-
-Não devem ser usados como depósitos de elementos classificados apenas pelo tipo técnico.
-
-### 4.8 Reorganizações
-
-Quando um elemento for movido:
-
-1. confirmar que todo conteúdo necessário existe na estrutura final;
-2. atualizar imports, referências e contratos;
-3. validar o funcionamento;
-4. remover a versão anterior;
-5. confirmar que não restaram duplicações ou caminhos obsoletos.
-
-A reorganização só estará concluída quando existir uma única árvore válida para cada responsabilidade.
-
 ---
 
-## 5. Modularização do código
+# Parte V — Código interno
 
-### 5.1 Blocos lógicos indivisíveis
-
-O menor bloco lógico indivisível deve:
-
-- executar uma parte coesa do fluxo;
-- possuir propósito identificável;
-- não misturar responsabilidades independentes;
-- permanecer próximo do contexto que lhe dá significado;
-- não ser separado quando a extração apenas aumentar navegação.
-
-Um bloco deixa de ser indivisível quando contém partes com responsabilidades, dependências, ciclos de mudança ou possibilidades de teste independentes.
-
-### 5.2 Funções, métodos e componentes
+## 34. Funções, métodos e componentes
 
 Cada função, método ou componente deve:
 
 - executar uma responsabilidade principal;
-- possuir nome que descreva sua intenção;
-- receber apenas os dados necessários;
+- possuir nome que descreva intenção;
+- receber apenas dados necessários;
 - tornar efeitos externos explícitos;
 - retornar resultado previsível;
-- evitar misturar validação, transformação, persistência e apresentação;
+- evitar misturar validação, transformação, persistência e apresentação sem coordenação justificável;
 - delegar etapas independentes;
 - evitar aninhamento excessivo;
 - tratar erros na fronteira adequada.
 
-Uma função coordenadora pode representar um fluxo composto, desde que delegue etapas independentes para filhos semanticamente claros.
+Uma função coordenadora pode representar fluxo composto, desde que delegue etapas independentes.
 
-### 5.3 Arquivos
+## 35. Arquivos
 
-Cada arquivo deve possuir responsabilidade principal identificável pelo nome e pela posição na árvore.
+Cada arquivo deve possuir responsabilidade principal identificável pelo nome e pela posição.
 
-Criar novo arquivo quando o conteúdo:
+Criar arquivo quando o conteúdo:
 
 - representar conceito próprio;
 - possuir motivo de mudança diferente;
@@ -490,26 +600,25 @@ Criar novo arquivo quando o conteúdo:
 
 Não criar arquivo apenas para:
 
-- reduzir quantidade de linhas;
+- reduzir linhas;
 - armazenar constante local sem contexto próprio;
-- separar função privada inseparável do fluxo;
+- separar função privada inseparável;
 - criar wrapper sem responsabilidade;
-- antecipar reutilização inexistente;
-- reproduzir convenção de outro projeto.
+- antecipar reutilização;
+- reproduzir convenção externa.
 
-### 5.4 Diretórios
+## 36. Diretórios
 
-Criar diretório somente quando houver conjunto de arquivos ou subdiretórios que:
+Criar diretório somente quando houver conjunto coeso de arquivos ou subdiretórios que:
 
-- represente responsabilidade semanticamente identificável;
-- possua relação coesa;
+- represente responsabilidade identificável;
 - forme domínio, funcionalidade ou fronteira;
-- torne o diretório pai sobrecarregado;
+- torne o pai realmente sobrecarregado;
 - precise ser localizado como grupo.
 
 Diretório com único filho exige justificativa arquitetural ou técnica explícita.
 
-### 5.5 Módulos e domínios
+## 37. Módulos e domínios
 
 Criar módulo quando um conjunto possuir:
 
@@ -517,11 +626,11 @@ Criar módulo quando um conjunto possuir:
 - contratos próprios;
 - dependências próprias;
 - ciclo de vida relativamente independente;
-- fronteira clara com o restante do sistema.
+- fronteira clara.
 
-Módulos devem expor interface pública e não permitir acesso indiscriminado a detalhes internos.
+Módulos devem expor interface pública intencional e proteger detalhes internos.
 
-### 5.6 Modularização interna de arquivos
+## 38. Ordem interna de arquivos
 
 Quando aplicável, utilizar ordem previsível:
 
@@ -534,152 +643,170 @@ Quando aplicável, utilizar ordem previsível:
 7. composição ou coordenação;
 8. exports.
 
-Essa ordem pode ser adaptada à tecnologia, mas deve permanecer consistente no projeto.
+A ordem pode ser adaptada à tecnologia, mas deve permanecer consistente no projeto.
 
-### 5.7 Duplicação
+## 39. Duplicação
 
-- Duplicação ocasional e pequena pode ser preferível a abstração incorreta.
+- Duplicação pequena e ocasional pode ser preferível a abstração incorreta.
 - Extrair quando a repetição representar o mesmo conceito e possuir manutenção conjunta.
-- Não unificar comportamentos que apenas parecem semelhantes.
+- Não unificar comportamentos apenas semelhantes.
 
 ---
 
-## 6. Nomenclatura, tipagem e contratos
+# Parte VI — Nomenclatura, tipagem e contratos
 
-### 6.1 Nomenclatura semântica orientada à responsabilidade
+## 40. Nomenclatura semântica
 
-Todo nó da árvore do projeto deve possuir um nome semântico que represente sua responsabilidade real dentro do contexto fornecido pelos nós superiores.
+Todo nó deve possuir nome que represente sua responsabilidade real dentro do contexto dos nós superiores.
 
-A leitura do caminho da raiz até uma folha deve permitir compreender progressivamente a finalidade de cada nó.
+A leitura do caminho da raiz até a folha deve permitir compreender progressivamente a finalidade.
 
 Os nomes devem:
 
-- representar o conteúdo ou comportamento real do nó;
+- representar conteúdo ou comportamento real;
 - distinguir responsabilidades diferentes;
-- utilizar o vocabulário consistente do domínio;
-- conter apenas o contexto necessário para evitar ambiguidade;
-- evitar termos genéricos, históricos, visuais ou baseados apenas na implementação;
-- ser reavaliados quando a responsabilidade do nó mudar.
+- utilizar vocabulário consistente do domínio;
+- conter somente contexto necessário;
+- evitar termos genéricos, históricos ou baseados apenas na implementação;
+- ser reavaliados quando a responsabilidade mudar.
 
-As convenções da linguagem ou tecnologia definem a forma de escrita do nome, mas não substituem sua definição semântica.
+A responsabilidade deve ser identificada antes da escolha do nome.
 
-- Usar `camelCase` para variáveis, funções, métodos e propriedades.
-- Usar `PascalCase` para componentes, classes, tipos, interfaces e enums.
-- Usar `UPPER_SNAKE_CASE` apenas para constantes globais convencionais.
-- Funções devem indicar ação.
-- Booleanos devem indicar condição, preferencialmente com `is`, `has`, `can` ou `should`.
-- Coleções devem usar nomes no plural.
-- Evitar abreviações não consolidadas e nomes ambíguos.
-- Evitar repetir no nome do filho o contexto já expresso pelo nó pai.
-- Evitar nomes genéricos quando houver alternativa mais específica.
+Convenções de linguagem definem a forma, não o significado.
 
-### 6.2 Convenções de nomenclatura
+Quando aplicável:
 
-Uma convenção pode prevalecer sobre o nome semanticamente ideal quando:
+- `camelCase` para variáveis, funções, métodos e propriedades;
+- `PascalCase` para componentes, classes, tipos, interfaces e enums;
+- `UPPER_SNAKE_CASE` apenas para constantes globais convencionais;
+- funções indicam ação;
+- booleanos indicam condição, preferencialmente com `is`, `has`, `can` ou `should`;
+- coleções usam plural;
+- abreviações não consolidadas devem ser evitadas.
 
-- for obrigatória para a linguagem, framework ou ferramenta;
+## 41. Convenções tecnológicas
+
+Uma convenção pode prevalecer quando:
+
+- for obrigatória para linguagem, framework ou ferramenta;
 - permitir descoberta automática;
-- reduzir configuração ou código adicional;
-- for consolidada no ecossistema;
-- melhorar previsibilidade para quem utiliza a tecnologia.
+- reduzir configuração relevante;
+- for consolidada e previsível no ecossistema;
+- melhorar interoperabilidade.
 
-A convenção não deve ser aplicada apenas por hábito quando um nome semântico produzir estrutura mais clara.
+Não aplicar convenção apenas por hábito quando ela prejudicar a semântica.
 
-### 6.3 Tipagem
+## 42. Tipagem
 
 - Contratos públicos devem possuir tipos explícitos.
-- Preferir `unknown` a `any` quando o dado ainda precisar ser validado.
-- Evitar casts usados apenas para silenciar erros.
-- Dados externos devem ser validados em tempo de execução quando necessário.
-- Tipos devem impedir estados inválidos sempre que viável.
-- Tipos locais devem permanecer próximos da implementação.
-- Tipos compartilhados devem representar contratos realmente compartilhados.
+- Preferir `unknown` a `any` quando o dado precisar de validação.
+- Evitar casts para silenciar erros.
+- Dados externos devem ser validados em runtime quando necessário.
+- Tipos devem impedir estados inválidos quando viável.
+- Tipos locais permanecem próximos ao uso.
+- Tipos compartilhados representam contratos realmente compartilhados.
 
-### 6.4 Contratos
+## 43. Contratos
 
 Contrato é qualquer interface estável entre módulos, processos ou sistemas.
 
 - Contratos devem ser explícitos e previsíveis.
+- Contratos públicos devem ser definidos antes das implementações concretas que os satisfazem.
 - Mudanças incompatíveis devem ser tratadas deliberadamente.
-- Implementações internas não devem vazar para consumidores.
+- Implementações internas não devem vazar.
 - Campos opcionais, valores nulos e estados de erro devem ser intencionais.
 
-### 6.5 Comentários e documentação
+## 44. Semântica e contratos nativos da plataforma
 
-- Comentários devem explicar intenção, restrição, decisão ou motivo não evidente.
-- Não comentar linha a linha comportamentos já claros.
-- Comentários devem permanecer sincronizados com a implementação.
+Abstrações, wrappers e componentes devem preservar a semântica, os contratos e os comportamentos nativos adequados da linguagem, plataforma ou ambiente.
+
+Não substituir recurso nativo adequado por abstração genérica que exija reconstrução manual de:
+
+- comportamento;
+- integração;
+- estado;
+- valor;
+- foco;
+- teclado;
+- acessibilidade;
+- ciclo de vida;
+- compatibilidade com ferramentas.
+
+Quando uma abstração for necessária, ela deve preservar os contratos observáveis e acrescentar responsabilidade real.
+
+## 45. Comentários e documentação
+
+- Comentários explicam intenção, restrição, decisão ou motivo não evidente.
+- Não comentar linha a linha comportamento já claro.
+- Comentários devem permanecer sincronizados.
 - Código desativado não deve permanecer comentado.
-- Documentação afetada por alteração deve ser atualizada junto com o código.
-- Relatórios permanentes de conformidade devem ser atualizados quando alterações invalidarem suas conclusões.
-- Evidências temporárias de execução devem permanecer em logs, artefatos ou registros apropriados, sem ocupar a árvore definitiva quando não constituírem documentação mantida.
+- Documentação afetada deve ser atualizada junto com o código.
+- Evidências temporárias devem permanecer em logs ou artefatos apropriados.
 
 ---
 
-## 7. Dependências, imports e configuração
+# Parte VII — Dependências, configuração, erros e segurança
 
-### 7.1 Dependências
+## 46. Dependências
 
-Antes de adicionar uma dependência, verificar se:
+Antes de adicionar dependência, verificar se:
 
 - resolve problema real;
-- não existe solução adequada no projeto ou plataforma;
+- não existe solução adequada já disponível;
 - reduz mais complexidade do que adiciona;
 - possui manutenção, documentação e licença compatíveis;
-- seu impacto em segurança, tamanho e desempenho é aceitável.
+- impacto em segurança, tamanho e desempenho é aceitável.
 
 Dependências não utilizadas devem ser removidas.
 
-### 7.2 Imports
+## 47. Imports
 
 - Remover imports não utilizados.
-- Evitar imports circulares.
+- Evitar ciclos.
 - Preferir caminhos estáveis.
-- Evitar conhecimento excessivo da estrutura interna de outros módulos.
+- Não acessar detalhes internos de outros módulos.
 - Evitar reexports em cadeia.
 
-### 7.3 Configuração
+## 48. Configuração
 
 - Configurações variáveis devem ser centralizadas.
 - Valores de ambiente devem ser validados na inicialização.
 - Configurações obrigatórias ausentes devem produzir erro claro.
 - Segredos nunca devem ser versionados.
-- Valores específicos de ambiente não devem ser codificados na regra de negócio.
+- Valores específicos de ambiente não pertencem à regra de negócio.
 
----
-
-## 8. Erros, segurança e observabilidade
-
-### 8.1 Erros
+## 49. Erros
 
 - Erros não devem ser ignorados silenciosamente.
-- Erros esperados devem ser representados de forma previsível.
+- Erros esperados devem possuir representação previsível.
 - Falhas inesperadas devem preservar contexto para diagnóstico.
 - Mensagens externas não devem expor detalhes internos.
 - Recuperação automática só deve ocorrer quando for segura.
+- A taxonomia interna de erros deve ser definida antes da conversão para transporte, interface, logs ou métricas.
 
-### 8.2 Segurança
+## 50. Segurança
 
-- Toda entrada externa deve ser considerada não confiável.
+- Toda entrada externa é não confiável.
 - Validação, autenticação e autorização devem ocorrer na fronteira adequada.
-- Aplicar o princípio do menor privilégio.
+- Aplicar menor privilégio.
 - Dados sensíveis devem ser protegidos em armazenamento, transporte e logs.
 - Não confiar no cliente para decisões de segurança.
+- Requisitos de segurança e privacidade devem anteceder decisões sobre logs, persistência e preenchimento automático.
 
-### 8.3 Observabilidade
+## 51. Observabilidade
 
-- Logs devem possuir contexto suficiente para diagnóstico.
+- Logs devem possuir contexto suficiente.
 - Não registrar segredos ou dados sensíveis sem necessidade explícita.
-- Mensagens de log devem ser consistentes e acionáveis.
+- Mensagens devem ser consistentes e acionáveis.
 - Métricas e rastreamento devem existir quando houver necessidade operacional real.
 
 ---
 
-## 9. Regras específicas de front-end
+# Parte VIII — Regras de front-end
 
-### 9.1 Organização semântica
+## 52. Organização do front-end
 
-A árvore de front-end deve representar responsabilidades reais da interface e dos fluxos da aplicação.
+A árvore deve representar responsabilidades reais da interface e dos fluxos.
 
 Quando existirem, distinguir:
 
@@ -695,13 +822,13 @@ Quando existirem, distinguir:
 - assets;
 - contratos.
 
-Nenhuma dessas divisões deve ser criada automaticamente.
+Nenhuma divisão é criada automaticamente.
 
-### 9.1.1 Normalização global de estilos
+## 53. Normalização global de estilos
 
-Todo projeto front-end deve possuir uma base global de estilos carregada na inicialização da aplicação para neutralizar diferenças desnecessárias entre os estilos padrão dos navegadores suportados.
+Todo front-end web deve possuir base global de estilos carregada na inicialização para neutralizar diferenças desnecessárias entre navegadores suportados.
 
-O reset mínimo obrigatório é:
+Reset mínimo:
 
 ```css
 *,
@@ -713,60 +840,142 @@ O reset mínimo obrigatório é:
 }
 ```
 
-A base global também deve, quando aplicável ao projeto:
+Quando aplicável, a base global deve:
 
-- fazer controles de formulário herdarem tipografia e cor do contexto;
-- impedir que imagens, vídeos, SVGs e canvases ultrapassem o contêiner;
-- definir comportamento previsível para elementos de mídia e conteúdo substituído;
-- normalizar altura mínima, renderização de texto e outros padrões que variem entre navegadores suportados;
-- remover estilos padrão adicionais somente quando houver necessidade real e substituição intencional no design system ou no componente correspondente.
+- fazer controles herdarem tipografia e cor;
+- impedir mídia de ultrapassar o contêiner;
+- definir comportamento previsível para conteúdo substituído;
+- normalizar diferenças relevantes dos navegadores.
 
-O reset global não deve:
+A base global não deve:
 
-- remover foco visível sem substituição acessível equivalente;
+- remover foco visível sem substituição equivalente;
 - eliminar semântica ou comportamento nativo necessário;
-- remover globalmente marcadores de listas, decoração de links, bordas de controles ou outros sinais de interação sem que o projeto defina uma alternativa clara;
-- introduzir regras específicas de componentes ou funcionalidades na base global.
+- remover sinais de interação sem alternativa clara;
+- introduzir regras específicas de componentes.
 
-### 9.2 Componentes
+## 54. Responsabilidades estruturais e visuais
 
-Componentes usados por uma única página ou funcionalidade devem permanecer próximos dela.
+Elementos estruturais ou visuais com responsabilidade identificável podem possuir representação nomeada no código, mesmo sem comportamento próprio.
 
-Mover para área compartilhada somente com reutilização real e contrato estável.
+A nomeação é justificável quando reduz o custo de compreender:
 
-Não manter simultaneamente `src/components` e `src/shared/components` quando ambas representarem a mesma responsabilidade.
+- composição;
+- hierarquia;
+- estados;
+- variantes;
+- relações visuais.
 
-### 9.3 Páginas e telas
+A existência de responsabilidade visual identificável não exige isoladamente:
 
-Páginas e telas devem coordenar interface e fluxos de alto nível.
+- novo componente;
+- novo arquivo;
+- novo diretório;
+- API pública;
+- abstração reutilizável.
 
-Não devem concentrar transformações complexas, geração de arquivos, regras de negócio, persistência ou integrações detalhadas.
+Elementos incidentais usados apenas como marcação, texto ou agrupamento circunstancial devem permanecer locais quando a abstração apenas aumentar vocabulário ou navegação.
 
-### 9.4 Estado
+São decisões independentes:
 
-Estado local deve permanecer próximo do consumidor.
+1. nomear uma responsabilidade;
+2. extrair abstração;
+3. separar em arquivo;
+4. promover para compartilhado.
 
-Promover para store, contexto ou equivalente somente quando houver múltiplos consumidores, sobrevivência entre componentes ou atualização coordenada.
+Cada decisão deve satisfazer seus próprios critérios.
 
-### 9.5 Engines e templates
+## 55. Componentes
 
-Transformações complexas, cálculos, serialização e geração de arquivos devem permanecer fora de componentes visuais quando representarem responsabilidades próprias.
+- Componentes específicos permanecem próximos à página ou funcionalidade.
+- Mover para compartilhado somente com equivalência semântica e contrato estável.
+- Não manter árvores concorrentes como `src/components` e `src/shared/components` quando representarem a mesma responsabilidade.
+
+## 56. Páginas e telas
+
+Páginas e telas coordenam interface e fluxos de alto nível.
+
+Não devem concentrar:
+
+- transformações complexas;
+- geração de arquivos;
+- regras de negócio independentes;
+- persistência;
+- integrações detalhadas.
+
+## 57. Fonte canônica de estados semânticos
+
+Cada estado semântico deve possuir uma representação canônica.
+
+Lógica, apresentação, comportamento e acessibilidade devem derivar da mesma representação sempre que possível.
+
+Não manter fontes independentes equivalentes, como:
+
+- `selected`;
+- `active`;
+- classe selecionada;
+- prop visual selecionada;
+- atributo acessível selecionado.
+
+Quando a plataforma exigir duplicação, a derivação e sincronização devem ser explícitas, determinísticas e testáveis.
+
+## 58. Condições no nível responsável
+
+Toda condição deve ser representada no menor nível com responsabilidade e informação suficientes.
+
+- condições de negócio pertencem ao domínio ou caso de uso;
+- condições derivadas de dados pertencem à transformação ou contrato responsável;
+- estados funcionais pertencem ao componente ou módulo controlador;
+- condições exclusivamente apresentacionais pertencem à camada visual;
+- características do ambiente pertencem aos mecanismos da plataforma.
+
+Condições apresentacionais não devem introduzir estado de aplicação, eventos, listeners ou processamento de runtime quando o mecanismo visual for suficiente.
+
+A camada visual não deve reconstruir decisões de negócio a partir de sinais indiretos de apresentação.
+
+## 59. Contratos de variantes
+
+Parâmetros de componentes devem representar conceitos coerentes, como:
+
+- tamanho;
+- densidade;
+- ênfase;
+- intenção;
+- orientação;
+- estado;
+- variante.
+
+Parâmetros públicos não devem transportar detalhes visuais arbitrários, como margens, paddings, cores e posicionamentos.
+
+Detalhes concretos de apresentação permanecem na camada visual ou no sistema de estilos.
+
+Uma exceção exige que o valor seja parte real e estável do contrato público.
+
+## 60. Estado local e compartilhado
+
+- Estado local permanece próximo ao consumidor.
+- Promover para store, contexto ou equivalente somente com múltiplos consumidores, sobrevivência necessária ou atualização coordenada.
+- Dados derivados devem ser calculados a partir da fonte canônica quando possível.
+
+## 61. Engines e templates
+
+Transformações complexas, cálculos, serialização e geração de arquivos permanecem fora de componentes visuais quando possuírem responsabilidade própria.
 
 Preview e exportação não devem depender de fontes de verdade divergentes.
 
-### 9.6 Assets
+## 62. Assets
 
 Assets devem ser organizados por finalidade ou domínio.
 
-Não criar subdiretórios para cada asset isolado sem fronteira real.
+Não criar subdiretório por asset isolado sem fronteira real.
 
 ---
 
-## 10. Regras específicas de back-end
+# Parte IX — Regras de back-end
 
-### 10.1 Organização semântica
+## 63. Organização do back-end
 
-A árvore de back-end deve ser organizada prioritariamente por domínio ou funcionalidade.
+A árvore deve ser organizada prioritariamente por domínio ou funcionalidade.
 
 Quando existirem, distinguir:
 
@@ -780,248 +989,266 @@ Quando existirem, distinguir:
 - configuração;
 - infraestrutura compartilhada.
 
-Nenhuma subdivisão deve ser criada automaticamente.
+Nenhuma subdivisão é automática.
 
-### 10.2 Domínio antes da categoria técnica
+## 64. Domínio antes da categoria técnica
 
-Evitar diretórios globais como `controllers`, `services`, `repositories` e `models` quando dispersarem uma mesma funcionalidade por toda a árvore.
+Evitar diretórios globais como `controllers`, `services`, `repositories` e `models` quando dispersarem uma funcionalidade por toda a árvore.
 
-Preferir manter próximos os elementos pertencentes ao mesmo domínio.
+Preferir proximidade dos elementos do mesmo domínio.
 
-### 10.3 Camadas proporcionais
+## 65. Camadas proporcionais
 
 Não criar controller, service, use case, repository, gateway e adapter para todo fluxo automaticamente.
 
 Cada camada deve possuir responsabilidade real.
 
-Camadas que apenas encaminham argumentos devem ser removidas ou incorporadas ao nó semanticamente correto.
+Camadas que apenas encaminham argumentos devem ser removidas ou incorporadas.
 
 ---
 
-## 11. Testes e validação
+# Parte X — Testes e validação
 
-### 11.1 Cobertura e comportamento
+## 66. Grafo de casos de uso
 
-- Alterações devem ser acompanhadas por validação proporcional ao risco.
-- A estratégia de testes deve mapear e cobrir integralmente o grafo de casos de uso do projeto, incluindo cada caso de uso e as conexões relevantes entre eles.
-- A cobertura deve combinar testes unitários, de integração e de ponta a ponta conforme a responsabilidade, o risco e a necessidade real de cada parte do projeto.
-- Fluxos principais, alternativos, de erro, limites e transições relevantes do grafo devem ser validados no nível de teste mais adequado, sem exigir uma categoria de teste quando ela não agregar proteção ao projeto.
-- Regras de negócio devem possuir testes quando relevantes e estáveis.
-- Testes devem verificar comportamento observável.
+A estratégia de testes deve mapear e cobrir integralmente o grafo de casos de uso do projeto.
+
+O grafo deve incluir:
+
+- cada caso de uso;
+- conexões relevantes;
+- fluxos principais;
+- fluxos alternativos;
+- erros;
+- limites;
+- transições relevantes.
+
+O grafo deve estar formalizado antes de declarar cobertura integral.
+
+## 67. Níveis de teste
+
+A cobertura deve combinar, conforme necessidade real:
+
+- testes unitários;
+- testes de integração;
+- testes de ponta a ponta.
+
+Cada comportamento deve ser validado no nível mais adequado.
+
+Uma categoria não deve ser exigida quando não agregar proteção, mas sua omissão deve registrar:
+
+- qual proteção não agregaria;
+- quais comportamentos permanecem cobertos;
+- por quais níveis de teste.
+
+## 68. Comportamento e permanência
+
+- Testes verificam comportamento observável.
+- Regras de negócio relevantes e estáveis devem possuir testes.
 - Refatorações devem preservar contratos e comportamento.
-- Testes quebrados não devem ser ignorados ou removidos para permitir integração.
-- Cenários de erro e limites devem ser testados quando fizerem parte do comportamento esperado.
+- Testes quebrados não podem ser ignorados ou removidos para permitir integração.
+- Cenários de erro e limite devem ser testados quando fizerem parte do comportamento.
+- Testes permanentes permanecem versionados.
+- Testes temporários só podem ser removidos quando não protegerem comportamento permanente.
 
-### 11.2 Permanência e localização
+## 69. Automação e evidências
 
-- Testes que protegem comportamento estável devem permanecer versionados junto ao código ou em infraestrutura de validação claramente vinculada ao projeto.
-- Testes não devem ser removidos apenas porque já foram executados ou porque a alteração foi concluída.
-- Testes temporários podem ser removidos somente quando verificarem exclusivamente uma migração encerrada e não protegerem comportamento permanente.
-- Testes podem permanecer privados quando expuserem dados, contratos ou cenários sensíveis, sem ocultar a ausência real de validação.
-
-### 11.3 Automação e evidências
-
-- Integração contínua deve executar as validações aplicáveis antes da promoção de alterações, quando utilizada pelo projeto.
+- Integração contínua deve executar validações aplicáveis quando utilizada.
 - Validações essenciais devem possuir forma documentada de execução local ou equivalente.
-- Ausência de execução, resultado indisponível ou status desconhecido não equivale a aprovação.
-- Declarações de validação devem identificar o escopo, a revisão verificada, os procedimentos executados, os resultados obtidos e as limitações existentes.
+- Ausência de execução ou resultado desconhecido não equivale a aprovação.
+- Declarações de validação devem identificar escopo, revisão, procedimentos, resultados e limitações.
 
 ---
 
-## 12. Versionamento e integração
+# Parte XI — Versionamento e integração
 
-### 12.1 Branches
+## 70. Branches
 
-- Todo projeto deve identificar os papéis de suas branches estáveis, de integração e de trabalho, quando existirem.
-- Alterações devem ocorrer fora da branch estável quando o projeto possuir fluxo de integração ou revisão.
-- Os nomes concretos das branches e as exceções permitidas devem ser registrados em `regrasProjeto.md`.
-- Atualizações forçadas devem ser evitadas e somente podem ocorrer quando explicitamente autorizadas e sem perda de histórico relevante.
+- Projetos devem identificar branches estáveis, de integração e de trabalho quando existirem.
+- Alterações devem ocorrer fora da branch estável quando houver fluxo de integração.
+- Nomes e exceções pertencem ao `regrasProjeto.md`.
+- Atualizações forçadas devem ser evitadas e somente podem ocorrer com autorização explícita e sem perda de histórico relevante.
 
-### 12.2 Promoção e integração
+## 71. Promoção
 
-Uma alteração somente pode ser promovida para uma branch mais estável quando:
+Uma alteração só pode ser promovida quando:
 
 - o diff corresponder ao escopo autorizado;
 - build, testes e validações aplicáveis estiverem aprovados;
-- contratos e comportamentos protegidos permanecerem preservados;
-- a documentação afetada estiver atualizada;
-- não existirem resíduos, caminhos antigos ou implementações concorrentes;
-- limitações e exceções restantes estiverem documentadas;
-- a branch de destino não tiver recebido alterações incompatíveis.
+- contratos e comportamentos protegidos estiverem preservados;
+- documentação afetada estiver atualizada;
+- não existirem resíduos ou implementações concorrentes;
+- limitações e não conformidades estiverem registradas;
+- a branch de destino não possuir alterações incompatíveis.
 
-A estratégia de integração deve preservar rastreabilidade suficiente para auditoria e reversão e ser definida em `regrasProjeto.md`.
+## 72. Artefatos temporários
 
-### 12.3 Artefatos e automações temporárias
-
-- Arquivos, scripts, workflows, branches, pacotes e fragmentos criados exclusivamente para transporte, migração, montagem ou auditoria devem possuir finalidade temporária explícita.
-- Artefatos temporários não devem tornar-se dependências da arquitetura final nem permanecer acionáveis após a conclusão.
-- Automações com permissão de escrita devem possuir escopo mínimo, resultado determinístico e proteção contra ciclos de alteração.
+- Arquivos, scripts, workflows, branches, pacotes e fragmentos temporários devem possuir finalidade explícita.
+- Não devem tornar-se dependências da arquitetura final.
+- Automações com escrita devem possuir escopo mínimo e proteção contra ciclos.
 - Todo resíduo temporário deve ser removido antes da validação final.
 
 ---
 
-## 13. Refatoração e manutenção
+# Parte XII — Refatoração e manutenção
+
+## 73. Baseline obrigatória
+
+Antes de normalização, migração ou refatoração estrutural, registrar baseline de:
+
+- comportamento;
+- contratos;
+- formatos;
+- resultados observáveis;
+- casos de uso afetados.
+
+## 74. Planejamento antes da migração
+
+A árvore final planejada deve ser validada contra:
+
+- responsabilidades;
+- contratos;
+- dependências;
+- casos de uso;
+- restrições do projeto.
+
+Nenhuma migração estrutural deve começar sem plano completo.
+
+## 75. Ordem da refatoração
 
 Toda refatoração estrutural deve ocorrer das folhas para a raiz:
 
-1. compreender o comportamento atual;
-2. identificar os menores blocos lógicos indivisíveis;
-3. organizar e validar os blocos lógicos internos;
-4. modularizar e validar funções, métodos e componentes;
-5. extrair e validar arquivos quando necessário;
-6. organizar e validar arquivos em diretórios quando necessário;
-7. consolidar e validar módulos e domínios;
-8. validar a estrutura global e a raiz do projeto;
+1. compreender comportamento atual;
+2. identificar blocos lógicos indivisíveis;
+3. organizar blocos internos;
+4. modularizar funções, métodos e componentes;
+5. extrair arquivos quando necessário;
+6. organizar diretórios;
+7. consolidar módulos e domínios;
+8. validar a raiz;
 9. atualizar imports, referências e contratos;
 10. remover estruturas antigas;
 11. validar comportamento, build e testes.
 
-Em cada passo estrutural, primeiro modularizar e validar internamente o nó atual; depois avaliar seu balanceamento. Se o balanceamento alterar a estrutura ou a responsabilidade de qualquer filho, retornar ao menor nível afetado e repetir a modularização e a validação das folhas para a raiz.
+## 76. Preservação de contratos observáveis
 
-A passagem de uma etapa estrutural para a seguinte só pode ocorrer quando o nível atual estiver em conformidade com estas regras.
+Mudanças estruturais devem preservar, salvo alteração funcional explícita:
 
-Se uma alteração em etapa posterior afetar um nível anteriormente validado, o ramo afetado deve retornar ao menor nível modificado e ser novamente validado das folhas para a raiz.
+- conteúdo;
+- ordem lógica;
+- semântica;
+- foco;
+- navegação por teclado;
+- nomes acessíveis;
+- estados;
+- eventos;
+- valores;
+- contratos públicos;
+- regras de negócio;
+- efeitos observáveis.
 
-Além disso:
+Equivalência não pode ser presumida apenas por:
 
-- Refatorações não devem alterar comportamento sem autorização explícita.
-- Antes de remover código, confirmar que não existem referências ativas.
-- Colocar todo o conteúdo necessário na estrutura final antes da poda.
-- Não manter versões antigas e novas da mesma responsabilidade em paralelo.
-- Dívida técnica deliberada deve ser documentada.
+- semelhança visual;
+- aprovação do build;
+- ausência de erro de tipagem;
+- funcionamento do caminho principal isolado.
 
-Mover código desorganizado para uma nova árvore apenas transfere o problema. A responsabilidade interna deve ser compreendida e validada antes da realocação externa.
+## 77. Migração e poda
 
----
+Ao mover elemento:
 
-## 14. Verificação de estrutura e modularização
+1. confirmar que todo conteúdo necessário existe na estrutura final;
+2. atualizar imports, exports, aliases e referências;
+3. validar funcionamento;
+4. remover versão anterior;
+5. confirmar ausência de duplicações e caminhos obsoletos.
 
-### 14.1 Modelo da árvore
-
-- [ ] A raiz considerada é o diretório raiz do projeto.
-- [ ] As folhas consideradas são os menores blocos lógicos indivisíveis do código.
-- [ ] A regra de balanceamento foi aplicada em todos os níveis.
-- [ ] A aplicação começou nas folhas e avançou em direção à raiz.
-- [ ] Cada nó possui responsabilidade identificável.
-- [ ] Cada folha permanece indivisível sem misturar responsabilidades.
-
-### 14.2 Progressão das folhas para a raiz
-
-- [ ] Os menores blocos lógicos foram avaliados primeiro.
-- [ ] Nenhuma função foi validada antes de seus blocos internos.
-- [ ] Nenhum arquivo foi validado antes de suas funções, componentes ou blocos internos.
-- [ ] Nenhum diretório foi validado antes de seus arquivos e subdiretórios.
-- [ ] Nenhum módulo foi validado antes de seus nós internos.
-- [ ] Nenhum domínio foi validado antes de seus módulos.
-- [ ] A raiz só foi validada após todos os níveis inferiores.
-- [ ] Cada nó foi modularizado internamente antes da avaliação de seu balanceamento.
-- [ ] Cada avanço ocorreu apenas depois da conformidade integral do nível atual.
-- [ ] Ramos afetados por alterações de balanceamento retornaram ao menor nível modificado.
-- [ ] Ramos afetados por alterações superiores foram remodularizados e reavaliados das folhas para a raiz.
-
-### 14.3 Balanceamento
-
-- [ ] Filhos do mesmo nó são semanticamente relacionados.
-- [ ] Responsabilidades diferentes foram separadas ou realocadas.
-- [ ] Nós com muitos filhos continuam fáceis de localizar e manter.
-- [ ] Nós extensos foram subdivididos somente em sub-responsabilidades reais.
-- [ ] Não existem limites numéricos arbitrários usados como regra automática.
-- [ ] A profundidade é proporcional à complexidade.
-- [ ] Não existem níveis intermediários sem responsabilidade própria.
-- [ ] Não existem cadeias de filho único sem justificativa.
-- [ ] A navegação não é maior que o ganho de clareza.
-- [ ] A árvore é a menor estrutura semanticamente suficiente.
-
-### 14.4 Modularização
-
-- [ ] A modularização começou pelos blocos lógicos internos.
-- [ ] Funções, métodos e componentes foram organizados antes da extração de arquivos.
-- [ ] Arquivos só foram criados para responsabilidades próprias.
-- [ ] Diretórios só foram criados para agrupamentos semânticos reais.
-- [ ] Módulos só foram criados após consolidação das responsabilidades internas.
-- [ ] A arquitetura global surgiu das responsabilidades reais do código.
-- [ ] Nenhuma pasta ou camada foi criada preventivamente.
-- [ ] O balanceamento de cada nó ocorreu somente depois de sua modularização interna.
-- [ ] Alterações de balanceamento que afetaram filhos provocaram nova modularização dos ramos correspondentes.
-
-### 14.5 Nomenclatura
-
-- [ ] Cada nó possui nome correspondente à sua responsabilidade real.
-- [ ] A leitura do caminho da raiz até a folha forma uma sequência semântica coerente.
-- [ ] O nome permite inferir a responsabilidade do elemento.
-- [ ] Responsabilidades diferentes são distinguíveis pelos nomes.
-- [ ] O vocabulário do domínio permanece consistente.
-- [ ] O contexto do nó pai não é repetido desnecessariamente no nome do filho.
-- [ ] Termos genéricos possuem delimitação semântica.
-- [ ] Convenções prevaleceram somente quando necessárias ou mais eficientes.
-- [ ] Nomes foram reavaliados após mudanças de responsabilidade.
-
-### 14.6 Arquivos e código interno
-
-- [ ] Cada arquivo possui responsabilidade principal.
-- [ ] Cada função possui responsabilidade principal.
-- [ ] Funções coordenadoras delegam etapas independentes.
-- [ ] Validação, transformação, persistência e apresentação estão separadas quando necessário.
-- [ ] Não existem blocos extensos executando tarefas não relacionadas.
-- [ ] Auxiliares locais permanecem próximos de seus consumidores.
-- [ ] Exports representam interface pública intencional.
-
-### 14.7 Migrações e refatorações
-
-- [ ] Todo conteúdo necessário foi colocado na árvore final antes da remoção.
-- [ ] Imports e referências foram atualizados.
-- [ ] A implementação anterior foi removida.
-- [ ] Não restaram caminhos obsoletos ou duplicados.
-- [ ] O comportamento foi validado após a reorganização.
-- [ ] Contratos e regras de negócio foram preservados.
-
-### 14.8 Versionamento e validação
-
-- [ ] Os papéis das branches estão definidos no projeto.
-- [ ] A alteração foi realizada fora da branch estável quando aplicável.
-- [ ] A promoção ocorreu somente após as validações obrigatórias.
-- [ ] Resultados declarados como aprovados possuem evidência verificável.
-- [ ] Testes permanentes continuam vinculados ao projeto.
-- [ ] Artefatos e automações temporárias foram removidos.
-- [ ] A origem e a revisão das regras gerais adotadas são identificáveis.
+A reorganização só termina quando existir uma única árvore válida para cada responsabilidade.
 
 ---
 
-## Apêndice normativo — Relações entre regras de desenvolvimento
+# Parte XIII — Critério de conclusão
 
-Este apêndice torna explícitas relações anteriormente implícitas ou necessárias. Todos os itens abaixo possuem força normativa equivalente às demais regras deste documento. Os identificadores preservam a origem da relação para auditoria: `I` indica relação anteriormente implícita e `N` indica relação necessária adicionada nesta revisão.
+## 78. Regra de parada
 
-### Dependências
+A normalização ou modularização está concluída somente quando:
 
-- [DEP-I-07] A nomenclatura de qualquer nó deve ser definida somente depois que sua responsabilidade real tiver sido identificada e estabilizada no escopo analisado.
-- [DEP-I-08] Contratos públicos e fronteiras abstratas devem ser definidos antes das implementações concretas que os satisfazem.
-- [DEP-I-15] A taxonomia interna de erros deve ser definida antes da conversão desses erros em mensagens externas, respostas de transporte, logs ou métricas.
-- [DEP-I-16] Requisitos de segurança e privacidade devem ser definidos antes de decisões sobre logs, persistência, valores padrão, preenchimento automático ou tratamento de dados.
-- [DEP-N-01] Toda regra que funcione como pré-condição de outra deve declarar expressamente a relação, o escopo afetado e a evidência necessária para considerar a pré-condição satisfeita.
-- [DEP-N-02] A alteração de uma regra antecedente invalida a conformidade das regras dependentes afetadas e exige sua reavaliação antes da continuidade.
-- [DEP-N-05] A baseline de comportamento, contratos, formatos e resultados observáveis deve ser registrada antes de qualquer normalização, migração ou refatoração estrutural.
-- [DEP-N-06] A árvore final planejada deve ser validada contra responsabilidades, contratos, dependências e casos de uso antes do início da migração estrutural.
+- raiz e todos os níveis foram validados das folhas para a raiz;
+- cada nó representa responsabilidade clara;
+- filhos são semanticamente relacionados;
+- largura é administrável;
+- profundidade é proporcional;
+- alocação é correta;
+- não existem duplicações ou classificações concorrentes;
+- não existem subdivisões preventivas;
+- nenhum nó pode ser dividido sem criar fragmentação artificial;
+- comportamento e contratos permanecem preservados;
+- documentação está atualizada.
 
-### Precedências
+---
 
-- [PRE-I-01] Corretude, segurança e preservação de comportamento prevalecem sobre simplificação, redução estrutural, desempenho ou conveniência de implementação quando não for possível satisfazer simultaneamente esses objetivos.
-- [PRE-I-02] Contratos públicos e comportamentos protegidos prevalecem sobre conveniências de refatoração, reorganização ou redução de código.
-- [PRE-I-03] Segurança e integridade dos dados prevalecem sobre eficiência, continuidade operacional ou conveniência de interface.
-- [PRE-I-05] Estrutura semântica e responsabilidade real prevalecem sobre simetria visual da árvore, uniformidade artificial ou aparência de organização.
-- [PRE-I-06] Responsabilidade, coesão e fronteira prevalecem sobre tamanho físico, quantidade de linhas, número de arquivos ou limites numéricos arbitrários.
-- [PRE-I-07] Contrato, significado e comportamento compartilhados prevalecem sobre semelhança visual, nominal ou estrutural.
-- [PRE-N-01] A precedência deve ser aplicada somente ao trecho e ao escopo em conflito; todas as regras não afetadas continuam cumulativamente obrigatórias.
-- [PRE-N-02] Um conflito normativo só existe quando duas regras aplicáveis não podem ser satisfeitas simultaneamente no mesmo escopo.
-- [PRE-N-03] Preferência pessoal, custo, prazo, hábito ou conveniência não constituem conflito normativo.
-- [PRE-N-04] Nenhuma decisão local pode prevalecer sobre exigência legal, requisito técnico obrigatório, segurança mínima ou integridade de dados.
-- [PRE-N-05] Quando regras do mesmo nível entrarem em conflito, deve prevalecer a solução que melhor preserve comportamento, segurança, acessibilidade e contratos, com decisão explícita e documentada.
+# Checklist de conformidade
 
-### Exceções
+## Arquitetura
 
-- [EXC-I-01] Código compartilhado deve retornar ao contexto específico quando seus consumidores deixarem de possuir significado, contrato ou ciclo de mudança equivalentes.
-- [EXC-I-02] Uma abstração deve ser removida quando deixar de representar contrato, responsabilidade, fronteira ou reutilização real.
-- [EXC-I-03] Uma camada deve ser incorporada ao nó semanticamente correto quando passar a apenas encaminhar dados sem transformação, proteção, coordenação ou adaptação.
-- [EXC-N-03] Uma exceção não dispensa regras que não sejam diretamente afetadas pelo motivo que a originou.
-- [EXC-N-04] Uma exceção local não cria convenção geral e não pode alterar o comportamento normativo dos documentos canônicos sem revisão formal.
-- [EXC-N-06] A omissão de uma categoria de teste deve registrar qual proteção ela não agregaria, quais comportamentos permanecem cobertos e por quais níveis de teste.
-- [EXC-N-10] Toda exceção deve ser reavaliada quando mudar a regra afetada, sua dependência, a tecnologia, o risco ou o contexto de aplicação.
+- [ ] A árvore representa responsabilidades reais.
+- [ ] A estrutura é a menor semanticamente suficiente.
+- [ ] Não existem árvores concorrentes.
+- [ ] Não existem camadas artificiais.
+- [ ] Dependências possuem direção previsível.
+
+## Modularização
+
+- [ ] A análise começou nas folhas.
+- [ ] Nenhum nível pai foi validado antes dos filhos.
+- [ ] A unidade de modularização foi a responsabilidade.
+- [ ] Tamanho físico não foi usado como critério isolado.
+- [ ] Ramos afetados foram reavaliados do menor nível até a raiz.
+
+## Abstrações e compartilhamento
+
+- [ ] Cada abstração reduz custo identificável.
+- [ ] Não existem abstrações preventivas.
+- [ ] Compartilhamento possui equivalência semântica.
+- [ ] Código específico permanece próximo ao consumidor.
+
+## Código
+
+- [ ] Funções, componentes e arquivos possuem responsabilidade principal.
+- [ ] Nomes representam responsabilidades reais.
+- [ ] Contratos públicos são explícitos.
+- [ ] Semântica nativa foi preservada.
+- [ ] Estados semânticos possuem fonte canônica.
+- [ ] Condições estão no nível responsável.
+- [ ] Variantes representam conceitos, não propriedades arbitrárias.
+
+## Referências
+
+- [ ] Imports são válidos.
+- [ ] Exports são válidos.
+- [ ] Aliases são válidos.
+- [ ] Não existem ciclos ou caminhos obsoletos.
+
+## Testes
+
+- [ ] O grafo de casos de uso está mapeado.
+- [ ] Fluxos principais, alternativos, erros e limites estão cobertos.
+- [ ] Níveis de teste foram escolhidos conforme risco e responsabilidade.
+- [ ] Testes permanentes não foram removidos.
+
+## Refatoração
+
+- [ ] Baseline foi registrada.
+- [ ] Árvore final foi planejada antes da migração.
+- [ ] Todo conteúdo foi colocado na árvore final antes da poda.
+- [ ] Contratos observáveis foram revalidados.
+- [ ] Não restaram resíduos temporários.
+
+## Documentação
+
+- [ ] `regrasDev.md` corresponde à revisão canônica.
+- [ ] `regrasUxUi.md` corresponde à revisão canônica quando aplicável.
+- [ ] `regrasProjeto.md` concretiza as decisões específicas.
+- [ ] `README.md` descreve o estado implementado.
+- [ ] Não conformidades estão explicitamente registradas.
