@@ -6,9 +6,31 @@ Este documento apresenta o projeto, seu contexto, seu estado atual e orienta sua
 
 Não deve conter regras arquiteturais, padrões gerais de desenvolvimento ou documentação detalhada da implementação.
 
-As decisões arquiteturais específicas do projeto pertencem ao `regrasProjeto.md`.
+As decisões específicas do projeto pertencem ao `regrasProjeto.md`.
 
-Os padrões gerais de desenvolvimento pertencem ao `regrasDev.md`.
+Os padrões universais de engenharia e arquitetura pertencem ao `regrasDev.md`.
+
+Os padrões universais de experiência e interface pertencem ao `regrasUxUi.md`, quando aplicável.
+
+## Natureza do documento
+
+Este documento é descritivo, específico e plástico.
+
+Ele deve acompanhar continuamente o estado válido e efetivamente implementado do projeto.
+
+O README não define normas universais nem substitui `regrasProjeto.md`. Quando houver divergência entre este documento e o estado válido do projeto, a divergência deve ser investigada e corrigida.
+
+O README deve descrever:
+
+- o que o projeto é;
+- qual problema resolve;
+- seu estado atual;
+- como executar;
+- como validar;
+- como navegar pela arquitetura;
+- como retomar o desenvolvimento.
+
+Decisões temporárias, hipóteses e implementações acidentais não devem ser transformadas em regras arquiteturais.
 
 ---
 
@@ -21,8 +43,10 @@ Os padrões gerais de desenvolvimento pertencem ao `regrasDev.md`.
 - Utilizar textos explicativos apenas quando forem necessários para evitar ambiguidades.
 - Utilizar exemplos somente quando o conteúdo esperado para o campo não for evidente.
 - Remover os exemplos após o preenchimento definitivo do campo.
-- Não repetir decisões presentes no `regrasProjeto.md`.
+- Não repetir decisões normativas presentes no `regrasProjeto.md`.
 - Não repetir padrões presentes no `regrasDev.md`.
+- Não repetir padrões presentes no `regrasUxUi.md`.
+- Referenciar os documentos normativos quando o leitor precisar consultá-los.
 - Não documentar funções, componentes ou arquivos linha a linha.
 - Não utilizar o README como histórico detalhado de alterações.
 - Não utilizar o README como backlog completo do projeto.
@@ -53,7 +77,7 @@ Uma nova seção somente deve ser criada quando:
 - representar uma responsabilidade diferente das seções existentes;
 - não puder ser incorporada de forma clara a outra seção;
 - ajudar qualquer pessoa a compreender, executar, localizar ou continuar o projeto;
-- não duplicar conteúdo do `regrasProjeto.md`, do `regrasDev.md` ou de uma documentação específica em `docs/`.
+- não duplicar conteúdo do `regrasProjeto.md`, do `regrasDev.md`, do `regrasUxUi.md` ou de uma documentação específica em `docs/`.
 
 ---
 
@@ -312,7 +336,8 @@ docker compose up --build
 1. `README.md`
 2. `regrasProjeto.md`
 3. `regrasDev.md`
-4. Documentações específicas disponíveis em `docs/`
+4. `regrasUxUi.md`, quando aplicável
+5. Documentações específicas disponíveis em `docs/`
 
 ## Fluxo recomendado para conhecer o projeto
 
@@ -321,10 +346,11 @@ Ex.:
 1. Leia este README integralmente.
 2. Execute o projeto localmente.
 3. Leia o `regrasProjeto.md` para compreender as decisões específicas.
-4. Leia o `regrasDev.md` para compreender os padrões gerais de implementação.
-5. Identifique o ponto de entrada da aplicação.
-6. Acompanhe o fluxo principal até os módulos responsáveis pelas regras de negócio.
-7. Navegue pela funcionalidade relacionada ao objetivo da alteração.
+4. Leia o `regrasDev.md` para compreender os padrões universais de engenharia.
+5. Leia o `regrasUxUi.md` quando o projeto possuir interface ou interação humana aplicável.
+6. Identifique o ponto de entrada da aplicação.
+7. Acompanhe o fluxo principal até os módulos responsáveis pelas regras de negócio.
+8. Navegue pela funcionalidade relacionada ao objetivo da alteração.
 
 ## Ponto de entrada da aplicação
 
@@ -527,7 +553,7 @@ Ex.:
 2. Execute o projeto e valide o fluxo principal.
 3. Consulte as pendências conhecidas.
 4. Leia a documentação da funcionalidade que será alterada.
-5. Confirme as regras aplicáveis no `regrasProjeto.md` e no `regrasDev.md`.
+5. Confirme as regras aplicáveis no `regrasProjeto.md`, no `regrasDev.md` e, quando aplicável, no `regrasUxUi.md`.
 
 ## Pontos críticos
 
@@ -622,13 +648,19 @@ Ex.:
 
 Responsabilidade:
 
-Define as decisões, restrições e regras específicas para construção e evolução deste projeto.
+Define as decisões, restrições e regras específicas para construção e evolução deste projeto. É normativo, específico e plástico.
 
 ## `regrasDev.md`
 
 Responsabilidade:
 
-Define os padrões gerais de engenharia e desenvolvimento aplicáveis ao projeto.
+Define os padrões universais de engenharia e desenvolvimento aplicáveis ao projeto. É normativo, universal e imutável no contexto do projeto.
+
+## `regrasUxUi.md`
+
+Responsabilidade:
+
+Define os padrões universais de experiência, interface, interação, acessibilidade e responsividade aplicáveis quando o projeto possuir interface ou interação humana. É normativo, universal e imutável no contexto do projeto.
 
 ## `docs/`
 
