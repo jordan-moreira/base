@@ -1,2009 +1,1243 @@
 # Regras do Projeto
 
-Este documento define as decisões específicas deste projeto e orienta como novas funcionalidades devem ser desenvolvidas.
+## 1. Objetivo
 
-Ele deve ser preenchido de cima para baixo, pois as decisões das seções posteriores dependem das definições anteriores.
+Este documento define as decisões, restrições, convenções e concretizações próprias deste projeto.
 
-O `README.md` deve concentrar instruções de uso, primeiros passos, contexto, histórico e diário de bordo.
+Ele responde à pergunta:
 
-O `regrasDev.md` deve concentrar regras gerais e reutilizáveis de desenvolvimento.
+```text
+Como este projeto deve ser estruturado, implementado, validado e mantido?
+```
 
-Este arquivo deve conter apenas definições, convenções, restrições e decisões próprias deste projeto.
+As instruções de uso, execução, navegação, contexto e retomada pertencem ao `README.md`.
 
-Cada regra definida em `regrasDev.md`, `regrasProjeto.md` e `regrasUxUi.md` deve ser analisada, aplicada e validada de forma independente das demais. O atendimento a uma regra não implica o atendimento, a substituição ou a dispensa de qualquer outra; todas as regras aplicáveis devem ser satisfeitas cumulativamente, salvo quando algum dos próprios documentos estabelecer explicitamente dependência, precedência ou exceção.
+As normas universais de engenharia e arquitetura pertencem ao `regrasDev.md`.
 
-## Regras de preenchimento
+As normas universais de experiência e interface pertencem ao `regrasUxUi.md`.
 
-- Cada campo deve representar uma única decisão.
+---
+
+## 2. Natureza normativa e mutabilidade
+
+Este documento é:
+
+- normativo;
+- específico;
+- plástico.
+
+É normativo porque define o estado válido esperado para este projeto.
+
+É específico porque contém apenas decisões que dependem do contexto, da stack, do domínio, da infraestrutura, dos requisitos e dos limites deste projeto.
+
+É plástico porque deve ser atualizado sempre que mudar uma decisão válida do projeto.
+
+Este documento deve acompanhar mudanças em:
+
+- objetivo;
+- escopo;
+- arquitetura;
+- stack;
+- estrutura de diretórios;
+- contratos;
+- integrações;
+- compatibilidade;
+- valores;
+- estratégias;
+- restrições;
+- critérios de validação;
+- exceções autorizadas;
+- não conformidades.
+
+Este documento não pode:
+
+- modificar `regrasDev.md` ou `regrasUxUi.md`;
+- dispensar regra universal;
+- reduzir critério mínimo universal;
+- repetir norma universal como se fosse decisão local;
+- transformar uma violação em exceção válida sem autorização explícita da própria norma universal;
+- documentar como válida uma implementação acidental apenas porque ela existe no código.
+
+---
+
+## 3. Relação com os demais documentos
+
+```text
+regrasDev.md + regrasUxUi.md
+            ↓
+       regrasProjeto.md
+            ↓
+         código-fonte
+            ↓
+          README.md
+```
+
+- As regras universais definem critérios e resultados obrigatórios.
+- Este documento concretiza esses critérios para o projeto.
+- O código implementa as decisões concretas.
+- O `README.md` descreve o estado implementado.
+
+Em caso de divergência entre este documento e o código, não presumir automaticamente que um dos dois está correto.
+
+Deve-se verificar:
+
+- se o código ainda não implementou uma decisão válida;
+- se a decisão ficou obsoleta;
+- se houve alteração deliberada não documentada;
+- se existe defeito em ambos.
+
+Após a análise:
+
+- se a decisão continuar válida, corrigir o código;
+- se o estado implementado for o novo estado válido, atualizar este documento;
+- se nenhum estiver adequado, corrigir ambos.
+
+---
+
+## 4. Regras de preenchimento
+
+- Preencher do geral para o específico.
+- Cada campo deve representar uma decisão principal.
 - Cada decisão deve existir em apenas uma seção.
 - Campos aplicáveis não devem permanecer vazios.
-- Use `Pendente.` quando a decisão ainda não tiver sido tomada.
-- Campos pendentes não impedem atividades independentes, mas impedem declarar conformidade integral quando forem aplicáveis ao escopo validado.
-- Use `Não se aplica.` quando o campo não pertencer ao projeto.
-- Os exemplos servem apenas para indicar o tipo e o formato da informação esperada.
-- Justificativas, histórico e contexto das decisões devem ser registrados no `README.md`.
-- Seções posteriores devem respeitar todas as definições anteriores.
-- Novas seções devem ser criadas apenas quando representarem uma decisão independente que não pertença às seções existentes.
-- Regras devem ser escritas de forma objetiva, afirmativa e verificável.
-- Proibições devem ser usadas apenas quando forem necessárias para impedir uma violação concreta da arquitetura ou do comportamento do projeto.
+- Usar `Pendente.` quando a decisão ainda não tiver sido tomada.
+- Usar `Não se aplica.` quando o campo não pertencer à natureza ou ao escopo do projeto.
+- `Não se aplica.` exige justificativa verificável.
+- Campos pendentes bloqueiam somente os ramos que dependem deles.
+- Exemplos devem ser removidos após preenchimento definitivo.
+- Justificativas históricas e contexto de decisões pertencem ao `README.md` ou a registro específico de decisão.
+- Novas seções somente devem existir quando representarem decisão independente não acomodável nas seções existentes.
+- Regras devem ser objetivas, afirmativas e verificáveis.
+- Proibições devem impedir violações concretas, não preferências pessoais.
 
-### Padrão para árvores e hierarquias
+### 4.1 Árvores e hierarquias
 
-Diretórios devem terminar com `/`.
+Diretórios terminam com `/`.
 
-Arquivos não devem terminar com `/`.
+Arquivos não terminam com `/`.
 
-Cada sequência adicional de `--` representa um nível abaixo na hierarquia.
+Cada sequência adicional de `--` representa um nível inferior.
 
-Ex.:
+Exemplo:
 
 ```text
 src/
 --app/
 ----router/
 ------router.ts
---pages/
-----home/
-------components/
-------HomePage.tsx
---shared/
-----components/
+--features/
+----featureName/
+------index.ts
 ```
 
-### Estados permitidos para campos não definidos
+---
 
-```text
-Pendente.
-```
+# Parte I — Governança documental
+
+## 5. Identificação do projeto
+
+Nome:
+
+Descrição curta:
+
+Tipo de projeto:
+
+Responsável principal:
+
+Repositório principal:
+
+Branch estável:
+
+Branch de integração:
+
+Estado atual:
+
+Versão atual:
+
+## 6. Revisões universais adotadas
+
+Revisão de `regrasDev.md`:
+
+Revisão de `regrasUxUi.md`:
+
+Aplicabilidade de `regrasUxUi.md`:
+
+Data da última sincronização:
+
+Método utilizado para confirmar integridade das cópias locais:
+
+## 7. Não conformidades conhecidas
+
+Para cada não conformidade, registrar:
+
+Regra afetada:
+
+Causa:
+
+Escopo:
+
+Impacto:
+
+Risco:
+
+Responsável:
+
+Medida compensatória:
+
+Tratamento planejado:
+
+Prazo ou condição para correção:
+
+Estado:
+
+Quando não existirem:
 
 ```text
 Não se aplica.
 ```
 
-# Parte I — Definição do projeto
+## 8. Exceções autorizadas pelas regras universais
 
-## 1. Identificação
+Para cada exceção autorizada, registrar:
 
-Nome do projeto:
+Regra que autoriza a exceção:
 
-Ex.: Gerador de Arquivos MAC
+Motivo:
 
-Descrição curta:
+Escopo mínimo:
 
-Ex.: Aplicação web para configurar, visualizar e gerar documentos em PDF a partir de modelos editáveis.
+Impacto:
 
-Tipo de projeto:
+Risco:
 
-Ex.: Aplicação web front-end.
+Medida compensatória:
 
-Responsável principal:
+Responsável:
 
-Ex.: Nome da pessoa, equipe ou organização responsável.
+Prazo ou condição de reavaliação:
 
-Repositório principal:
+Critério de encerramento:
 
-Ex.: `owner/repository`
+Quando não existirem:
 
-Revisão de `regrasDev.md` adotada:
+```text
+Não se aplica.
+```
 
-Ex.: SHA do commit ou versão da fonte canônica.
+---
 
-Revisão de `regrasUxUi.md` adotada:
+# Parte II — Definição do produto
 
-Ex.: SHA do commit, versão da fonte canônica ou `Não se aplica.`
+## 9. Objetivo
 
-Data da última sincronização das regras gerais:
+Problema principal resolvido:
 
-Ex.: 2026-08-04.
+Resultado principal entregue:
 
-Divergências ou exceções locais conhecidas:
-
-Ex.: Não se aplica.
-
-Estado atual do projeto:
-
-Ex.: Planejamento, protótipo, desenvolvimento, manutenção ou produção.
-
-## 2. Objetivo
-
-Problema principal que o projeto resolve:
-
-Ex.: Automatizar a criação de documentos padronizados que atualmente são preenchidos manualmente.
-
-Resultado principal entregue ao usuário:
-
-Ex.: Arquivo PDF gerado a partir de dados informados na interface.
-
-Usuários ou consumidores principais:
-
-Ex.:
-
-- operadores administrativos;
-- gestores;
-- sistemas integrados.
+Público ou consumidores:
 
 Critério principal de sucesso:
 
-Ex.: Permitir a criação correta de um documento completo sem edição manual posterior.
+Objetivo de longo prazo:
 
-## 3. Escopo funcional
+## 10. Escopo funcional
 
-Funcionalidades incluídas no projeto:
+Funcionalidades incluídas:
 
-Ex.:
-
-- criação de documentos;
-- edição de campos;
-- visualização prévia;
-- exportação em PDF.
-
-Funcionalidades explicitamente excluídas:
-
-Ex.:
-
-- assinatura digital;
-- envio automático por e-mail;
-- armazenamento em nuvem.
+Funcionalidades excluídas:
 
 Limites de responsabilidade do sistema:
 
-Ex.: O sistema gera o documento, mas não controla sua distribuição, assinatura ou arquivamento externo.
+Entidades e conceitos centrais:
 
-Entidades ou conceitos centrais do domínio:
+Casos de uso principais:
 
-Ex.:
+Casos de uso alternativos:
 
-- documento;
-- modelo;
-- campo;
-- arquivo gerado.
+Casos de uso de erro e recuperação:
 
-## 4. Requisitos e características do sistema
+## 11. Requisitos do sistema
 
-Plataformas em que o sistema deve funcionar:
-
-Ex.:
-
-- navegador desktop;
-- navegador mobile;
-- servidor Linux.
+Plataformas suportadas:
 
 Modo de funcionamento:
 
-Ex.: Aplicação online com execução principal no navegador.
+Funcionamento offline:
 
-Necessidade de funcionamento offline:
+Usuários simultâneos:
 
-Ex.: Não se aplica.
+Autenticação:
 
-Necessidade de múltiplos usuários simultâneos:
+Autorização:
 
-Ex.: Sim, sem compartilhamento de sessão entre usuários.
+Persistência:
 
-Necessidade de autenticação:
+Comunicação em tempo real:
 
-Ex.: Não se aplica.
+Serviços externos:
 
-Necessidade de autorização por papéis ou permissões:
+Importação de arquivos:
 
-Ex.: Não se aplica.
+Geração de arquivos:
 
-Necessidade de persistência de dados:
+Processamento assíncrono:
 
-Ex.: Armazenamento local das preferências do usuário.
+Responsividade:
 
-Necessidade de comunicação em tempo real:
+Acessibilidade:
 
-Ex.: Não se aplica.
-
-Necessidade de consumir serviços externos:
-
-Ex.: API de consulta de endereços por CEP.
-
-Necessidade de importar arquivos:
-
-Ex.: Importação de arquivos JSON com configurações de modelos.
-
-Necessidade de gerar arquivos:
-
-Ex.: Geração de arquivos PDF.
-
-Necessidade de processamento assíncrono:
-
-Ex.: Geração de arquivos executada sem bloquear a interface.
-
-Necessidade de responsividade:
-
-Ex.: A interface deve permanecer utilizável em telas a partir de 768 px.
-
-Necessidade de acessibilidade:
-
-Ex.: Navegação por teclado e associação correta entre labels e campos.
+Internacionalização:
 
 Volume esperado de dados:
 
-Ex.: Até 100 modelos locais e documentos com até 50 páginas.
+Desempenho relevante:
 
-Requisitos de desempenho relevantes:
+Compatibilidade relevante:
 
-Ex.: A visualização prévia deve refletir alterações em até 200 ms em condições normais.
-
-Requisitos de compatibilidade relevantes:
-
-Ex.: Compatibilidade com as duas versões estáveis mais recentes de Chrome, Edge e Firefox.
-
-## 5. Restrições e premissas
+## 12. Restrições e premissas
 
 Tecnologias obrigatórias:
 
-Ex.:
-
-- TypeScript;
-- React;
-- Vite.
-
 Tecnologias proibidas:
 
-Ex.:
-
-- dependências sem manutenção ativa;
-- bibliotecas que exijam serviço externo para gerar PDF.
-
-Ambientes obrigatoriamente suportados:
-
-Ex.:
-
-- desenvolvimento local em Windows;
-- build de produção em Linux.
+Ambientes suportados:
 
 Limites de infraestrutura:
 
-Ex.: O projeto deve funcionar sem servidor próprio.
+Compatibilidades preservadas:
 
-Compatibilidades que devem ser preservadas:
+Comportamentos que não podem mudar:
 
-Ex.:
-
-- formato atual dos arquivos exportados;
-- contratos públicos utilizados por integrações existentes.
-
-Funcionalidades existentes que não podem mudar de comportamento:
-
-Ex.:
-
-- geração dos PDFs;
-- visualização prévia dos modelos;
-- funcionamento das stores existentes.
+Contratos que não podem mudar:
 
 Restrições acadêmicas, comerciais, legais ou organizacionais:
 
-Ex.: O projeto deve utilizar apenas dependências com licenças compatíveis com uso comercial.
-
 Premissas adotadas:
 
-Ex.: O usuário utilizará um navegador moderno com JavaScript habilitado.
+---
 
-# Parte II — Decisões técnicas
+# Parte III — Natureza técnica e stack
 
-## 6. Natureza do sistema
+## 13. Natureza do sistema
 
 Modelo principal da aplicação:
 
-Ex.: Aplicação web de página única.
-
 Componentes técnicos existentes:
-
-Ex.:
-
-- front-end;
-- API;
-- banco de dados;
-- serviço assíncrono.
 
 Modelo de execução:
 
-Ex.: Interface executada no navegador e API executada em Node.js.
-
 Modelo de implantação:
 
-Ex.: Front-end estático e API em contêiner separado.
+Pontos de entrada:
 
-Pontos de entrada da aplicação:
+Interfaces públicas:
 
-Ex.:
-
-- `src/main.tsx`;
-- `src/server.ts`;
-- comando de linha `generate`.
-
-Interfaces públicas do sistema:
-
-Ex.:
-
-- interface gráfica;
-- API REST;
-- arquivos exportados.
-
-## 7. Stack tecnológica
-
-### 7.1 Linguagens
+## 14. Linguagens e plataformas
 
 Linguagem principal:
 
-Ex.: TypeScript.
+Versão mínima:
 
 Linguagens auxiliares:
 
-Ex.:
-
-- CSS;
-- SQL;
-- Python.
-
-Versão mínima da linguagem principal:
-
-Ex.: TypeScript 5.7.
-
-### 7.2 Runtime e plataforma
-
 Runtime principal:
-
-Ex.: Node.js.
 
 Versão mínima do runtime:
 
-Ex.: Node.js 22.
+Plataforma principal:
 
-Plataforma principal de execução:
+Sistemas operacionais de desenvolvimento:
 
-Ex.: Navegadores modernos.
+Sistemas operacionais de produção:
 
-Sistemas operacionais suportados para desenvolvimento:
+## 15. Front-end
 
-Ex.:
+Aplicabilidade:
 
-- Windows 11;
-- Linux.
-
-### 7.3 Front-end
-
-Framework ou biblioteca principal:
-
-Ex.: React 19.
+Framework ou biblioteca:
 
 Ferramenta de build:
 
-Ex.: Vite.
+Roteamento:
 
-Biblioteca de roteamento:
+Estado local ou global:
 
-Ex.: React Router.
+Estado remoto:
 
-Biblioteca de gerenciamento de estado local ou global:
+Formulários:
 
-Ex.: Zustand.
-
-Biblioteca para estado remoto:
-
-Ex.: TanStack Query.
-
-Biblioteca de formulários:
-
-Ex.: React Hook Form.
-
-Biblioteca de validação:
-
-Ex.: Zod.
+Validação:
 
 Estratégia de estilos:
 
-Ex.: CSS Modules.
+Biblioteca visual:
 
-Biblioteca de componentes visuais:
+Design system:
 
-Ex.: Não se aplica.
+## 16. Back-end
 
-### 7.4 Back-end
+Aplicabilidade:
 
-Framework principal:
-
-Ex.: Fastify.
+Framework:
 
 Servidor ou adaptador HTTP:
 
-Ex.: Servidor nativo do Fastify.
+Validação:
 
-Biblioteca de validação:
+Autenticação:
 
-Ex.: Zod.
+Documentação da API:
 
-Estratégia de autenticação:
+Processamento assíncrono:
 
-Ex.: JWT com access token e refresh token.
+## 17. Persistência
 
-Ferramenta de documentação da API:
+Aplicabilidade:
 
-Ex.: OpenAPI gerado pelo Fastify Swagger.
-
-### 7.5 Persistência
-
-Banco de dados principal:
-
-Ex.: MySQL 8.
+Banco de dados:
 
 ORM, query builder ou driver:
 
-Ex.: Prisma.
+Migrações:
 
-Ferramenta de migração:
-
-Ex.: Prisma Migrate.
-
-Solução de cache:
-
-Ex.: Redis.
+Cache:
 
 Armazenamento de arquivos:
 
-Ex.: Sistema de arquivos local.
+Estratégia de backup:
 
-### 7.6 Ferramentas de desenvolvimento
+## 18. Ferramentas de desenvolvimento
 
 Gerenciador de pacotes:
 
-Ex.: npm.
+Lint:
 
-Ferramenta de lint:
+Formatação:
 
-Ex.: ESLint.
+Tipagem:
 
-Ferramenta de formatação:
+Testes unitários:
 
-Ex.: Prettier.
+Testes de integração:
 
-Framework de testes unitários:
+Testes de interface:
 
-Ex.: Vitest.
+Testes de ponta a ponta:
 
-Framework de testes de interface:
+Containerização:
 
-Ex.: Testing Library.
+Integração contínua:
 
-Framework de testes de ponta a ponta:
+---
 
-Ex.: Playwright.
+# Parte IV — Arquitetura e árvore
 
-Ferramenta de containerização:
+## 19. Arquitetura adotada
 
-Ex.: Docker.
-
-Ferramenta de integração contínua:
-
-Ex.: GitHub Actions.
-
-## 8. Arquitetura adotada
-
-Modelo arquitetural principal:
-
-Ex.: Arquitetura modular organizada por features.
+Modelo arquitetural:
 
 Estratégia predominante de organização:
 
-Ex.: Organização por feature, com áreas compartilhadas e infraestrutura isolada.
-
-Camadas ou áreas arquiteturais existentes:
-
-Ex.:
-
-- aplicação;
-- features;
-- domínio;
-- infraestrutura;
-- compartilhado.
+Camadas ou áreas existentes:
 
 Responsabilidade de cada camada ou área:
 
-Ex.:
-
-- aplicação: composição, inicialização e roteamento;
-- features: funcionalidades de negócio;
-- domínio: regras e contratos independentes;
-- infraestrutura: integrações e detalhes técnicos;
-- compartilhado: elementos reutilizados por múltiplas features.
-
 Direção obrigatória das dependências:
 
-Ex.:
+Dependências proibidas:
 
-```text
-a aplicação
---pode depender de features
-----podem depender do domínio
-------pode depender de contratos compartilhados
+Critério para criar nova camada ou área:
 
-a infraestrutura
---pode implementar contratos do domínio
-```
+## 20. Módulos e fronteiras
 
-Dependências proibidas entre camadas ou áreas:
-
-Ex.:
-
-- domínio não depende da interface;
-- compartilhado não depende de features;
-- infraestrutura não contém regras de apresentação.
-
-Critério para criação de uma nova camada ou área arquitetural:
-
-Ex.: Somente quando existir uma responsabilidade independente que não possa ser acomodada sem violar as fronteiras existentes.
-
-## 9. Módulos e fronteiras
-
-Módulos principais do sistema:
-
-Ex.:
-
-- documentGeneration;
-- templateManagement;
-- fileImport;
-- applicationSettings.
+Módulos principais:
 
 Responsabilidade de cada módulo:
 
-Ex.:
-
-- `documentGeneration`: preparar e gerar documentos finais;
-- `templateManagement`: criar e editar modelos;
-- `fileImport`: validar e importar arquivos externos;
-- `applicationSettings`: manter preferências da aplicação.
-
 Dados pertencentes a cada módulo:
 
-Ex.:
+Interface pública de cada módulo:
 
-- modelos pertencem a `templateManagement`;
-- documentos gerados pertencem a `documentGeneration`;
-- preferências pertencem a `applicationSettings`.
+Dependências permitidas:
 
-Interfaces públicas de cada módulo:
+Dependências proibidas:
 
-Ex.:
+Critério para criar novo módulo:
 
-- cada módulo expõe apenas seu arquivo `index.ts`;
-- arquivos internos não podem ser importados externamente.
+## 21. Fluxos técnicos
 
-Dependências permitidas entre módulos:
+Fluxo de inicialização:
 
-Ex.:
+Fluxo principal de leitura:
 
-- `documentGeneration` pode consumir contratos públicos de `templateManagement`.
-
-Dependências proibidas entre módulos:
-
-Ex.:
-
-- `templateManagement` não pode acessar internals de `documentGeneration`.
-
-Critério para criação de um novo módulo:
-
-Ex.: Criar um novo módulo quando surgir uma capacidade de negócio com dados, regras e ciclo de evolução próprios.
-
-## 10. Fluxos técnicos principais
-
-Fluxo de inicialização da aplicação:
-
-Ex.:
-
-```text
-main.tsx
---App
-----providers
-------router
---------pages
-```
-
-Fluxo principal de leitura de dados:
-
-Ex.:
-
-```text
-Page
---Hook
-----Service
-------Repository
---------Database
-```
-
-Fluxo principal de escrita de dados:
-
-Ex.:
-
-```text
-Form
---UseCase
-----Service
-------Repository
---------Database
-```
+Fluxo principal de escrita:
 
 Fluxo de autenticação:
 
-Ex.:
-
-```text
-LoginPage
---authenticationService
-----authenticationApi
-------sessionStore
-```
-
 Fluxo de geração de arquivos:
-
-Ex.:
-
-```text
-Page
---documentGenerationUseCase
-----documentEngine
-------fileOutput
-```
 
 Fluxo de integração externa:
 
-Ex.:
-
-```text
-Feature
---Service
-----IntegrationClient
-------ExternalApi
-```
-
 Fluxo de tratamento de falhas:
 
-Ex.:
-
-```text
-Origem da falha
---erro técnico
-----erro de aplicação
-------mensagem segura para a interface
-```
-
-# Parte III — Organização do código
-
-## 11. Estrutura de diretórios
+## 22. Estrutura de diretórios
 
 Diretório raiz do código-fonte:
 
-Ex.: `src/`
-
-Estrutura principal de diretórios:
-
-Ex.:
+Árvore final:
 
 ```text
-src/
---app/
-----providers/
-----router/
---features/
-----documentGeneration/
-----templateManagement/
---shared/
-----components/
-----hooks/
-----types/
-----utils/
---infrastructure/
-----api/
-----storage/
---main.tsx
+Pendente.
 ```
 
 Diretórios obrigatórios:
 
-Ex.:
-
-- `src/app/`;
-- `src/features/`;
-- `src/shared/`.
-
 Diretórios opcionais:
-
-Ex.:
-
-- `src/infrastructure/`;
-- `src/domain/`;
-- `src/assets/`.
 
 Diretórios proibidos:
 
-Ex.:
+Critério para criar diretório:
 
-- diretórios genéricos duplicados na raiz e em `shared`;
-- diretórios sem responsabilidade definida.
+Critério para remover diretório:
 
-Critério para criar um novo diretório:
+## 23. Responsabilidade dos diretórios
 
-Ex.: Criar apenas quando houver um agrupamento coerente de arquivos com a mesma responsabilidade.
+Para cada diretório principal, registrar:
 
-## 12. Responsabilidade dos diretórios
-
-Responsabilidade de `app/`:
-
-Ex.: Compor a aplicação, registrar providers, configurar rotas e inicializar dependências.
-
-Conteúdo permitido em `app/`:
-
-Ex.:
-
-- providers;
-- roteamento;
-- layouts globais;
-- composição da aplicação.
-
-Conteúdo proibido em `app/`:
-
-Ex.:
-
-- regras específicas de uma feature;
-- componentes reutilizáveis de domínio;
-- acesso direto ao banco de dados.
-
-Responsabilidade de `features/`:
-
-Ex.: Concentrar cada capacidade funcional do sistema e seus elementos específicos.
-
-Conteúdo permitido em `features/`:
-
-Ex.:
-
-- componentes específicos;
-- hooks específicos;
-- serviços da feature;
-- tipos da feature;
-- stores da feature.
-
-Conteúdo proibido em `features/`:
-
-Ex.:
-
-- elementos reutilizáveis sem vínculo com uma feature;
-- implementações de infraestrutura compartilhada.
-
-Responsabilidade de `shared/`:
-
-Ex.: Concentrar apenas elementos estáveis e reutilizados por múltiplas features.
-
-Conteúdo permitido em `shared/`:
-
-Ex.:
-
-- componentes genéricos;
-- hooks genéricos;
-- utilitários puros;
-- tipos compartilhados;
-- contratos comuns.
-
-Conteúdo proibido em `shared/`:
-
-Ex.:
-
-- regras específicas de uma feature;
-- imports de módulos internos de features;
-- código movido preventivamente sem reutilização real.
-
-Responsabilidade de `infrastructure/`:
-
-Ex.: Implementar detalhes técnicos, integrações externas, persistência e adaptadores.
-
-Conteúdo permitido em `infrastructure/`:
-
-Ex.:
-
-- clientes HTTP;
-- repositories concretos;
-- armazenamento;
-- adaptadores externos.
-
-Conteúdo proibido em `infrastructure/`:
-
-Ex.:
-
-- componentes visuais;
-- regras de apresentação;
-- decisões de fluxo da interface.
-
-## 13. Organização interna dos módulos
-
-Estrutura padrão de uma feature:
-
-Ex.:
-
-```text
-featureName/
---components/
---hooks/
---services/
---store/
---types/
---utils/
---index.ts
-```
-
-Subdiretórios obrigatórios em uma feature:
-
-Ex.: Apenas `index.ts`; os demais devem existir somente quando necessários.
-
-Subdiretórios opcionais em uma feature:
-
-Ex.:
-
-- `components/`;
-- `hooks/`;
-- `services/`;
-- `store/`;
-- `types/`;
-- `utils/`.
-
-Critério para criar um subdiretório interno:
-
-Ex.: Criar quando existirem pelo menos dois arquivos da mesma responsabilidade ou quando a separação melhorar claramente a fronteira do módulo.
-
-Critério para dividir um arquivo:
-
-Ex.: Dividir quando o arquivo acumular responsabilidades independentes ou apresentar blocos que evoluem por motivos diferentes.
-
-Critério para mover código específico para uma área compartilhada:
-
-Ex.: Mover somente após reutilização real por pelo menos duas features e quando o elemento não depender do contexto interno de nenhuma delas.
-
-Interface pública padrão dos módulos:
-
-Ex.: O arquivo `index.ts` exporta apenas contratos e elementos permitidos para consumidores externos.
-
-## 14. Dependências e imports
-
-Aliases disponíveis:
-
-Ex.:
-
-- `@app/*` → `src/app/*`;
-- `@features/*` → `src/features/*`;
-- `@shared/*` → `src/shared/*`;
-- `@infrastructure/*` → `src/infrastructure/*`.
-
-Direção permitida dos imports:
-
-Ex.:
-
-```text
-app/
---features/
-----shared/
-
-features/
---shared/
-
-infrastructure/
---shared/
-```
-
-Imports proibidos:
-
-Ex.:
-
-- `shared` importando `features`;
-- uma feature importando internals de outra feature;
-- domínio importando interface ou infraestrutura concreta.
-
-Política para imports relativos:
-
-Ex.: Imports relativos podem ser usados dentro do mesmo módulo e não devem atravessar fronteiras arquiteturais.
-
-Política para reexports:
-
-Ex.: Reexports devem ocorrer apenas nas interfaces públicas dos módulos e não devem ocultar dependências circulares.
-
-Política para dependências circulares:
-
-Ex.: Dependências circulares são proibidas e devem ser eliminadas por extração de contratos ou reorganização das responsabilidades.
-
-## 15. Convenções específicas do projeto
-
-Padrão de nomes de arquivos:
-
-Ex.:
-
-- componentes: `PascalCase.tsx`;
-- hooks: `useNomeDoHook.ts`;
-- serviços: `nomeDoServicoService.ts`;
-- tipos: `nomeDoContexto.types.ts`.
-
-Padrão de nomes de diretórios:
-
-Ex.: `camelCase` para features e diretórios técnicos.
-
-Padrão de componentes:
-
-Ex.: Um componente principal por arquivo, com tipos auxiliares locais quando não forem reutilizados.
-
-Padrão de hooks:
-
-Ex.: Hooks encapsulam estado ou comportamento reutilizável e começam com `use`.
-
-Padrão de serviços:
-
-Ex.: Serviços representam operações de aplicação ou comunicação e não contêm detalhes visuais.
-
-Padrão de stores:
-
-Ex.: Cada store possui responsabilidade específica e expõe apenas estado e ações necessárias.
-
-Padrão de tipos e contratos:
-
-Ex.: Tipos locais permanecem próximos ao uso; contratos públicos ficam na interface pública do módulo.
-
-Padrão de arquivos de índice:
-
-Ex.: `index.ts` define a API pública do diretório e não deve reexportar automaticamente todos os arquivos internos.
-
-Padrão de testes:
-
-Ex.: Arquivos de teste permanecem próximos ao código testado com sufixo `.test.ts` ou `.test.tsx`.
-
-# Parte IV — Regras de implementação
-
-## 16. Regras gerais de implementação
-
-Critério para considerar uma funcionalidade pertencente ao projeto:
-
-Ex.: A funcionalidade deve estar dentro do escopo definido e possuir módulo responsável identificado.
-
-Critério para alterar uma funcionalidade existente:
-
-Ex.: A alteração deve preservar contratos, restrições e comportamentos marcados como obrigatórios.
-
-Critério para criar uma nova abstração:
-
-Ex.: Criar somente quando houver responsabilidade estável, reutilização real ou necessidade de isolar uma dependência variável.
-
-Critério para reutilizar código existente:
-
-Ex.: Reutilizar quando o contrato e a responsabilidade forem equivalentes, sem introduzir condicionais específicas de consumidores distintos.
-
-Critério para duplicação temporária:
-
-Ex.: Permitida apenas quando uma abstração comum criaria acoplamento incorreto; a decisão deve ser registrada no README.
-
-Critério para criação de código compartilhado:
-
-Ex.: O código deve ser reutilizado por múltiplos módulos e não pode depender de um contexto específico.
-
-Comportamentos que toda nova implementação deve preservar:
-
-Ex.:
-
-- contratos públicos;
-- formatos de arquivos;
-- estado persistido;
-- acessibilidade existente;
-- fluxo atual de geração de documentos.
-
-## 17. Front-end
-
-Aplicabilidade da seção:
-
-Ex.: Aplicável quando o projeto possuir interface gráfica.
-
-### 17.1 Páginas e rotas
-
-Diretório das páginas:
-
-Ex.: `src/pages/`
-
-Responsabilidade das páginas:
-
-Ex.: Compor a interface de uma rota e coordenar componentes e hooks da funcionalidade.
-
-Conteúdo permitido nas páginas:
-
-Ex.:
-
-- composição visual;
-- leitura de parâmetros de rota;
-- acionamento de hooks e casos de uso.
-
-Conteúdo proibido nas páginas:
-
-Ex.:
-
-- acesso direto a APIs;
-- regras de negócio complexas;
-- implementação de persistência.
-
-Local de definição das rotas:
-
-Ex.: `src/app/router/`
-
-Estratégia de proteção de rotas:
-
-Ex.: Guards declarativos baseados no estado de autenticação.
-
-Estratégia para parâmetros de rota:
-
-Ex.: Parâmetros devem ser validados antes de serem utilizados pela feature.
-
-### 17.2 Componentes
-
-Diretório dos componentes específicos de uma feature:
-
-Ex.: `src/features/nomeDaFeature/components/`
-
-Diretório dos componentes compartilhados:
-
-Ex.: `src/shared/components/`
-
-Critério para considerar um componente compartilhado:
-
-Ex.: Ser reutilizado por múltiplas features sem conhecer regras específicas de nenhuma delas.
-
-Responsabilidade permitida nos componentes:
-
-Ex.: Apresentação, interação local e delegação de eventos.
-
-Responsabilidade proibida nos componentes:
-
-Ex.: Acesso direto a APIs, banco de dados ou regras de negócio independentes da interface.
-
-Critério para divisão de componentes:
-
-Ex.: Dividir quando partes possuírem responsabilidade, estado, reutilização ou ciclo de alteração próprios.
-
-Política de propriedades:
-
-Ex.: Props devem representar contratos explícitos, mínimos e orientados ao comportamento do componente.
-
-### 17.3 Estado
-
-Critério para utilizar estado local:
-
-Ex.: Quando o estado pertencer a um único componente ou à sua subárvore imediata.
-
-Critério para utilizar estado da feature:
-
-Ex.: Quando múltiplos elementos da mesma feature precisarem compartilhar estado persistente durante o fluxo.
-
-Critério para utilizar estado global:
-
-Ex.: Somente quando múltiplas features independentes precisarem acessar ou alterar o mesmo estado.
-
-Critério para utilizar estado remoto:
-
-Ex.: Quando os dados tiverem origem externa e exigirem cache, sincronização ou revalidação.
-
-Diretório das stores globais:
-
-Ex.: `src/shared/stores/`
-
-Diretório das stores específicas:
-
-Ex.: `src/features/nomeDaFeature/store/`
-
-Critério para criar uma nova store:
-
-Ex.: Criar apenas quando o estado não puder permanecer local e possuir responsabilidade claramente delimitada.
-
-Conteúdo proibido nas stores:
-
-Ex.:
-
-- componentes;
-- chamadas diretas de apresentação;
-- dados derivados que possam ser calculados por seletores;
-- múltiplos domínios sem relação.
-
-Estratégia de persistência do estado:
-
-Ex.: Persistir apenas preferências necessárias entre sessões usando adaptador de armazenamento definido.
-
-### 17.4 Formulários e validação
-
-Biblioteca padrão para formulários:
-
-Ex.: React Hook Form.
-
-Biblioteca padrão para validação:
-
-Ex.: Zod.
-
-Local dos schemas de validação:
-
-Ex.: Próximos à feature ou formulário que utiliza o contrato.
-
-Momento da validação no cliente:
-
-Ex.: Validar na alteração para feedback simples e no envio para validação completa.
-
-Tratamento de erros de formulário:
-
-Ex.: Exibir mensagens próximas aos campos e manter um resumo apenas quando necessário.
-
-Conversão entre valores da interface e domínio:
-
-Ex.: Adaptadores devem converter strings de formulário em tipos de domínio antes do caso de uso.
-
-### 17.5 Estilos e interface
-
-Estratégia principal de estilos:
-
-Ex.: CSS Modules com tokens globais.
-
-Local dos estilos globais:
-
-Ex.: `src/app/styles/`
-
-Local dos estilos específicos:
-
-Ex.: Próximos aos componentes que utilizam os estilos.
-
-Estratégia para tokens visuais:
-
-Ex.: Variáveis CSS centralizadas para cores, tipografia, espaçamento e bordas.
-
-Critério para criar um componente visual compartilhado:
-
-Ex.: Criar após recorrência real de estrutura e comportamento visual em múltiplas features.
-
-Regras de responsividade:
-
-Ex.: Layout fluido com pontos de quebra definidos nos tokens do projeto.
-
-Regras de acessibilidade específicas:
-
-Ex.:
-
-- todos os controles possuem nome acessível;
-- estados não são comunicados apenas por cor;
-- foco visível deve ser preservado.
-
-Nível de validação UX/UI exigido:
-
-Ex.: Operacional, com validação estrutural e automatizada concluídas.
-
-Contextos obrigatórios para validação UX/UI:
-
-Ex.: Chrome e Firefox em desktop, navegação por teclado e viewport mobile definido.
-
-## 18. Back-end
-
-Aplicabilidade da seção:
-
-Ex.: Aplicável quando o projeto possuir API, servidor ou processamento no back-end.
-
-### 18.1 Transporte e API
-
-Diretório das rotas:
-
-Ex.: `src/interfaces/http/routes/`
-
-Responsabilidade das rotas:
-
-Ex.: Declarar método, caminho, middleware e handler responsável.
-
-Diretório dos controllers ou handlers:
-
-Ex.: `src/interfaces/http/controllers/`
-
-Responsabilidade dos controllers ou handlers:
-
-Ex.: Converter transporte em entrada de aplicação e resposta de aplicação em resposta HTTP.
-
-Formato padrão de sucesso:
-
-Ex.:
-
-```text
-{
-  "data": {},
-  "meta": {}
-}
-```
-
-Formato padrão de erro:
-
-Ex.:
-
-```text
-{
-  "error": {
-    "code": "RESOURCE_NOT_FOUND",
-    "message": "Recurso não encontrado"
-  }
-}
-```
-
-Estratégia de versionamento da API:
-
-Ex.: Prefixo `/api/v1`.
-
-Política de paginação:
-
-Ex.: Paginação por cursor para coleções potencialmente grandes.
-
-Política de filtros e ordenação:
-
-Ex.: Parâmetros explícitos e validados por schema.
-
-### 18.2 Aplicação
-
-Diretório dos casos de uso:
-
-Ex.: `src/application/useCases/`
-
-Responsabilidade dos casos de uso:
-
-Ex.: Coordenar regras, contratos e efeitos necessários para concluir uma ação do sistema.
-
-Responsabilidade dos serviços de aplicação:
-
-Ex.: Encapsular operações reutilizadas por múltiplos casos de uso sem assumir detalhes de transporte.
-
-Estratégia de transação:
-
-Ex.: O caso de uso define o limite transacional e utiliza uma abstração de unidade de trabalho.
-
-Estratégia para idempotência:
-
-Ex.: Operações sensíveis aceitam uma chave de idempotência persistida.
-
-Estratégia para concorrência:
-
-Ex.: Atualizações críticas utilizam controle otimista por versão.
-
-### 18.3 Domínio
-
-Diretório do domínio:
-
-Ex.: `src/domain/`
-
-Entidades principais:
-
-Ex.:
-
-- User;
-- Document;
-- Template.
-
-Objetos de valor principais:
-
-Ex.:
-
-- Email;
-- DocumentId;
-- PageSize.
-
-Invariantes obrigatórias:
-
-Ex.: Um documento deve possuir pelo menos uma página válida antes de ser gerado.
-
-Local das regras de negócio:
-
-Ex.: Entidades, objetos de valor e serviços de domínio.
-
-Dependências permitidas no domínio:
-
-Ex.: Tipos da linguagem e contratos abstratos definidos pelo próprio domínio.
-
-Dependências proibidas no domínio:
-
-Ex.:
-
-- framework HTTP;
-- ORM;
-- componentes de interface;
-- clientes externos concretos.
-
-### 18.4 Infraestrutura
-
-Diretório dos repositories concretos:
-
-Ex.: `src/infrastructure/database/repositories/`
-
-Diretório dos clientes externos:
-
-Ex.: `src/infrastructure/integrations/`
-
-Diretório dos adaptadores de armazenamento:
-
-Ex.: `src/infrastructure/storage/`
-
-Responsabilidade da infraestrutura:
-
-Ex.: Implementar contratos definidos pelas camadas internas usando tecnologias concretas.
-
-Critério para substituir uma implementação de infraestrutura:
-
-Ex.: A substituição deve preservar o contrato interno e os comportamentos observáveis definidos.
-
-## 19. Persistência
-
-Aplicabilidade da seção:
-
-Ex.: Aplicável quando o projeto armazenar dados além do ciclo atual de execução.
-
-Responsabilidade da camada de persistência:
-
-Ex.: Armazenar e recuperar dados sem expor detalhes do banco às camadas consumidoras.
-
-Diretório dos schemas ou modelos de persistência:
-
-Ex.: `src/infrastructure/database/schema/`
-
-Diretório das migrações:
-
-Ex.: `database/migrations/`
-
-Diretório das seeds:
-
-Ex.: `database/seeds/`
-
-Camadas autorizadas a acessar o banco diretamente:
-
-Ex.: Somente repositories e ferramentas de migração.
-
-Camadas proibidas de acessar o banco diretamente:
-
-Ex.:
-
-- controllers;
-- componentes;
-- casos de uso;
-- entidades de domínio.
-
-Estratégia de integridade dos dados:
-
-Ex.: Restrições no banco complementadas por validações e invariantes no domínio.
-
-Estratégia de migração:
-
-Ex.: Migrações incrementais, versionadas e compatíveis com rollback quando tecnicamente possível.
-
-Estratégia de backup antes de migrações críticas:
-
-Ex.: Backup obrigatório antes de alterações destrutivas em produção.
-
-Estratégia para dados de teste:
-
-Ex.: Factories isoladas e banco descartável por suíte de integração.
-
-## 20. Integrações externas
-
-Integrações existentes:
-
-Ex.:
-
-- serviço de CEP;
-- armazenamento de arquivos;
-- provedor de e-mail.
-
-Para cada integração, preencher os campos abaixo.
-
-Nome da integração:
-
-Ex.: ViaCEP.
-
-Finalidade da integração:
-
-Ex.: Consultar endereço a partir de um CEP informado.
-
-Módulo responsável:
-
-Ex.: `addressLookup`.
-
-Cliente ou adaptador utilizado:
-
-Ex.: `ViaCepClient`.
-
-Diretório da implementação:
-
-Ex.: `src/infrastructure/integrations/viaCep/`
-
-Contrato interno exposto:
-
-Ex.: `AddressLookupGateway`.
-
-Estratégia de autenticação:
-
-Ex.: Não se aplica.
-
-Timeout definido:
-
-Ex.: 5 segundos.
-
-Política de repetição:
-
-Ex.: Até duas novas tentativas para falhas transitórias.
-
-Política de espera entre tentativas:
-
-Ex.: Backoff exponencial com limite máximo de 2 segundos.
-
-Estratégia de fallback:
-
-Ex.: Permitir preenchimento manual quando a consulta falhar.
-
-Tratamento de erros:
-
-Ex.: Converter falhas externas em erros internos estáveis sem expor detalhes do provedor.
-
-Limites de uso:
-
-Ex.: Até 100 requisições por minuto por instância.
-
-## 21. Autenticação e autorização
-
-Aplicabilidade da seção:
-
-Ex.: Aplicável quando o sistema identificar usuários ou restringir ações.
-
-Modelo de autenticação:
-
-Ex.: E-mail e senha com sessão baseada em tokens.
-
-Modelo de autorização:
-
-Ex.: Controle de acesso baseado em papéis e permissões.
-
-Papéis existentes:
-
-Ex.:
-
-- administrator;
-- editor;
-- viewer.
-
-Permissões existentes:
-
-Ex.:
-
-- `document:create`;
-- `document:update`;
-- `document:delete`.
-
-Local da validação de autenticação:
-
-Ex.: Middleware HTTP e serviço de sessão.
-
-Local da validação de autorização:
-
-Ex.: Casos de uso ou política central antes da execução da ação.
-
-Estratégia de armazenamento de sessão ou token:
-
-Ex.: Refresh token em cookie seguro e access token mantido em memória.
-
-Tempo de expiração:
-
-Ex.:
-
-- access token: 15 minutos;
-- refresh token: 7 dias.
-
-Estratégia de revogação:
-
-Ex.: Refresh tokens versionados e revogáveis no servidor.
-
-Regras para rotas protegidas:
-
-Ex.: Rotas privadas exigem sessão válida e permissões explícitas quando aplicável.
-
-## 22. Processamentos especializados
-
-Processamentos especializados existentes:
-
-Ex.:
-
-- geração de PDF;
-- importação de TCX;
-- processamento de imagens;
-- geração de relatórios;
-- inteligência artificial.
-
-Para cada processamento especializado, preencher os campos abaixo.
-
-Nome do processamento:
-
-Ex.: Geração de PDF.
+Caminho:
 
 Responsabilidade:
 
-Ex.: Transformar um modelo e seus dados em um arquivo PDF final.
+Conteúdo permitido:
 
-Módulo responsável:
+Conteúdo proibido:
 
-Ex.: `documentGeneration`.
-
-Entrada esperada:
-
-Ex.: Modelo validado e dados normalizados.
-
-Saída esperada:
-
-Ex.: Arquivo PDF em memória ou stream.
-
-Contrato interno:
-
-Ex.: `DocumentGenerator`.
+Consumidores:
 
 Dependências permitidas:
 
-Ex.: Engine de PDF e contratos públicos de modelos.
+## 24. Organização interna dos módulos
 
-Dependências proibidas:
+Estrutura padrão, quando existir:
 
-Ex.: Componentes visuais e estado direto da interface.
+Subdiretórios obrigatórios:
 
-Restrições obrigatórias:
+Subdiretórios opcionais:
 
-Ex.:
+Critério para criar subdiretório:
 
-- preservar dimensões dos templates;
-- preservar quebra de páginas;
-- preservar fontes incorporadas.
+Critério para dividir arquivo:
 
-Comportamentos existentes que devem ser preservados:
+Critério para promover código a compartilhado:
 
-Ex.:
+Interface pública padrão:
 
-- conteúdo do arquivo;
-- ordem das páginas;
-- visualização prévia equivalente ao documento final.
+## 25. Imports, exports e aliases
 
-# Parte V — Configuração, qualidade e entrega
+Aliases disponíveis:
 
-## 23. Configuração e ambientes
+Direção permitida dos imports:
 
-Ambientes existentes:
+Imports proibidos:
 
-Ex.:
+Política para imports relativos:
 
-- development;
-- test;
-- staging;
-- production.
+Política para reexports:
 
-Diretório ou módulo de configuração:
+Política para dependências circulares:
 
-Ex.: `src/config/`
-
-Variáveis de ambiente obrigatórias:
-
-Ex.:
-
-- `DATABASE_URL`;
-- `API_BASE_URL`;
-- `SESSION_SECRET`.
-
-Variáveis de ambiente opcionais:
-
-Ex.:
-
-- `LOG_LEVEL`;
-- `PORT`.
-
-Valores padrão permitidos:
-
-Ex.:
-
-- `PORT=3000`;
-- `LOG_LEVEL=info`.
-
-Estratégia de validação da configuração:
-
-Ex.: Validar todas as variáveis no início da aplicação com schema tipado.
-
-Arquivo de exemplo das variáveis:
-
-Ex.: `.env.example`
-
-Dados que nunca podem ser versionados:
-
-Ex.:
-
-- segredos;
-- tokens;
-- credenciais;
-- dados pessoais reais.
-
-Diferenças obrigatórias entre ambientes:
-
-Ex.: Produção utiliza logs estruturados e não exibe detalhes internos de erro.
-
-## 24. Erros, logs e observabilidade
-
-Modelo interno de erros:
-
-Ex.: Classes ou objetos tipados separados por categoria de domínio, aplicação e infraestrutura.
-
-Categorias de erro existentes:
-
-Ex.:
-
-- validationError;
-- notFoundError;
-- conflictError;
-- externalServiceError;
-- internalError.
-
-Local de conversão de erros técnicos:
-
-Ex.: Nas fronteiras entre infraestrutura, aplicação e transporte.
-
-Formato de erro exposto externamente:
-
-Ex.: Código estável, mensagem segura e identificador de correlação.
-
-Biblioteca de logs:
-
-Ex.: Pino.
-
-Formato dos logs:
-
-Ex.: JSON estruturado.
-
-Campos obrigatórios nos logs:
-
-Ex.:
-
-- timestamp;
-- level;
-- message;
-- correlationId;
-- operation.
-
-Dados proibidos nos logs:
-
-Ex.:
-
-- senhas;
-- tokens;
-- documentos pessoais completos;
-- conteúdo sensível de arquivos.
-
-Estratégia de correlação:
-
-Ex.: Um `correlationId` é criado ou propagado por requisição e operação assíncrona.
-
-Métricas obrigatórias:
-
-Ex.:
-
-- duração das operações críticas;
-- taxa de erros;
-- quantidade de arquivos gerados.
-
-## 25. Testes
-
-Estratégia geral de testes:
-
-Ex.: Testes unitários para regras, integração para fronteiras e ponta a ponta para fluxos críticos.
-
-Diretório ou localização dos testes unitários:
-
-Ex.: Próximos aos arquivos testados.
-
-Diretório dos testes de integração:
-
-Ex.: `tests/integration/`
-
-Diretório dos testes de ponta a ponta:
-
-Ex.: `tests/e2e/`
-
-Partes que exigem testes unitários:
-
-Ex.:
-
-- regras de negócio;
-- validações;
-- transformações;
-- seletores;
-- utilitários não triviais.
-
-Partes que exigem testes de integração:
-
-Ex.:
-
-- repositories;
-- clientes externos;
-- persistência;
-- endpoints.
-
-Fluxos que exigem testes de ponta a ponta:
-
-Ex.:
-
-- criação de documento;
-- visualização prévia;
-- geração do PDF.
-
-Estratégia de mocks:
-
-Ex.: Mockar fronteiras externas e evitar mocks de detalhes internos da unidade testada.
-
-Estratégia para banco de testes:
-
-Ex.: Banco isolado, descartável e migrado antes da suíte.
-
-Estratégia para fixtures e factories:
-
-Ex.: Factories reutilizáveis com valores válidos por padrão e sobrescritas explícitas.
-
-Cobertura mínima obrigatória:
-
-Ex.: Não se aplica; fluxos e regras críticas devem possuir cobertura explícita.
-
-Política de permanência dos testes:
-
-Ex.: Testes que protegem comportamento estável permanecem versionados junto ao código.
-
-Critério para remoção de testes temporários:
-
-Ex.: Remover somente quando verificarem migração concluída e não protegerem comportamento permanente.
-
-Política para testes privados:
-
-Ex.: Permitidos apenas quando expuserem dados ou contratos sensíveis, com validação vinculada ao projeto.
-
-## 26. Build, validação e entrega
-
-Branch estável:
-
-Ex.: `main`.
-
-Branch de integração:
-
-Ex.: `develop` ou `Não se aplica.`
-
-Estratégia para branches de trabalho:
-
-Ex.: Uma branch por alteração, criada a partir da branch de integração.
-
-Política para alterações diretas na branch estável:
-
-Ex.: Proibidas, salvo correção emergencial explicitamente autorizada.
-
-Estratégia de integração:
-
-Ex.: Pull request com squash após aprovação das validações.
-
-Política para atualização forçada de branches:
-
-Ex.: Proibida nas branches estável e de integração.
-
-Comando de desenvolvimento:
-
-Ex.: `npm run dev`
-
-Comando de build:
-
-Ex.: `npm run build`
-
-Comando de lint:
-
-Ex.: `npm run lint`
-
-Comando de verificação de tipos:
-
-Ex.: `npm run typecheck`
-
-Comando de testes unitários:
-
-Ex.: `npm run test`
-
-Comando de testes de integração:
-
-Ex.: `npm run test:integration`
-
-Comando de testes de ponta a ponta:
-
-Ex.: `npm run test:e2e`
-
-Comando de formatação:
-
-Ex.: `npm run format`
-
-Artefato gerado pelo build:
-
-Ex.: Diretório `dist/`.
-
-Estratégia de empacotamento:
-
-Ex.: Build estático produzido pelo Vite.
-
-Estratégia de deploy:
-
-Ex.: Publicação automática após aprovação na branch principal.
-
-Critério para promoção entre branches:
-
-Ex.: Diff revisado, validações aprovadas, documentação atualizada e ausência de resíduos temporários.
-
-Relatórios permanentes de conformidade:
-
-Ex.: Arquivos versionados que devem ser atualizados quando suas conclusões forem afetadas.
-
-Destino das evidências temporárias:
-
-Ex.: Logs e artefatos da integração contínua.
-
-Política para workflows, scripts e arquivos temporários:
-
-Ex.: Remover após a finalidade ser concluída e antes da promoção para a branch estável.
-
-Validações obrigatórias antes de concluir uma alteração:
-
-Ex.:
-
-- lint;
-- tipagem;
-- testes afetados;
-- build.
-
-Critério técnico para considerar uma implementação concluída:
-
-Ex.: Código integrado, validações aprovadas, contratos preservados e regras deste documento atendidas.
-
-# Parte VI — Controle arquitetural
-
-## 27. Restrições obrigatórias
-
-Arquivos, módulos ou áreas que não podem ser removidos:
-
-Ex.:
-
-- engine atual de geração de PDF;
-- contratos públicos de templates.
-
-Tecnologias que não podem ser substituídas sem decisão explícita:
-
-Ex.:
-
-- Zustand;
-- biblioteca de geração de PDF;
-- formato de persistência local.
-
-Comportamentos que não podem ser alterados:
-
-Ex.:
-
-- resultado visual dos PDFs;
-- fluxo da visualização prévia;
-- formato dos arquivos importados e exportados.
-
-Contratos que devem permanecer compatíveis:
-
-Ex.:
-
-- propriedades públicas dos templates;
-- formato dos dados persistidos;
-- respostas públicas da API.
-
-Acessos diretos proibidos:
-
-Ex.:
-
-- componentes acessando APIs;
-- casos de uso acessando banco;
-- features importando internals de outras features.
-
-Duplicações arquiteturais proibidas:
-
-Ex.:
-
-- duas pastas compartilhadas com a mesma responsabilidade;
-- múltiplos clientes para a mesma integração sem contrato comum;
-- stores concorrentes para o mesmo estado.
-
-## 28. Decisões pendentes
-
-Para cada decisão ainda não tomada, preencher os campos abaixo.
-
-Decisão pendente:
-
-Ex.: Escolha da estratégia de autenticação.
-
-Motivo da pendência:
-
-Ex.: O modelo de usuários ainda não foi definido.
-
-Impacto da decisão:
-
-Ex.: Afeta rotas, persistência, segurança e estrutura do back-end.
-
-Opções consideradas:
-
-Ex.:
-
-- sessão no servidor;
-- JWT;
-- provedor externo.
-
-Regra temporária até a decisão:
-
-Ex.: Não implementar autenticação nem criar abstrações provisórias.
-
-Seções afetadas quando a decisão for concluída:
-
-Ex.:
-
-- Stack tecnológica;
-- Autenticação e autorização;
-- Estrutura de diretórios.
-
-## 29. Checklist para novas implementações
-
-- [ ] A implementação pertence ao escopo definido.
-- [ ] O módulo responsável foi identificado.
-- [ ] As decisões pendentes relacionadas foram verificadas.
-- [ ] A revisão das regras gerais adotadas está identificada.
-- [ ] A implementação segue a arquitetura adotada.
-- [ ] A estrutura de diretórios foi respeitada.
-- [ ] A responsabilidade de cada arquivo está clara.
-- [ ] A direção permitida dos imports foi respeitada.
-- [ ] Nenhum módulo interno foi acessado fora de sua interface pública.
-- [ ] Contratos existentes foram reutilizados quando aplicáveis.
-- [ ] Nenhum estado global foi criado sem necessidade comprovada.
-- [ ] Nenhum código foi movido para `shared` sem reutilização real.
-- [ ] Nenhuma abstração foi criada preventivamente.
-- [ ] As restrições obrigatórias foram preservadas.
-- [ ] Os comportamentos existentes protegidos permanecem inalterados.
-- [ ] Erros são tratados na fronteira adequada.
-- [ ] Logs não expõem dados sensíveis.
-- [ ] Testes necessários foram adicionados ou atualizados.
-- [ ] Testes permanentes não foram removidos sem justificativa.
-- [ ] A política de branches e integração foi respeitada.
-- [ ] Artefatos e automações temporárias foram removidos.
-- [ ] Resultados declarados como aprovados possuem evidência verificável.
-- [ ] O nível de validação UX/UI exigido foi alcançado quando aplicável.
-- [ ] Lint foi executado com sucesso.
-- [ ] Verificação de tipos foi executada com sucesso.
-- [ ] Testes afetados foram executados com sucesso.
-- [ ] Build foi executado com sucesso.
+Política para interfaces públicas:
 
 ---
 
-## Apêndice normativo — Relações entre decisões do projeto
+# Parte V — Convenções de implementação
 
-Este apêndice torna explícitas relações anteriormente implícitas ou necessárias. Todos os itens abaixo devem ser preenchidos e aplicados junto às decisões correspondentes deste documento. Os identificadores preservam a origem da relação para auditoria: `I` indica relação anteriormente implícita e `N` indica relação necessária adicionada nesta revisão.
+## 26. Nomenclatura
 
-### Dependências
+Padrão de nomes de arquivos:
 
-- [DEP-I-01] A arquitetura adotada deve ser definida somente depois de objetivo, escopo, requisitos, restrições, premissas e natureza do sistema estarem suficientemente definidos.
-- [DEP-I-02] Os módulos e suas fronteiras devem ser definidos somente depois da arquitetura, das responsabilidades e da direção de dependências estarem estabelecidas.
-- [DEP-I-03] A árvore concreta de diretórios deve ser definida a partir da arquitetura, dos módulos, dos fluxos técnicos e da direção permitida das dependências.
-- [DEP-I-04] Regras de imports e reexports devem ser definidas a partir das fronteiras, interfaces públicas e dependências permitidas entre módulos.
-- [DEP-I-05] A escolha da tecnologia de persistência deve depender da existência, propriedade, volume, ciclo de vida, integridade e requisitos de recuperação dos dados.
-- [DEP-I-06] A escolha entre estado local, de feature, global ou remoto deve depender da propriedade, dos consumidores, da origem, da duração e da necessidade de sincronização do estado.
-- [DEP-I-09] A implementação dos testes deve ocorrer depois que comportamentos observáveis, contratos, casos de uso, conexões, riscos e critérios de sucesso estiverem definidos.
-- [DEP-N-03] Uma decisão pendente bloqueia somente os ramos que dependem dela; atividades independentes podem prosseguir desde que não antecipem a decisão.
-- [DEP-N-04] O grafo de casos de uso deve estar formalizado antes de qualquer declaração de cobertura integral de testes.
-- [DEP-N-07] A documentação afetada deve ser identificada antes da implementação e atualizada antes da conclusão ou promoção da alteração.
-- [DEP-N-08] As revisões canônicas de `regrasDev.md`, `regrasProjeto.md` e `regrasUxUi.md` adotadas pelo projeto devem estar identificadas antes de declarar conformidade normativa.
+Padrão de nomes de diretórios:
 
-### Precedências
+Vocabulário do domínio:
 
-- [PRE-N-06] Quando não for possível determinar a precedência entre regras aplicáveis, a implementação do escopo afetado deve permanecer bloqueada até que a decisão seja registrada explicitamente neste documento.
+Abreviações permitidas:
 
-### Exceções
+Nomes proibidos ou reservados:
 
-- [EXC-I-04] Uma compatibilidade existente somente pode ser alterada mediante decisão explícita que autorize a quebra, identifique consumidores afetados e defina estratégia de migração.
-- [EXC-N-01] Toda exceção deve registrar a regra afetada, motivo, escopo, responsável, data, impacto, riscos, medidas compensatórias e critério de encerramento.
-- [EXC-N-02] Toda exceção temporária deve possuir prazo ou condição objetiva de revisão e remoção.
-- [EXC-N-05] O estado `Não se aplica.` exige justificativa verificável baseada na natureza e no escopo do projeto, e não apenas na ausência atual de implementação.
-- [EXC-N-08] Exceções relacionadas à segurança exigem análise de risco, autorização explícita e medida compensatória proporcional.
-- [EXC-N-09] Exceções que afetem contratos públicos, formatos persistidos ou comportamento observável exigem autorização explícita do responsável pelo projeto e plano de compatibilidade ou migração.
-- [EXC-N-11] A conformidade integral só pode ser declarada quando não existirem exceções incompatíveis com o nível de conformidade pretendido.
-- [EXC-N-12] Exceções encerradas devem ser removidas da implementação e da documentação normativa ativa, preservando apenas o histórico da decisão no local apropriado.
+## 27. Componentes, funções e arquivos
+
+Padrão de componentes:
+
+Critério para dividir componente:
+
+Padrão de funções:
+
+Critério para extrair função:
+
+Padrão de arquivos:
+
+Critério para criar arquivo:
+
+Critério para manter conteúdo no mesmo arquivo:
+
+## 28. Abstrações e compartilhamento
+
+Critério concreto para criar abstração:
+
+Critério para reutilizar código:
+
+Critério para duplicação temporária:
+
+Critério para código compartilhado:
+
+Critério para remover abstração:
+
+Critério para retornar código compartilhado ao contexto específico:
+
+## 29. Tipos e contratos
+
+Padrão de tipos locais:
+
+Padrão de contratos públicos:
+
+Localização dos contratos:
+
+Política para dados externos:
+
+Política para estados inválidos:
+
+Política de compatibilidade:
+
+## 30. Estado
+
+Critério para estado local:
+
+Critério para estado de módulo ou feature:
+
+Critério para estado global:
+
+Critério para estado remoto:
+
+Fonte canônica de cada estado compartilhado:
+
+Estratégia de persistência:
+
+Diretório das stores:
+
+Critério para criar store:
+
+Conteúdo proibido nas stores:
+
+## 31. Erros e observabilidade
+
+Modelo interno de erros:
+
+Categorias de erro:
+
+Fronteira de conversão:
+
+Formato externo:
+
+Biblioteca de logs:
+
+Formato dos logs:
+
+Campos obrigatórios:
+
+Dados proibidos:
+
+Correlação:
+
+Métricas:
+
+---
+
+# Parte VI — Concretização de UX e UI
+
+## 32. Aplicabilidade e contexto
+
+Aplicabilidade de `regrasUxUi.md`:
+
+Público principal:
+
+Frequência de uso:
+
+Contextos operacionais:
+
+Dispositivos suportados:
+
+Métodos de entrada suportados:
+
+Tecnologias assistivas consideradas:
+
+## 33. Arquitetura da informação
+
+Estrutura principal de navegação:
+
+Vocabulário adotado:
+
+Conteúdo essencial por contexto:
+
+Conteúdo secundário por contexto:
+
+Estratégia de divulgação progressiva:
+
+Critério para criar página, etapa, seção ou grupo:
+
+## 34. Densidade
+
+Densidades adotadas:
+
+Exemplo de preenchimento:
+
+```text
+- compacta em tabelas e painéis operacionais;
+- normal em formulários;
+- ampliada em onboarding e avisos críticos.
+```
+
+Critério para escolher densidade:
+
+Áreas em que compactação é permitida:
+
+Áreas em que compactação é restrita:
+
+Dimensões mínimas de interação:
+
+## 35. Responsividade
+
+Estratégia global:
+
+Estratégia local:
+
+Mecanismo para condições de viewport:
+
+Mecanismo para condições do contêiner:
+
+Mecanismo para preferências do usuário:
+
+Comportamentos fluidos adotados:
+
+Breakpoints ou limiares:
+
+Para cada breakpoint, registrar:
+
+Valor:
+
+Mudança observável que o justifica:
+
+Componentes ou fluxos afetados:
+
+## 36. Sistema visual
+
+Identidade visual:
+
+Paleta:
+
+Tipografia:
+
+Escala de espaçamento:
+
+Tokens:
+
+Bordas, raios e sombras:
+
+Critério para uso de contêineres:
+
+Critério para ação principal, secundária e destrutiva:
+
+## 37. Componentes visuais
+
+Biblioteca ou design system:
+
+Critério para componente compartilhado:
+
+Variantes permitidas:
+
+Estados obrigatórios:
+
+Política para elementos nativos:
+
+Política de foco:
+
+Política de ícones:
+
+## 38. Formulários e conteúdo
+
+Padrão de rótulos:
+
+Padrão de obrigatoriedade:
+
+Momento da validação:
+
+Padrão de mensagens de erro:
+
+Padrão de ações:
+
+Padrão de datas, números e unidades:
+
+Tom de voz:
+
+Internacionalização:
+
+## 39. Acessibilidade
+
+Padrão ou nível exigido:
+
+Critérios de contraste:
+
+Ampliação suportada:
+
+Navegação por teclado:
+
+Leitores de tela:
+
+Redução de movimento:
+
+Alternativas de mídia:
+
+Exceções autorizadas:
+
+## 40. Condições limite de validação
+
+Largura mínima:
+
+Largura máxima relevante:
+
+Ampliação máxima exigida:
+
+Conteúdo mínimo:
+
+Conteúdo máximo:
+
+Textos extensos:
+
+Idiomas ou traduções:
+
+Estados vazios:
+
+Estados de erro:
+
+Estados selecionados:
+
+Orientações:
+
+Toque:
+
+Teclado:
+
+Mudanças dinâmicas de conteúdo:
+
+Nível de validação UX/UI exigido:
+
+---
+
+# Parte VII — Back-end, persistência e integrações
+
+## 41. Transporte e API
+
+Aplicabilidade:
+
+Diretório das rotas:
+
+Responsabilidade das rotas:
+
+Diretório dos handlers:
+
+Responsabilidade dos handlers:
+
+Formato de sucesso:
+
+Formato de erro:
+
+Versionamento:
+
+Paginação:
+
+Filtros e ordenação:
+
+## 42. Aplicação e domínio
+
+Diretório dos casos de uso:
+
+Responsabilidade dos casos de uso:
+
+Serviços de aplicação:
+
+Limite transacional:
+
+Idempotência:
+
+Concorrência:
+
+Diretório do domínio:
+
+Entidades:
+
+Objetos de valor:
+
+Invariantes:
+
+Dependências permitidas no domínio:
+
+Dependências proibidas no domínio:
+
+## 43. Persistência
+
+Responsabilidade:
+
+Diretório dos modelos ou schemas:
+
+Diretório das migrações:
+
+Diretório das seeds:
+
+Acessos diretos permitidos:
+
+Acessos diretos proibidos:
+
+Integridade dos dados:
+
+Estratégia de migração:
+
+Backup:
+
+Dados de teste:
+
+## 44. Integrações externas
+
+Para cada integração, registrar:
+
+Nome:
+
+Finalidade:
+
+Módulo responsável:
+
+Cliente ou adaptador:
+
+Diretório:
+
+Contrato interno:
+
+Autenticação:
+
+Timeout:
+
+Repetição:
+
+Backoff:
+
+Fallback:
+
+Tratamento de erros:
+
+Limites de uso:
+
+## 45. Autenticação e autorização
+
+Aplicabilidade:
+
+Modelo de autenticação:
+
+Modelo de autorização:
+
+Papéis:
+
+Permissões:
+
+Local da autenticação:
+
+Local da autorização:
+
+Sessão ou token:
+
+Expiração:
+
+Revogação:
+
+Rotas protegidas:
+
+## 46. Processamentos especializados
+
+Para cada processamento, registrar:
+
+Nome:
+
+Responsabilidade:
+
+Módulo responsável:
+
+Entrada:
+
+Saída:
+
+Contrato:
+
+Dependências permitidas:
+
+Dependências proibidas:
+
+Restrições:
+
+Comportamentos preservados:
+
+---
+
+# Parte VIII — Configuração, testes e entrega
+
+## 47. Configuração e ambientes
+
+Ambientes:
+
+Diretório de configuração:
+
+Variáveis obrigatórias:
+
+Variáveis opcionais:
+
+Valores padrão:
+
+Validação da configuração:
+
+Arquivo de exemplo:
+
+Dados proibidos no repositório:
+
+Diferenças entre ambientes:
+
+## 48. Grafo de casos de uso e testes
+
+Local do grafo de casos de uso:
+
+Estratégia geral de testes:
+
+Casos de uso cobertos por testes unitários:
+
+Conexões cobertas por integração:
+
+Fluxos cobertos por ponta a ponta:
+
+Fluxos principais:
+
+Fluxos alternativos:
+
+Fluxos de erro:
+
+Limites e transições:
+
+Localização dos testes unitários:
+
+Localização dos testes de integração:
+
+Localização dos testes ponta a ponta:
+
+Estratégia de mocks:
+
+Banco de testes:
+
+Fixtures e factories:
+
+Cobertura mínima, quando aplicável:
+
+Política de permanência:
+
+Critério para remover teste temporário:
+
+Omissões justificadas de categoria de teste:
+
+## 49. Comandos de validação
+
+Desenvolvimento:
+
+Build:
+
+Lint:
+
+Tipagem:
+
+Testes unitários:
+
+Testes de integração:
+
+Testes ponta a ponta:
+
+Formatação:
+
+Validação UX/UI:
+
+## 50. Versionamento e integração
+
+Branch estável:
+
+Branch de integração:
+
+Branches de trabalho:
+
+Alterações diretas na branch estável:
+
+Estratégia de integração:
+
+Atualização forçada:
+
+Critérios para promoção:
+
+Relatórios permanentes:
+
+Destino de evidências temporárias:
+
+Política para scripts e workflows temporários:
+
+## 51. Build e implantação
+
+Artefato de build:
+
+Empacotamento:
+
+Implantação:
+
+Rollback:
+
+Critério técnico de conclusão:
+
+---
+
+# Parte IX — Controle arquitetural
+
+## 52. Restrições obrigatórias
+
+Arquivos ou módulos que não podem ser removidos:
+
+Tecnologias que exigem decisão explícita para substituição:
+
+Comportamentos protegidos:
+
+Contratos protegidos:
+
+Acessos diretos proibidos:
+
+Duplicações arquiteturais proibidas:
+
+## 53. Baseline de comportamento
+
+Revisão usada como baseline:
+
+Casos de uso executados:
+
+Contratos registrados:
+
+Formatos registrados:
+
+Resultados observáveis registrados:
+
+Evidências:
+
+## 54. Planejamento estrutural
+
+Árvore final aprovada:
+
+Módulos finais:
+
+Arquivos finais:
+
+Estratégia de migração:
+
+Estratégia de poda:
+
+Critérios de revalidação dos ramos:
+
+## 55. Decisões pendentes
+
+Para cada decisão:
+
+Descrição:
+
+Motivo:
+
+Impacto:
+
+Opções consideradas:
+
+Regra temporária:
+
+Ramos bloqueados:
+
+Seções afetadas:
+
+## 56. Débitos técnicos
+
+Para cada débito:
+
+Descrição:
+
+Causa:
+
+Impacto:
+
+Risco:
+
+Escopo:
+
+Tratamento planejado:
+
+Prioridade:
+
+---
+
+# Checklist de conformidade
+
+## Documentos
+
+- [ ] A revisão de `regrasDev.md` está identificada.
+- [ ] A revisão de `regrasUxUi.md` está identificada quando aplicável.
+- [ ] As cópias locais correspondem às versões canônicas.
+- [ ] Este documento contém somente concretizações específicas.
+- [ ] O `README.md` descreve o estado implementado.
+
+## Escopo e arquitetura
+
+- [ ] Objetivo, escopo e restrições estão definidos.
+- [ ] A arquitetura emerge das responsabilidades reais.
+- [ ] A árvore final está registrada.
+- [ ] Fronteiras e dependências são explícitas.
+- [ ] Não existem árvores concorrentes.
+
+## Implementação
+
+- [ ] Nomenclatura e contratos específicos estão definidos.
+- [ ] Estado possui fontes canônicas identificadas.
+- [ ] Critérios de abstração e compartilhamento estão concretizados.
+- [ ] Comportamentos e contratos protegidos estão registrados.
+
+## UX e UI
+
+- [ ] A aplicabilidade de `regrasUxUi.md` está declarada.
+- [ ] Densidades por contexto estão definidas.
+- [ ] Estratégias global e local de responsividade estão definidas.
+- [ ] Breakpoints possuem justificativas observáveis.
+- [ ] Conteúdo essencial e secundário está classificado.
+- [ ] Condições limite de validação estão registradas.
+- [ ] Nível de acessibilidade e validação está definido.
+
+## Testes
+
+- [ ] O grafo de casos de uso está localizado.
+- [ ] Fluxos principais, alternativos, erros e limites estão cobertos.
+- [ ] Unitários, integração e ponta a ponta são usados conforme necessidade.
+- [ ] Omissões de níveis de teste estão justificadas.
+- [ ] Testes permanentes permanecem versionados.
+
+## Entrega
+
+- [ ] Comandos de validação estão registrados.
+- [ ] Estratégia de branches está definida.
+- [ ] Critérios de promoção estão definidos.
+- [ ] Artefatos temporários possuem política de remoção.
+- [ ] Critério técnico de conclusão está definido.
+
+## Conformidade
+
+- [ ] Não conformidades estão registradas separadamente de exceções.
+- [ ] Exceções possuem autorização universal explícita.
+- [ ] Decisões pendentes bloqueiam somente ramos dependentes.
+- [ ] Nenhuma implementação acidental foi transformada em regra local.
