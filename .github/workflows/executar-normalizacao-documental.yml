@@ -1,0 +1,51 @@
+name: Executar normalização documental
+
+on:
+  push:
+    paths:
+      - '.github/normalizar-documentos-regras.trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  executar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Executar migração declarada
+        shell: python
+        run: |
+          from pathlib import Path
+          import textwrap
+
+          workflow = Path('.github/workflows/normalizar-documentos-regras.yml').read_text(encoding='utf-8')
+          start_marker = '      - name: Aplicar normas documentais explícitas\n'
+          start = workflow.index(start_marker) + len(start_marker)
+          run_marker = '        run: |\n'
+          start = workflow.index(run_marker, start) + len(run_marker)
+          end = workflow.index('\n      - name: Validar alterações', start)
+          script = textwrap.dedent(workflow[start:end])
+          exec(compile(script, 'normalizar-documentos-regras.py', 'exec'))
+
+      - name: Validar e commitar
+        run: |
+          set -euo pipefail
+          grep -q "Natureza normativa e mutabilidade" regrasDev.md
+          grep -q "Menor abstração semanticamente suficiente" regrasDev.md
+          grep -q "Fonte canônica de estados semânticos" regrasDev.md
+          grep -q "Natureza normativa e mutabilidade" regrasUxUi.md
+          grep -q "Ordem de compactação" regrasUxUi.md
+          grep -q "Contexto responsável pela adaptação" regrasUxUi.md
+          grep -q "normativo, específico e plástico" regrasProjeto.md
+          grep -q "Não conformidades conhecidas" regrasProjeto.md
+          grep -q "descritivo, específico e plástico" README.md
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add regrasDev.md regrasUxUi.md regrasProjeto.md README.md
+          git commit -m "docs: explicitar natureza e normas dos documentos"
+          git push
