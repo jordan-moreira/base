@@ -54,7 +54,16 @@ regrasDev.md + regrasUxUi.md
 
 ### Conceitos transversais
 
-Quando um conceito produzir obrigações tanto de engenharia ou arquitetura quanto de experiência ou interface, sua definição e suas especializações devem ser distribuídas pela responsabilidade fundamental:
+Quando um conceito produzir obrigações tanto de engenharia ou arquitetura quanto de experiência ou interface, sua definição e suas especializações devem ser distribuídas pela responsabilidade fundamental.
+
+A responsabilidade fundamental deve ser identificada pelos seguintes critérios:
+
+- um conceito possui responsabilidade fundamental de engenharia ou arquitetura quando a garantia correspondente continuar necessária para a corretude, segurança, integridade, contratos, estado, processamento ou estrutura do sistema mesmo que não exista interação humana;
+- um conceito possui responsabilidade fundamental de experiência ou interface quando a obrigação existir especificamente em razão de como uma pessoa percebe, compreende, opera ou recebe resposta do sistema;
+- quando o mesmo conceito possuir uma garantia sistêmica e uma consequência humana inseparáveis, a garantia sistêmica permanece canônica em `regrasDev.md` e a consequência humana é especializada em `regrasUxUi.md`;
+- quando a obrigação puder ser completamente definida sem depender de comportamento técnico interno e existir exclusivamente para a experiência humana, sua definição canônica pertence a `regrasUxUi.md`.
+
+Aplicada essa classificação:
 
 - quando a responsabilidade fundamental for de engenharia ou arquitetura, este documento contém a definição canônica e `regrasUxUi.md` contém somente as especializações necessárias à experiência e à interface;
 - quando a responsabilidade fundamental for de experiência ou interface, `regrasUxUi.md` contém a definição canônica e este documento contém somente as especializações técnicas necessárias;
@@ -242,6 +251,8 @@ Entre soluções que preservem igualmente corretude, segurança, integridade, co
 
 A menor complexidade assintótica possível não constitui obrigação isolada. Uma solução teoricamente mais eficiente não deve substituir solução suficientemente eficiente quando o ganho for irrelevante para os limites reais e a troca aumentar complexidade ou risco sem benefício justificável.
 
+A relevância de custo, ganho ou economia de recursos deve ser avaliada contra os limites, metas, carga esperada e recursos concretizados em `regrasProjeto.md`. Ganho apenas teórico, sem efeito verificável nesses limites ou metas, não constitui benefício relevante por si só.
+
 Otimizações que adicionem complexidade relevante devem possuir necessidade verificável no contexto esperado. Limites, metas e restrições concretas de desempenho pertencem ao `regrasProjeto.md`.
 
 ### 13.2 Trabalho computacional redundante
@@ -270,9 +281,11 @@ Repetição necessária para preservar segurança, integridade, idempotência, o
 
 O caminho crítico de uma operação é a cadeia de trabalhos dos quais depende a produção do próximo resultado necessário ou a liberação da próxima operação dependente.
 
+Dois trabalhos são independentes entre si quando nenhum depende do resultado, efeito, estado intermediário ou ordem de execução do outro para preservar o comportamento definido, seus invariantes e seus contratos.
+
 Trabalho que não seja necessário ao resultado ou à operação seguinte não deve permanecer artificialmente no caminho crítico quando puder ser adiado, executado incrementalmente, concorrentemente ou em paralelo com benefício relevante.
 
-Trabalhos independentes devem utilizar execução concorrente ou paralela quando a plataforma permitir, houver ganho relevante e puderem ser preservados:
+Trabalhos independentes devem utilizar execução concorrente ou paralela quando a plataforma permitir, houver ganho relevante conforme as metas e limites definidos em `regrasProjeto.md` e puderem ser preservados:
 
 - corretude;
 - segurança;
@@ -1153,9 +1166,14 @@ Camadas que apenas encaminham argumentos devem ser removidas ou incorporadas.
 
 ## 66. Grafo comportamental e casos de uso
 
-A estratégia de testes deve mapear o grafo de casos de uso e o grafo comportamental necessário para representar integralmente os comportamentos relevantes do projeto.
+A estratégia de testes deve mapear dois modelos complementares:
 
-O grafo deve incluir, conforme aplicável:
+- o grafo de casos de uso, que representa objetivos, casos de uso, conexões e fluxos funcionais relevantes;
+- o grafo comportamental, que representa estados semanticamente distintos, transições, precondições, efeitos, invariantes, falhas, recuperação e encerramento.
+
+Os dois modelos podem ser registrados no mesmo artefato ou em artefatos separados. Quando forem separados, deve existir rastreabilidade explícita entre os casos de uso e os estados, transições ou caminhos comportamentais que os realizam.
+
+Em conjunto, os modelos devem representar, conforme aplicável:
 
 - casos de uso;
 - estados semanticamente distintos;
@@ -1234,11 +1252,19 @@ A análise de completude deve considerar, quando aplicável:
 
 Todo estado catalogado deve possuir tratamento explícito para entrada, permanência, saída, erro, recuperação e encerramento quando cada uma dessas possibilidades for aplicável.
 
+Transições proibidas não integram o conjunto de transições válidas. Quando uma tentativa de transição proibida puder ocorrer por entrada externa, chamada direta, concorrência, sequência de uso ou outro caminho tecnicamente possível, a proibição deve permanecer explicitamente representada por precondição, invariante, contrato ou restrição do modelo e possuir evidência de rejeição ou prevenção correspondente.
+
+Um estado semanticamente inválido ou inalcançável por construção não precisa integrar o conjunto de estados alcançáveis quando sua impossibilidade decorrer de invariante, tipo, contrato, precondição ou outra restrição verificável. A justificativa de inalcançabilidade deve ser localizável quando necessária para demonstrar a completude do modelo.
+
 Estado ou transição cuja existência permaneça desconhecida, indefinida ou apenas presumida impede declarar o grafo completo.
 
 ### 66.5 Conformidade entre modelo e implementação
 
 A implementação não pode produzir estado semanticamente alcançável ausente do grafo comportamental nem permitir transição alcançável não catalogada.
+
+Uma transição semântica não precisa corresponder a exatamente uma função, método, handler ou chamada técnica. Ela pode ser implementada por múltiplos elementos técnicos, e um mesmo elemento técnico pode participar de múltiplas transições, desde que a relação permaneça explícita e rastreável.
+
+Todo caminho técnico capaz de realizar uma transição semanticamente relevante deve estar associado à transição catalogada correspondente. Essa associação pode ser direta ou composta, mas não pode depender de inferência que impeça localizar como o comportamento modelado é realizado.
 
 Quando a análise, execução ou teste revelar estado ou transição alcançável ausente do modelo:
 
@@ -1254,19 +1280,19 @@ Completude do grafo e cobertura do grafo são critérios independentes e cumulat
 - completude demonstra que o modelo contém todos os estados e transições semanticamente possíveis e alcançáveis no escopo definido;
 - cobertura demonstra que os elementos aplicáveis do modelo possuem tratamento e evidência de validação adequados.
 
-Todo estado relevante do grafo deve possuir tratamento compatível com seu papel no modelo e evidência de validação suficiente para os comportamentos que ele permite ou restringe.
+Todo estado catalogado no grafo deve possuir tratamento compatível com seu papel no modelo e pelo menos uma evidência de validação que demonstre os comportamentos, restrições ou invariantes que o distinguem semanticamente. Essa evidência pode ser compartilhada com evidências de transições de entrada, permanência ou saída quando a relação permanecer explícita.
 
 Toda transição catalogada deve possuir tratamento explícito na implementação ou na fronteira responsável e pelo menos uma evidência de validação correspondente.
 
-Cobertura integral não pode ser declarada enquanto existir estado relevante ou transição alcançável sem tratamento definido, sem evidência correspondente ou sem rastreabilidade suficiente para localizar essa evidência.
+Cobertura comportamental completa não pode ser declarada enquanto existir estado catalogado ou transição catalogada sem tratamento definido, sem evidência correspondente ou sem rastreabilidade suficiente para localizar essa evidência.
 
-Cobertura integral não pode ser declarada para grafo cuja completude não tenha sido estabelecida.
+Cobertura comportamental completa não pode ser declarada para grafo cuja completude não tenha sido estabelecida.
 
-O grafo deve estar formalizado e sua completude deve ser estabelecida antes de declarar cobertura integral.
+O grafo deve estar formalizado e sua completude deve ser estabelecida antes de declarar cobertura comportamental completa.
 
 ### 66.7 Transições isoladas e sequências comportamentais
 
-Cada transição relevante deve ser validada isoladamente a partir de precondições conhecidas.
+Cada transição catalogada deve ser validada isoladamente a partir de precondições conhecidas.
 
 Transições também devem ser validadas em sequência quando a execução anterior puder alterar o resultado, as precondições, os efeitos, os invariantes, o estado de origem, o estado de destino ou qualquer propriedade compartilhada da execução seguinte.
 
@@ -1357,7 +1383,7 @@ Uma categoria não deve ser exigida quando não agregar proteção, mas sua omis
 - Refatorações devem preservar contratos e comportamento.
 - Testes quebrados não podem ser ignorados ou removidos para permitir integração.
 - Cenários de erro e limite devem ser testados quando fizerem parte do comportamento.
-- Transições relevantes devem ser verificadas isoladamente e em sequências aplicáveis capazes de revelar dependência ou interferência de estado.
+- Transições catalogadas devem ser verificadas isoladamente e em sequências aplicáveis capazes de revelar dependência ou interferência de estado.
 - Operações assíncronas e concorrentes devem ser verificadas nos cenários aplicáveis de ordem, atraso, repetição, falha e recuperação.
 - Testes permanentes permanecem versionados.
 - Testes temporários só podem ser removidos quando não protegerem comportamento permanente.
@@ -1546,7 +1572,7 @@ A normalização ou modularização está concluída somente quando:
 - [ ] A complexidade computacional e o consumo de recursos são proporcionais aos limites reais do problema.
 - [ ] Trabalho computacional redundante foi eliminado quando sua repetição não possui responsabilidade necessária.
 - [ ] Trabalho secundário independente não permanece artificialmente no caminho crítico.
-- [ ] Trabalhos independentes utilizam concorrência ou paralelismo quando há ganho relevante e segurança semântica.
+- [ ] Trabalhos independentes utilizam concorrência ou paralelismo quando há ganho relevante demonstrável pelas metas e limites do projeto e segurança semântica.
 - [ ] Dependências e requisitos reais de ordem permanecem explícitos.
 - [ ] Concorrência ou paralelismo não foram introduzidos quando seus custos, contenção, complexidade ou riscos superam o benefício esperado.
 
@@ -1559,17 +1585,20 @@ A normalização ou modularização está concluída somente quando:
 
 ## Testes
 
-- [ ] O grafo de casos de uso e o grafo comportamental estão mapeados.
+- [ ] O grafo de casos de uso e o grafo comportamental estão mapeados e possuem relação explícita quando registrados separadamente.
 - [ ] Todos os estados semanticamente possíveis e alcançáveis no escopo estão catalogados.
 - [ ] Todas as transições válidas e alcançáveis no escopo estão catalogadas.
+- [ ] Transições proibidas tecnicamente tentáveis possuem restrição explícita e evidência de prevenção ou rejeição.
+- [ ] Estados declarados inalcançáveis possuem justificativa verificável quando necessária à completude do modelo.
 - [ ] Não existem estados ou transições alcançáveis fora do modelo catalogado.
-- [ ] A completude do grafo foi estabelecida antes de declarar cobertura integral.
-- [ ] Cada estado relevante possui tratamento e evidência de validação adequados.
+- [ ] Caminhos técnicos capazes de realizar transições semanticamente relevantes estão mapeados às transições correspondentes.
+- [ ] A completude do grafo foi estabelecida antes de declarar cobertura comportamental completa.
+- [ ] Cada estado catalogado possui tratamento e pelo menos uma evidência de validação adequada.
 - [ ] Cada transição catalogada possui tratamento explícito e evidência de validação localizável.
-- [ ] Transições relevantes foram validadas isoladamente e em sequências aplicáveis.
+- [ ] Transições catalogadas foram validadas isoladamente e em sequências aplicáveis.
 - [ ] Combinações A → B, B → A, A → A e B → B foram consideradas quando semanticamente possíveis e sujeitas a interferência.
 - [ ] O modelo e as evidências possuem rastreabilidade bidirecional suficiente.
-- [ ] Não existem lacunas de tratamento, cobertura ou rastreabilidade incompatíveis com a declaração de cobertura integral.
+- [ ] Não existem lacunas de tratamento, cobertura ou rastreabilidade incompatíveis com a declaração de cobertura comportamental completa.
 - [ ] Operações assíncronas aplicáveis foram validadas em sucesso, falha, atraso, repetição, concorrência e recuperação.
 - [ ] Respostas obsoletas não sobrescrevem estado válido mais recente.
 - [ ] Falha posterior a uma mutação concluída preserva a distinção entre efeito principal e falha secundária.
