@@ -1020,21 +1020,108 @@ Camadas que apenas encaminham argumentos devem ser removidas ou incorporadas.
 
 # Parte X — Testes e validação
 
-## 66. Grafo de casos de uso
+## 66. Grafo comportamental e casos de uso
 
-A estratégia de testes deve mapear e cobrir integralmente o grafo de casos de uso do projeto.
+A estratégia de testes deve mapear o grafo de casos de uso e o grafo comportamental necessário para representar integralmente os comportamentos relevantes do projeto.
 
-O grafo deve incluir:
+O grafo deve incluir, conforme aplicável:
 
-- cada caso de uso;
+- casos de uso;
+- estados semanticamente distintos;
+- transições entre estados;
 - conexões relevantes;
 - fluxos principais;
 - fluxos alternativos;
 - erros;
+- recuperação;
 - limites;
-- transições relevantes.
+- estados de encerramento.
 
-O grafo deve estar formalizado antes de declarar cobertura integral.
+Cobertura de linhas, funções, branches ou instruções não substitui a completude nem a cobertura do grafo comportamental.
+
+### 66.1 Modelo comportamental
+
+Quando um comportamento possuir estado ou evolução entre condições semanticamente distintas, o modelo deve representar explicitamente:
+
+- estado de origem;
+- evento, condição ou causa da transição;
+- precondições aplicáveis;
+- efeitos produzidos;
+- propriedades que devem permanecer invariantes quando sua preservação fizer parte do comportamento;
+- estado de destino;
+- falhas aplicáveis;
+- possibilidades de recuperação;
+- encerramento, quando aplicável.
+
+Uma transição representa a mudança semanticamente relevante entre estados provocada por evento, condição ou resultado definido.
+
+### 66.2 Estados semanticamente distintos
+
+Um estado deve ser catalogado separadamente quando sua existência alterar pelo menos um aspecto semanticamente relevante do comportamento, como:
+
+- transições permitidas;
+- precondições;
+- invariantes;
+- efeitos possíveis;
+- ações disponíveis;
+- comportamento observável;
+- tratamento de erro;
+- possibilidades de recuperação ou encerramento.
+
+Combinações arbitrárias de valores não constituem estados distintos quando não alterarem comportamento semanticamente relevante.
+
+### 66.3 Estados de encerramento
+
+Estados que representem encerramento de fluxo devem declarar explicitamente quais transições de saída, se houver, permanecem permitidas.
+
+Não devem existir transições implícitas a partir de estado de encerramento.
+
+Quando o encerramento for definitivo no escopo modelado, nenhuma transição de saída deve ser permitida.
+
+### 66.4 Completude do grafo comportamental
+
+O grafo comportamental somente pode ser declarado completo quando todos os estados semanticamente possíveis e alcançáveis no escopo modelado e todas as transições válidas entre eles estiverem catalogados.
+
+A análise de completude deve considerar, quando aplicável:
+
+- estados iniciais;
+- estados intermediários;
+- permanência no mesmo estado quando possuir significado comportamental;
+- sucesso;
+- erro;
+- espera;
+- ausência;
+- parcialidade;
+- degradação;
+- recuperação;
+- limites;
+- encerramento.
+
+Todo estado catalogado deve possuir tratamento explícito para entrada, permanência, saída, erro, recuperação e encerramento quando cada uma dessas possibilidades for aplicável.
+
+Estado ou transição cuja existência permaneça desconhecida, indefinida ou apenas presumida impede declarar o grafo completo.
+
+### 66.5 Conformidade entre modelo e implementação
+
+A implementação não pode produzir estado semanticamente alcançável ausente do grafo comportamental nem permitir transição alcançável não catalogada.
+
+Quando a análise, execução ou teste revelar estado ou transição alcançável ausente do modelo:
+
+1. o grafo deve ser atualizado para representar o comportamento válido, quando esse comportamento for intencional; ou
+2. a implementação deve ser corrigida, quando o comportamento não for válido.
+
+Enquanto a divergência existir, o comportamento afetado não pode ser considerado conforme.
+
+### 66.6 Completude e cobertura
+
+Completude do grafo e cobertura do grafo são critérios independentes e cumulativos.
+
+- completude demonstra que o modelo contém todos os estados e transições semanticamente possíveis e alcançáveis no escopo definido;
+- cobertura demonstra que os elementos aplicáveis do modelo possuem tratamento e evidência de validação adequados.
+
+Cobertura integral não pode ser declarada para grafo cuja completude não tenha sido estabelecida.
+
+O grafo deve estar formalizado e sua completude deve ser estabelecida antes de declarar cobertura integral.
 
 ## 67. Níveis de teste
 
@@ -1243,7 +1330,11 @@ A normalização ou modularização está concluída somente quando:
 
 ## Testes
 
-- [ ] O grafo de casos de uso está mapeado.
+- [ ] O grafo de casos de uso e o grafo comportamental estão mapeados.
+- [ ] Todos os estados semanticamente possíveis e alcançáveis no escopo estão catalogados.
+- [ ] Todas as transições válidas e alcançáveis no escopo estão catalogadas.
+- [ ] Não existem estados ou transições alcançáveis fora do modelo catalogado.
+- [ ] A completude do grafo foi estabelecida antes de declarar cobertura integral.
 - [ ] Fluxos principais, alternativos, erros e limites estão cobertos.
 - [ ] Níveis de teste foram escolhidos conforme risco e responsabilidade.
 - [ ] Testes permanentes não foram removidos.
