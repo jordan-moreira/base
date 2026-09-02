@@ -1129,9 +1129,46 @@ Completude do grafo e cobertura do grafo são critérios independentes e cumulat
 - completude demonstra que o modelo contém todos os estados e transições semanticamente possíveis e alcançáveis no escopo definido;
 - cobertura demonstra que os elementos aplicáveis do modelo possuem tratamento e evidência de validação adequados.
 
+Todo estado relevante do grafo deve possuir tratamento compatível com seu papel no modelo e evidência de validação suficiente para os comportamentos que ele permite ou restringe.
+
+Toda transição catalogada deve possuir tratamento explícito na implementação ou na fronteira responsável e pelo menos uma evidência de validação correspondente.
+
+Cobertura integral não pode ser declarada enquanto existir estado relevante ou transição alcançável sem tratamento definido, sem evidência correspondente ou sem rastreabilidade suficiente para localizar essa evidência.
+
 Cobertura integral não pode ser declarada para grafo cuja completude não tenha sido estabelecida.
 
 O grafo deve estar formalizado e sua completude deve ser estabelecida antes de declarar cobertura integral.
+
+### 66.7 Transições isoladas e sequências comportamentais
+
+Cada transição relevante deve ser validada isoladamente a partir de precondições conhecidas.
+
+Transições também devem ser validadas em sequência quando a execução anterior puder alterar o resultado, as precondições, os efeitos, os invariantes, o estado de origem, o estado de destino ou qualquer propriedade compartilhada da execução seguinte.
+
+Quando duas transições A e B compartilharem estado de origem ou destino, atuarem sobre propriedades comuns ou possuírem possibilidade real de dependência, interferência, reentrada ou efeito residual, devem ser consideradas, quando semanticamente possíveis:
+
+- A → B;
+- B → A;
+- A → A;
+- B → B.
+
+A matriz não exige combinações sem significado no domínio nem enumeração individual de transições cuja independência tenha sido demonstrada de forma verificável.
+
+Sequências adicionais devem ser incluídas quando forem necessárias para representar ciclos, retornos, recuperação, repetição ou outros caminhos relevantes do grafo.
+
+Validar apenas o estado final não substitui validar os efeitos e invariantes relevantes ao longo da sequência.
+
+### 66.8 Rastreabilidade entre modelo e validação
+
+Cada transição catalogada deve apontar para pelo menos uma evidência de validação que demonstre seu comportamento esperado.
+
+Quando a cobertura depender de sequência de transições, a evidência deve identificar explicitamente a sequência ou o caminho do grafo que valida.
+
+Testes ou outras evidências permanentes de comportamento devem identificar os estados, transições ou sequências que protegem de forma suficiente para permitir rastreamento bidirecional entre modelo e validação.
+
+Uma mesma evidência pode validar múltiplos elementos do grafo e um mesmo elemento pode exigir múltiplas evidências, desde que a relação permaneça explícita.
+
+Não pode existir transição catalogada sem evidência localizável nem evidência declarada como cobertura comportamental sem vínculo identificável com o comportamento protegido.
 
 ## 67. Níveis de teste
 
@@ -1156,6 +1193,7 @@ Uma categoria não deve ser exigida quando não agregar proteção, mas sua omis
 - Refatorações devem preservar contratos e comportamento.
 - Testes quebrados não podem ser ignorados ou removidos para permitir integração.
 - Cenários de erro e limite devem ser testados quando fizerem parte do comportamento.
+- Transições relevantes devem ser verificadas isoladamente e em sequências aplicáveis capazes de revelar dependência ou interferência de estado.
 - Testes permanentes permanecem versionados.
 - Testes temporários só podem ser removidos quando não protegerem comportamento permanente.
 
@@ -1165,6 +1203,7 @@ Uma categoria não deve ser exigida quando não agregar proteção, mas sua omis
 - Validações essenciais devem possuir forma documentada de execução local ou equivalente.
 - Ausência de execução ou resultado desconhecido não equivale a aprovação.
 - Declarações de validação devem identificar escopo, revisão, procedimentos, resultados e limitações.
+- Evidências utilizadas para cobertura comportamental devem manter rastreabilidade com os estados, transições ou sequências correspondentes.
 
 ---
 
@@ -1348,6 +1387,12 @@ A normalização ou modularização está concluída somente quando:
 - [ ] Todas as transições válidas e alcançáveis no escopo estão catalogadas.
 - [ ] Não existem estados ou transições alcançáveis fora do modelo catalogado.
 - [ ] A completude do grafo foi estabelecida antes de declarar cobertura integral.
+- [ ] Cada estado relevante possui tratamento e evidência de validação adequados.
+- [ ] Cada transição catalogada possui tratamento explícito e evidência de validação localizável.
+- [ ] Transições relevantes foram validadas isoladamente e em sequências aplicáveis.
+- [ ] Combinações A → B, B → A, A → A e B → B foram consideradas quando semanticamente possíveis e sujeitas a interferência.
+- [ ] O modelo e as evidências possuem rastreabilidade bidirecional suficiente.
+- [ ] Não existem lacunas de tratamento, cobertura ou rastreabilidade incompatíveis com a declaração de cobertura integral.
 - [ ] Fluxos principais, alternativos, erros e limites estão cobertos.
 - [ ] Níveis de teste foram escolhidos conforme risco e responsabilidade.
 - [ ] Testes permanentes não foram removidos.
