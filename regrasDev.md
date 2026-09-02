@@ -920,6 +920,10 @@ Cada estado semântico deve possuir uma representação canônica.
 
 Lógica, apresentação, comportamento e acessibilidade devem derivar da mesma representação sempre que possível.
 
+Representações derivadas do mesmo estado devem permanecer semanticamente equivalentes em todo instante observável.
+
+Uma alteração de estado não pode produzir divergência persistente entre comportamento, apresentação, conteúdo ou acessibilidade. Quando houver estado intermediário observável, ele deve possuir significado próprio e integrar o modelo comportamental aplicável.
+
 Não manter fontes independentes equivalentes, como:
 
 - `selected`;
@@ -967,6 +971,8 @@ Uma exceção exige que o valor seja parte real e estável do contrato público.
 - Estado local permanece próximo ao consumidor.
 - Promover para store, contexto ou equivalente somente com múltiplos consumidores, sobrevivência necessária ou atualização coordenada.
 - Dados derivados devem ser calculados a partir da fonte canônica quando possível.
+- A localização técnica do estado não pode reduzir o ciclo de vida exigido pelo comportamento que ele representa.
+- Quando a sobrevivência além do consumidor atual fizer parte do comportamento, o estado deve permanecer no menor escopo capaz de preservá-la corretamente.
 
 ## 61. Engines e templates
 
@@ -1054,6 +1060,10 @@ Quando um comportamento possuir estado ou evolução entre condições semantica
 - encerramento, quando aplicável.
 
 Uma transição representa a mudança semanticamente relevante entre estados provocada por evento, condição ou resultado definido.
+
+Uma transição somente pode alterar propriedades cuja alteração esteja definida entre seus efeitos. As demais propriedades semanticamente relevantes devem preservar seu valor válido; invalidação, reinicialização ou descarte também constituem efeitos e devem ser explícitos.
+
+O ciclo de vida da representação técnica de um estado deve ser suficiente para o ciclo de vida do comportamento que ele representa. Recriação, recomposição, remontagem, troca de contexto técnico ou outra mudança de implementação não pode descartar estado ainda semanticamente válido sem transição que defina esse efeito.
 
 ### 66.2 Estados semanticamente distintos
 
@@ -1318,6 +1328,9 @@ A normalização ou modularização está concluída somente quando:
 - [ ] Contratos públicos são explícitos.
 - [ ] Semântica nativa foi preservada.
 - [ ] Estados semânticos possuem fonte canônica.
+- [ ] Representações derivadas do mesmo estado permanecem semanticamente equivalentes.
+- [ ] Transições preservam propriedades cuja alteração não esteja definida entre seus efeitos.
+- [ ] O ciclo de vida técnico dos estados preserva o ciclo de vida dos comportamentos representados.
 - [ ] Condições estão no nível responsável.
 - [ ] Variantes representam conceitos, não propriedades arbitrárias.
 
