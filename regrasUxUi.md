@@ -734,6 +734,18 @@ Solicitar confirmação quando houver:
 
 Preferir desfazer a confirmações repetitivas em ações reversíveis.
 
+### 59.1 Cancelamento, desfazer e reversibilidade
+
+A interface somente pode oferecer `Cancelar`, `Desfazer`, restaurar ou ação equivalente quando a operação subjacente possuir semântica técnica compatível com o efeito comunicado, conforme definido em `regrasDev.md`.
+
+`Cancelar` deve distinguir, quando necessário, entre impedir uma operação ainda não efetivada, interromper processamento futuro e desfazer efeitos já produzidos.
+
+`Desfazer` somente pode comunicar restauração quando a operação for reversível ou quando existir compensação cuja consequência seja semanticamente equivalente ao resultado prometido.
+
+Quando existirem efeitos irrevogáveis, reversão parcial ou compensação que não restaure exatamente o estado anterior, essa limitação deve ser comunicada antes de o usuário depender da ação.
+
+Uma ação de recuperação não pode prometer restauração, cancelamento ou reversão mais forte do que a garantia técnica disponível.
+
 ## 60. Animações
 
 Animações devem explicar mudança, continuidade, atenção ou progresso.
@@ -822,6 +834,18 @@ A região afetada deve indicar a falha sem bloquear áreas independentes.
 - O requisito para habilitação deve ser informado quando aplicável.
 - Desabilitação não deve ocultar erro que poderia ser explicado.
 
+### 68.1 Permissões e disponibilidade de ações
+
+Quando a interface conhecer o estado de permissão aplicável, a disponibilidade apresentada das ações deve ser compatível com esse estado para não induzir expectativa de execução inválida.
+
+Uma ação conhecida como não autorizada não deve ser apresentada como normalmente executável. Conforme o contexto, ela pode ser omitida, desabilitada ou substituída por orientação adequada, desde que a decisão preserve compreensão e acessibilidade.
+
+Ocultar ou desabilitar uma ação não constitui autorização nem fronteira de segurança. A validação autoritativa permanece obrigatória conforme `regrasDev.md`.
+
+Quando a permissão estiver desconhecida, pendente ou puder ter mudado, a interface não deve afirmar disponibilidade definitiva com base apenas em estado local obsoleto.
+
+Mudança de permissão deve atualizar estado visual, comportamento, disponibilidade e estado acessível de forma semanticamente consistente.
+
 ## 69. Estado de sucesso
 
 A conclusão deve ser confirmada quando não for imediatamente visível.
@@ -890,6 +914,9 @@ Utilizar o controle adequado à natureza da entrada:
 - Erros não devem aparecer antes de oportunidade razoável de preenchimento.
 - Cliente e servidor devem produzir mensagens coerentes.
 - Dados válidos não devem ser removidos silenciosamente.
+- Validação antecipada da interface deve preservar o mesmo significado semântico da validação autoritativa definida para a regra correspondente em `regrasDev.md`.
+- A interface pode validar mais cedo para melhorar feedback, mas não pode relaxar, contradizer ou substituir a validação autoritativa.
+- Diferenças de máscara, formato, normalização ou mensagem são permitidas somente quando não alterarem semanticamente quais estados são válidos ou inválidos para a mesma regra.
 
 ## 78. Mensagens de erro
 
@@ -961,6 +988,8 @@ Tentar novamente somente deve ser apresentado como ação segura quando a repeti
 Quando uma mutação principal tiver sido concluída e apenas sincronização, comunicação ou efeito secundário falhar, a recuperação deve tratar essa condição sem induzir repetição da mutação principal como se nada tivesse ocorrido.
 
 Quando o resultado permanecer indeterminado, a interface deve orientar verificação ou recuperação compatível sem apresentar resultado definitivo não confirmado.
+
+Cancelar, desfazer, restaurar ou recuperar somente podem ser oferecidos quando a operação subjacente possuir semântica compatível com a consequência comunicada; limitações de reversibilidade devem permanecer explícitas.
 
 ## 86. Erros locais e globais
 
@@ -1478,6 +1507,7 @@ Uma interface somente pode ser considerada concluída quando:
 - [ ] Estados necessários foram implementados.
 - [ ] Estados e transições interativos aplicáveis especializam o modelo comportamental de desenvolvimento.
 - [ ] Estado visual, interativo, informacional e acessível permanecem semanticamente equivalentes.
+- [ ] Disponibilidade apresentada das ações reflete permissões conhecidas sem substituir autorização técnica.
 - [ ] Elementos nativos são utilizados quando adequados.
 
 ## Interação
@@ -1485,6 +1515,8 @@ Uma interface somente pode ser considerada concluída quando:
 - [ ] Toda ação relevante produz feedback.
 - [ ] Operações demoradas indicam atividade.
 - [ ] Acionamentos equivalentes convergem para uma única intenção sem duplicação pelo mesmo evento.
+- [ ] Cancelar e desfazer somente são oferecidos quando a operação subjacente suporta a consequência comunicada.
+- [ ] Limitações de reversibilidade são comunicadas quando aplicáveis.
 - [ ] Ações destrutivas comunicam consequência.
 - [ ] Processos automáticos são distinguíveis de decisões confirmadas.
 
@@ -1516,6 +1548,7 @@ Uma interface somente pode ser considerada concluída quando:
 ## Validação
 
 - [ ] Fluxos principais foram executados.
+- [ ] Validações antecipadas da interface permanecem semanticamente compatíveis com a validação autoritativa.
 - [ ] Estados de erro, vazio, carregamento e recuperação foram verificados.
 - [ ] Fluxos temporários e canceláveis foram validados em sequências de reentrada aplicáveis.
 - [ ] Formas alternativas de encerramento e confirmação foram consideradas quando suportadas.
