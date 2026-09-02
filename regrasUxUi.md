@@ -46,22 +46,15 @@ Este documento somente pode ser alterado quando o objeto da alteração for o pr
 
 ### Conceitos transversais
 
-Quando um conceito produzir obrigações tanto de engenharia ou arquitetura quanto de experiência ou interface, sua definição e suas especializações devem ser distribuídas pela responsabilidade fundamental.
+Este documento aplica o mecanismo canônico de classificação, fonte canônica e especialização de conceitos transversais definido em `regrasDev.md`.
 
-A responsabilidade fundamental deve ser identificada pelos seguintes critérios:
+No escopo de experiência e interface:
 
-- um conceito possui responsabilidade fundamental de engenharia ou arquitetura quando a garantia correspondente continuar necessária para a corretude, segurança, integridade, contratos, estado, processamento ou estrutura do sistema mesmo que não exista interação humana;
-- um conceito possui responsabilidade fundamental de experiência ou interface quando a obrigação existir especificamente em razão de como uma pessoa percebe, compreende, opera ou recebe resposta do sistema;
-- quando o mesmo conceito possuir uma garantia sistêmica e uma consequência humana inseparáveis, a garantia sistêmica permanece canônica em `regrasDev.md` e a consequência humana é especializada neste documento;
-- quando a obrigação puder ser completamente definida sem depender de comportamento técnico interno e existir exclusivamente para a experiência humana, sua definição canônica pertence a este documento.
-
-Aplicada essa classificação:
-
-- quando a responsabilidade fundamental for de experiência ou interface, este documento contém a definição canônica e `regrasDev.md` contém somente as especializações técnicas necessárias;
-- quando a responsabilidade fundamental for de engenharia ou arquitetura, `regrasDev.md` contém a definição canônica e este documento contém somente as especializações necessárias à experiência e à interface;
+- quando esse mecanismo classificar a responsabilidade fundamental de um conceito como experiência ou interface, este documento contém a definição canônica desse conceito específico;
+- quando a responsabilidade fundamental for de engenharia ou arquitetura, este documento contém somente as especializações necessárias à experiência e à interface;
 - uma especialização presente neste documento deve preservar integralmente o significado, os critérios mínimos e as restrições da definição canônica;
 - uma especialização não pode redefinir o conceito, criar critério concorrente nem constituir segunda fonte canônica;
-- uma obrigação transversal aplicável ao escopo deste documento deve ser explicitada aqui sempre que sua ausência puder permitir interpretação local incompleta, ainda que a definição canônica permaneça em `regrasDev.md`;
+- uma obrigação transversal aplicável ao escopo deste documento deve ser explicitada aqui sempre que sua ausência puder permitir interpretação local incompleta;
 - essa explicitação deve identificar a dependência normativa ou especializar suas consequências observáveis e interativas sem repetir desnecessariamente a definição canônica.
 
 ---
@@ -608,6 +601,8 @@ Quando a plataforma exigir representações derivadas ou transitórias distintas
 - Área interativa não deve divergir de forma confusa da área visual.
 - Dimensões mínimas concretas pertencem ao `regrasProjeto.md`.
 
+Para esta regra, área adequada e precisão excessiva devem ser avaliadas contra as dimensões concretas de interação e o padrão de acessibilidade adotados em `regrasProjeto.md`, considerando o dispositivo e o método de entrada suportados.
+
 ## 46. Indicação de interação
 
 - Elementos interativos devem parecer interativos.
@@ -673,7 +668,7 @@ Perda inevitável de contexto deve ser explícita.
 
 - Voltar ou cancelar não deve causar perda inesperada.
 - Alterações não salvas devem ser preservadas ou ter consequência comunicada.
-- Cancelar deve interromper a operação atual sem efeitos ocultos.
+- Cancelar deve produzir somente os efeitos compatíveis com a semântica declarada para a operação conforme a seção 59.1 e não pode ocultar efeitos já produzidos.
 
 ## 53. Links e botões
 
@@ -702,6 +697,8 @@ Cada etapa deve conter decisões semanticamente relacionadas.
 Toda ação deve produzir resposta perceptível em tempo compatível com a expectativa.
 
 A ausência de resposta não deve induzir repetição por incerteza.
+
+Quando a classificação temporal depender do produto, expressões como tempo compatível, operação instantânea ou operação demorada devem ser interpretadas segundo as metas de resposta percebida e os requisitos de desempenho concretizados em `regrasProjeto.md`.
 
 ## 56. Correspondência entre ação e resposta
 
@@ -1490,7 +1487,7 @@ Limites concretos pertencem ao `regrasProjeto.md`.
 Uma interface somente pode ser considerada concluída quando:
 
 - fluxos principais funcionarem nos contextos suportados;
-- estados relevantes estiverem implementados;
+- estados semanticamente aplicáveis à interface e catalogados no modelo comportamental estiverem implementados;
 - problemas críticos de usabilidade e acessibilidade estiverem resolvidos;
 - não conformidades restantes estiverem registradas;
 - comportamento observado corresponder aos objetivos;
@@ -1529,7 +1526,7 @@ Uma interface somente pode ser considerada concluída quando:
 - [ ] Componentes possuem responsabilidade identificável.
 - [ ] Compartilhamento possui equivalência semântica.
 - [ ] Variantes representam conceitos reais.
-- [ ] Estados necessários foram implementados.
+- [ ] Estados semanticamente aplicáveis à interface e catalogados no modelo comportamental foram implementados.
 - [ ] Estados e transições interativos aplicáveis especializam o modelo comportamental de desenvolvimento.
 - [ ] Estado visual, interativo, informacional e acessível permanecem semanticamente equivalentes.
 - [ ] Disponibilidade apresentada das ações reflete permissões conhecidas sem substituir autorização técnica.
