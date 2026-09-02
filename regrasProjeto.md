@@ -306,6 +306,8 @@ Carga simultânea esperada:
 
 Metas de latência:
 
+Metas de resposta percebida, quando aplicáveis:
+
 Throughput esperado:
 
 Limites de memória:
@@ -323,6 +325,8 @@ Limites de serviços externos:
 Recursos computacionais disponíveis:
 
 Caminhos críticos de desempenho:
+
+Conteúdos, regiões ou resultados prioritários, quando aplicáveis:
 
 Trabalhos secundários que podem permanecer fora do caminho crítico:
 
@@ -644,6 +648,12 @@ Política para dados externos:
 
 Política para estados inválidos:
 
+Local da validação autoritativa por regra ou domínio:
+
+Validações antecipadas ou derivadas relevantes:
+
+Política de coerência semântica das validações entre fronteiras:
+
 Política de compatibilidade:
 
 ## 30. Estado
@@ -658,7 +668,7 @@ Critério para estado global:
 
 Critério para estado remoto:
 
-Fonte canônica de cada estado compartilhado:
+Fonte canônica de cada estado semântico relevante:
 
 Escopo e ciclo de vida dos estados relevantes:
 
@@ -679,6 +689,16 @@ Conteúdo proibido nas stores:
 Modelo interno de erros:
 
 Categorias de erro:
+
+Estado da operação após cada categoria de falha relevante:
+
+Política de repetição segura:
+
+Estratégias de recuperação por categoria de erro:
+
+Tratamento de falhas secundárias após efeito principal concluído:
+
+Tratamento de resultados indeterminados:
 
 Fronteira de conversão:
 
@@ -791,6 +811,12 @@ Bordas, raios e sombras:
 Critério para uso de contêineres:
 
 Critério para ação principal, secundária e destrutiva:
+
+Política de disponibilidade de ações conforme permissões conhecidas:
+
+Política para ações canceláveis, reversíveis ou compensáveis:
+
+Comunicação de limitações de reversibilidade:
 
 ## 37. Componentes visuais
 
@@ -922,7 +948,13 @@ Tratamento de operações assíncronas ou sobrepostas:
 
 Tratamento de resultados obsoletos:
 
-Estratégia de cancelamento de operações em andamento:
+Operações canceláveis e semântica de cancelamento:
+
+Operações reversíveis:
+
+Operações compensáveis e estratégia de compensação:
+
+Efeitos irrevogáveis ou parcialmente reversíveis:
 
 Diretório do domínio:
 
@@ -1003,6 +1035,8 @@ Permissões:
 Local da autenticação:
 
 Local da autorização:
+
+Política de atualização ou invalidação de permissões:
 
 Sessão ou token:
 
@@ -1086,6 +1120,8 @@ Estratégia geral de testes:
 
 Critérios adicionais de cobertura específicos do projeto:
 
+Critério para declarar cobertura comportamental completa:
+
 Transições validadas isoladamente:
 
 Sequências comportamentais sujeitas a dependência ou interferência:
@@ -1126,7 +1162,7 @@ Banco de testes:
 
 Fixtures e factories:
 
-Cobertura mínima, quando aplicável:
+Cobertura quantitativa mínima adicional, quando aplicável:
 
 Política de permanência:
 
@@ -1293,16 +1329,20 @@ Prioridade:
 ## Implementação
 
 - [ ] Nomenclatura e contratos específicos estão definidos.
+- [ ] A validação autoritativa e suas validações antecipadas ou derivadas permanecem semanticamente coerentes.
 - [ ] Estados semânticos relevantes e suas fontes canônicas estão identificados.
 - [ ] Ciclos de vida e sincronização de estados relevantes estão concretizados.
 - [ ] Critérios de abstração e compartilhamento estão concretizados.
 - [ ] Comportamentos e contratos protegidos estão registrados.
+- [ ] Estados de operação, repetição segura e recuperação de erros relevantes estão concretizados.
 - [ ] Concorrência, ordenação e tratamento de resultados obsoletos estão concretizados quando aplicáveis.
+- [ ] Cancelamento, reversão, compensação e efeitos irrevogáveis estão concretizados quando aplicáveis.
 
 ## Desempenho
 
 - [ ] Escopos com requisitos de desempenho possuem metas ou limites concretos quando aplicáveis.
 - [ ] Volume, latência, throughput, concorrência e recursos disponíveis estão definidos quando relevantes.
+- [ ] Metas de resposta percebida e prioridades observáveis estão definidas quando aplicáveis.
 - [ ] Limites de memória, CPU, armazenamento, entrada e saída, rede e serviços externos estão registrados quando relevantes.
 - [ ] Caminhos críticos e trabalhos secundários independentes estão identificados quando relevantes.
 - [ ] Estratégia e limites de concorrência ou paralelismo estão concretizados quando aplicáveis.
@@ -1315,6 +1355,8 @@ Prioridade:
 - [ ] Estratégias global e local de responsividade estão definidas.
 - [ ] Breakpoints possuem justificativas observáveis.
 - [ ] Conteúdo essencial e secundário está classificado.
+- [ ] Disponibilidade de ações conforme permissões conhecidas está concretizada quando aplicável.
+- [ ] Cancelamento, reversibilidade e suas limitações possuem política observável compatível com as garantias técnicas.
 - [ ] Condições limite de validação estão registradas.
 - [ ] Nível de acessibilidade e validação está definido.
 
@@ -1325,9 +1367,11 @@ Prioridade:
 - [ ] Estados e transições relevantes estão catalogados.
 - [ ] A evidência de completude do grafo está registrada.
 - [ ] A rastreabilidade entre modelo e evidências está definida.
+- [ ] O critério para declarar cobertura comportamental completa está definido.
 - [ ] Transições isoladas e sequências sujeitas a interferência estão identificadas.
 - [ ] Cenários assíncronos, concorrentes, de respostas obsoletas e de execução única estão registrados quando aplicáveis.
 - [ ] Critérios adicionais de cobertura específicos do projeto estão definidos quando existirem.
+- [ ] Cobertura quantitativa, quando adotada, está registrada como critério adicional e não como substituta da cobertura comportamental.
 - [ ] Fluxos principais, alternativos, erros e limites estão cobertos.
 - [ ] Unitários, integração e ponta a ponta são usados conforme necessidade.
 - [ ] Omissões de níveis de teste estão justificadas.
