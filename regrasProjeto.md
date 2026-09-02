@@ -99,6 +99,8 @@ Após a análise:
 - Preencher do geral para o específico.
 - Cada campo deve representar uma decisão principal.
 - Cada decisão deve existir em apenas uma seção.
+- Quando um mesmo conceito possuir consequências em seções diferentes, somente a seção responsável pela decisão deve defini-la; as demais devem registrar apenas consequências específicas, referências ou evidências do próprio escopo.
+- Campos com nomes semelhantes em seções diferentes não autorizam repetir a mesma decisão; o significado deve ser delimitado pela responsabilidade declarada da seção e pelo rótulo do campo.
 - Campos aplicáveis não devem permanecer vazios.
 - Usar `Pendente.` quando a decisão ainda não tiver sido tomada.
 - Usar `Não se aplica.` quando o campo não pertencer à natureza ou ao escopo do projeto.
@@ -330,9 +332,11 @@ Conteúdos, regiões ou resultados prioritários, quando aplicáveis:
 
 Trabalhos secundários que podem permanecer fora do caminho crítico:
 
-Estratégia de concorrência ou paralelismo:
+Critério para considerar ganho de desempenho relevante:
 
-Limites de concorrência:
+Estratégia de concorrência ou paralelismo exclusivamente para desempenho e capacidade:
+
+Limites de concorrência relacionados à capacidade:
 
 Otimizações relevantes e respectivas justificativas:
 
@@ -658,7 +662,7 @@ Política de compatibilidade:
 
 ## 30. Estado
 
-Estados semânticos relevantes:
+Estados semânticos concretizados na implementação:
 
 Critério para estado local:
 
@@ -812,12 +816,6 @@ Critério para uso de contêineres:
 
 Critério para ação principal, secundária e destrutiva:
 
-Política de disponibilidade de ações conforme permissões conhecidas:
-
-Política para ações canceláveis, reversíveis ou compensáveis:
-
-Comunicação de limitações de reversibilidade:
-
 ## 37. Componentes visuais
 
 Biblioteca ou design system:
@@ -834,7 +832,13 @@ Política de foco:
 
 Política de ícones:
 
-## 38. Formulários e conteúdo
+## 38. Interação, formulários e conteúdo
+
+Política de disponibilidade de ações conforme permissões conhecidas:
+
+Política para ações canceláveis, reversíveis ou compensáveis:
+
+Comunicação de limitações de reversibilidade:
 
 Padrão de rótulos:
 
@@ -940,7 +944,7 @@ Limite transacional:
 
 Idempotência:
 
-Concorrência:
+Semântica de concorrência das operações:
 
 Dependências de ordem:
 
@@ -1100,17 +1104,25 @@ Local do grafo de casos de uso:
 
 Local do grafo comportamental:
 
+Relação e rastreabilidade entre grafo de casos de uso e grafo comportamental:
+
 Escopo do grafo comportamental:
 
-Local do catálogo de estados e transições:
+Local do catálogo de estados, transições e restrições comportamentais:
 
-Estados semanticamente relevantes catalogados:
+Estados catalogados no grafo comportamental:
 
-Transições catalogadas:
+Estados declarados inalcançáveis e respectivas justificativas:
 
-Estados de encerramento relevantes:
+Transições válidas catalogadas:
+
+Transições proibidas relevantes e evidências de prevenção ou rejeição:
+
+Estados de encerramento catalogados:
 
 Evidência de completude do grafo:
+
+Local do mapeamento entre transições semânticas e caminhos técnicos de implementação:
 
 Local da rastreabilidade entre modelo e validação:
 
@@ -1120,9 +1132,9 @@ Estratégia geral de testes:
 
 Critérios adicionais de cobertura específicos do projeto:
 
-Critério para declarar cobertura comportamental completa:
+Procedimento e evidências usados para demonstrar o atendimento ao critério universal de cobertura comportamental completa:
 
-Transições validadas isoladamente:
+Transições catalogadas validadas isoladamente:
 
 Sequências comportamentais sujeitas a dependência ou interferência:
 
@@ -1134,7 +1146,7 @@ Cenários assíncronos e concorrentes relevantes:
 
 Cenários de respostas obsoletas:
 
-Cenários de execução única da intenção de domínio:
+Cenários de execução única da intenção comportamental e, quando aplicável, da intenção de domínio:
 
 Casos de uso cobertos por testes unitários:
 
@@ -1330,12 +1342,12 @@ Prioridade:
 
 - [ ] Nomenclatura e contratos específicos estão definidos.
 - [ ] A validação autoritativa e suas validações antecipadas ou derivadas permanecem semanticamente coerentes.
-- [ ] Estados semânticos relevantes e suas fontes canônicas estão identificados.
+- [ ] Estados semânticos concretizados na implementação e suas fontes canônicas estão identificados.
 - [ ] Ciclos de vida e sincronização de estados relevantes estão concretizados.
 - [ ] Critérios de abstração e compartilhamento estão concretizados.
 - [ ] Comportamentos e contratos protegidos estão registrados.
 - [ ] Estados de operação, repetição segura e recuperação de erros relevantes estão concretizados.
-- [ ] Concorrência, ordenação e tratamento de resultados obsoletos estão concretizados quando aplicáveis.
+- [ ] Semântica de concorrência, ordenação e tratamento de resultados obsoletos estão concretizados quando aplicáveis.
 - [ ] Cancelamento, reversão, compensação e efeitos irrevogáveis estão concretizados quando aplicáveis.
 
 ## Desempenho
@@ -1345,7 +1357,8 @@ Prioridade:
 - [ ] Metas de resposta percebida e prioridades observáveis estão definidas quando aplicáveis.
 - [ ] Limites de memória, CPU, armazenamento, entrada e saída, rede e serviços externos estão registrados quando relevantes.
 - [ ] Caminhos críticos e trabalhos secundários independentes estão identificados quando relevantes.
-- [ ] Estratégia e limites de concorrência ou paralelismo estão concretizados quando aplicáveis.
+- [ ] O critério para considerar ganho de desempenho relevante está definido quando necessário.
+- [ ] Estratégia e limites de concorrência ou paralelismo voltados a desempenho e capacidade estão concretizados quando aplicáveis.
 - [ ] Otimizações que adicionam complexidade relevante possuem justificativa registrada.
 
 ## UX e UI
@@ -1362,13 +1375,15 @@ Prioridade:
 
 ## Testes
 
-- [ ] O grafo de casos de uso está localizado.
-- [ ] O grafo comportamental e seu escopo estão localizados.
-- [ ] Estados e transições relevantes estão catalogados.
+- [ ] O grafo de casos de uso e o grafo comportamental estão localizados e sua relação está explícita.
+- [ ] Estados e transições válidos do grafo comportamental estão catalogados.
+- [ ] Estados declarados inalcançáveis possuem justificativas registradas quando necessárias à completude.
+- [ ] Transições proibidas relevantes possuem restrição e evidência de prevenção ou rejeição registradas.
 - [ ] A evidência de completude do grafo está registrada.
+- [ ] O mapeamento entre transições semânticas e caminhos técnicos está localizado.
 - [ ] A rastreabilidade entre modelo e evidências está definida.
-- [ ] O critério para declarar cobertura comportamental completa está definido.
-- [ ] Transições isoladas e sequências sujeitas a interferência estão identificadas.
+- [ ] O procedimento e as evidências usados para demonstrar o critério universal de cobertura comportamental completa estão definidos.
+- [ ] Transições catalogadas isoladas e sequências sujeitas a interferência estão identificadas.
 - [ ] Cenários assíncronos, concorrentes, de respostas obsoletas e de execução única estão registrados quando aplicáveis.
 - [ ] Critérios adicionais de cobertura específicos do projeto estão definidos quando existirem.
 - [ ] Cobertura quantitativa, quando adotada, está registrada como critério adicional e não como substituta da cobertura comportamental.
