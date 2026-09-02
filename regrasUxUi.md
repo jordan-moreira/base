@@ -1242,11 +1242,25 @@ A interface deve responder visualmente assim que a ação for reconhecida.
 
 Tarefas secundárias não devem bloquear interações independentes sem necessidade.
 
+As garantias de resposta e não bloqueio especializam as regras de eficiência computacional, caminho crítico, concorrência e paralelismo definidas em `regrasDev.md`.
+
+Trabalho que não seja necessário para reconhecer a interação, produzir o próximo resultado observável necessário ou liberar a próxima ação dependente não deve atrasar essas respostas quando puder avançar fora do caminho crítico com segurança.
+
 ## 116. Carregamento progressivo
 
 - Conteúdo prioritário deve aparecer antes do secundário quando possível.
 - Regiões independentes devem carregar sem bloquear o conjunto.
 - A ordem deve preservar compreensão e estabilidade.
+
+### 116.1 Caminho crítico e independência técnica
+
+Para a interface, o caminho crítico observável corresponde ao trabalho necessário para disponibilizar o próximo conteúdo prioritário, feedback necessário ou operação da qual a continuidade do usuário realmente dependa.
+
+Conteúdo, regiões ou tarefas secundárias tecnicamente independentes não devem ser serializados antes do resultado prioritário apenas por conveniência de implementação.
+
+Quando existir independência técnica real e benefício relevante, regiões e trabalhos independentes devem poder avançar incrementalmente, concorrentemente ou em paralelo conforme as garantias de `regrasDev.md`.
+
+Dependências reais devem preservar sua ordem e seus invariantes. Desempenho percebido não justifica concorrência ou paralelismo que comprometam corretude, segurança, consistência, acessibilidade, contratos ou limites de recursos.
 
 ## 117. Estabilidade visual
 
@@ -1537,6 +1551,14 @@ Uma interface somente pode ser considerada concluída quando:
 - [ ] Ordem semântica e ações essenciais foram preservadas.
 - [ ] Redimensionamento e troca de composição preservam estado semanticamente válido.
 - [ ] Métodos de entrada suportados permanecem utilizáveis.
+
+## Desempenho percebido
+
+- [ ] Feedback e próxima ação não são atrasados por trabalho secundário independente sem necessidade.
+- [ ] Conteúdo prioritário e regiões independentes não são serializados artificialmente antes de trabalho do qual não dependem.
+- [ ] Trabalhos independentes avançam incrementalmente, concorrentemente ou em paralelo quando há benefício relevante e segurança semântica.
+- [ ] Dependências reais preservam ordem, consistência e invariantes.
+- [ ] Ganho de desempenho percebido não é obtido por concorrência ou paralelismo que comprometam corretude, segurança, acessibilidade ou limites de recursos.
 
 ## Conteúdo
 
