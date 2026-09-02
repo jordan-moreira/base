@@ -224,6 +224,71 @@ Quando não for possível satisfazer simultaneamente todos os objetivos:
 - responsabilidade e coesão prevalecem sobre tamanho físico;
 - estrutura semântica prevalece sobre simetria da árvore.
 
+### 13.1 Eficiência computacional proporcional
+
+A implementação deve utilizar complexidade computacional e consumo de recursos proporcionais aos limites reais do problema.
+
+Devem ser evitados, quando desnecessários, custos superiores em:
+
+- tempo de processamento;
+- memória;
+- armazenamento;
+- operações de entrada e saída;
+- serialização e desserialização;
+- comunicação de rede;
+- quantidade de chamadas a serviços, persistência ou recursos externos.
+
+Entre soluções que preservem igualmente corretude, segurança, integridade, contratos e comportamento, deve ser preferida aquela que reduza custo computacional ou uso de recursos relevante sem aumentar desproporcionalmente complexidade estrutural, risco ou manutenção.
+
+A menor complexidade assintótica possível não constitui obrigação isolada. Uma solução teoricamente mais eficiente não deve substituir solução suficientemente eficiente quando o ganho for irrelevante para os limites reais e a troca aumentar complexidade ou risco sem benefício justificável.
+
+Otimizações que adicionem complexidade relevante devem possuir necessidade verificável no contexto esperado. Limites, metas e restrições concretas de desempenho pertencem ao `regrasProjeto.md`.
+
+### 13.2 Trabalho computacional redundante
+
+Processamento cujo resultado válido já esteja disponível não deve ser repetido sem necessidade.
+
+Devem ser evitadas repetições desnecessárias de:
+
+- cálculos;
+- consultas;
+- transformações;
+- serializações e desserializações;
+- leituras e escritas;
+- transferências;
+- renderizações;
+- conversões;
+- chamadas externas.
+
+Resultados válidos podem ser reutilizados quando isso reduzir custo relevante e puder preservar corretude, atualidade, consistência, segurança e limites de memória ou armazenamento.
+
+Cache, memoização, materialização ou outra forma de reutilização não são obrigatórios quando invalidação, obsolescência, coordenação, consumo de recursos ou complexidade introduzida superarem o benefício esperado.
+
+Repetição necessária para preservar segurança, integridade, idempotência, observabilidade ou validação em fronteiras independentes não constitui trabalho redundante apenas por produzir verificação semelhante.
+
+### 13.3 Caminho crítico, concorrência e paralelismo
+
+O caminho crítico de uma operação é a cadeia de trabalhos dos quais depende a produção do próximo resultado necessário ou a liberação da próxima operação dependente.
+
+Trabalho que não seja necessário ao resultado ou à operação seguinte não deve permanecer artificialmente no caminho crítico quando puder ser adiado, executado incrementalmente, concorrentemente ou em paralelo com benefício relevante.
+
+Trabalhos independentes devem utilizar execução concorrente ou paralela quando a plataforma permitir, houver ganho relevante e puderem ser preservados:
+
+- corretude;
+- segurança;
+- integridade e consistência;
+- invariantes;
+- contratos;
+- ordem realmente necessária;
+- limites de recursos;
+- limites de serviços externos.
+
+Dependências reais e requisitos de ordenação devem permanecer explícitos. Trabalho com estado mutável compartilhado, efeitos concorrentes ou recursos contenciosos somente pode avançar concorrentemente quando sua coordenação preservar o comportamento definido.
+
+Concorrência ou paralelismo não devem ser introduzidos quando custo de coordenação, sincronização, contenção, criação de tarefas, comunicação, consumo adicional de recursos, complexidade ou risco superar o benefício esperado.
+
+Paralelização não substitui a eliminação de trabalho redundante nem a escolha de complexidade computacional proporcional.
+
 ---
 
 # Parte II — Modelo universal da árvore
@@ -1475,6 +1540,15 @@ A normalização ou modularização está concluída somente quando:
 - [ ] O ciclo de vida técnico dos estados preserva o ciclo de vida dos comportamentos representados.
 - [ ] Condições estão no nível responsável.
 - [ ] Variantes representam conceitos, não propriedades arbitrárias.
+
+## Desempenho
+
+- [ ] A complexidade computacional e o consumo de recursos são proporcionais aos limites reais do problema.
+- [ ] Trabalho computacional redundante foi eliminado quando sua repetição não possui responsabilidade necessária.
+- [ ] Trabalho secundário independente não permanece artificialmente no caminho crítico.
+- [ ] Trabalhos independentes utilizam concorrência ou paralelismo quando há ganho relevante e segurança semântica.
+- [ ] Dependências e requisitos reais de ordem permanecem explícitos.
+- [ ] Concorrência ou paralelismo não foram introduzidos quando seus custos, contenção, complexidade ou riscos superam o benefício esperado.
 
 ## Referências
 
