@@ -712,6 +712,16 @@ A ausência de resposta não deve induzir repetição por incerteza.
 - O bloqueio deve ser limitado ao escopo afetado.
 - Conclusão ou falha deve restaurar estado apropriado.
 
+### 58.1 Acionamentos equivalentes e intenção única
+
+Quando clique, toque, `Enter`, tecla de ativação, atalho, comando de tecnologia assistiva ou outro método suportado representarem a mesma ação semântica, todos devem convergir para a mesma intenção de domínio.
+
+Uma única interação física ou ativação lógica não pode executar essa intenção mais de uma vez por sobreposição de handlers, comportamento nativo combinado com handler manual, propagação, submissão implícita, atalhos concorrentes ou mecanismos equivalentes.
+
+A execução única da intenção não proíbe múltiplos efeitos internos coordenados necessários à mesma ação.
+
+Nova interação deliberada do usuário constitui novo evento e não deve ser descartada indevidamente; quando repetição rápida puder produzir conflito ou duplicação de efeito, o bloqueio deve seguir a regra de ações duplicadas e permanecer limitado ao escopo necessário.
+
 ## 59. Confirmações e desfazer
 
 Solicitar confirmação quando houver:
@@ -793,6 +803,12 @@ Deve informar:
 - suporte, quando necessário.
 
 Detalhes técnicos não substituem explicação compreensível.
+
+A representação de erro deve corresponder ao estado real conhecido da operação. Falha posterior a efeito principal concluído não pode ser apresentada como se toda a operação necessariamente não tivesse ocorrido.
+
+Erros semanticamente diferentes que permitam formas diferentes de continuidade ou recuperação devem permanecer distinguíveis o suficiente para orientar a ação correta.
+
+Quando o resultado da operação for indeterminado, a interface não pode afirmar sucesso nem ausência de efeito sem confirmação.
 
 ## 67. Estado parcial
 
@@ -937,6 +953,14 @@ Após erro, preservar:
 - dados válidos;
 - caminho de continuidade;
 - proteção contra duplicação de efeitos.
+
+As ações de recuperação oferecidas devem ser compatíveis com o estado real conhecido da operação e com as garantias técnicas definidas em `regrasDev.md`.
+
+Tentar novamente somente deve ser apresentado como ação segura quando a repetição não puder duplicar efeito indevido ou quando o sistema possuir mecanismo capaz de reconciliar a repetição corretamente.
+
+Quando uma mutação principal tiver sido concluída e apenas sincronização, comunicação ou efeito secundário falhar, a recuperação deve tratar essa condição sem induzir repetição da mutação principal como se nada tivesse ocorrido.
+
+Quando o resultado permanecer indeterminado, a interface deve orientar verificação ou recuperação compatível sem apresentar resultado definitivo não confirmado.
 
 ## 86. Erros locais e globais
 
@@ -1251,6 +1275,26 @@ Reabrir um fluxo deve produzir o estado previsto pelo modelo comportamental, pre
 
 A validação deve identificar as transições ou sequências do grafo comportamental que o cenário protege.
 
+### 120.2 Operações assíncronas e recuperação observável
+
+Quando uma interação iniciar operação assíncrona ou sujeita a resultados sobrepostos, a validação deve especializar os cenários definidos em `regrasDev.md` e verificar o comportamento observável correspondente.
+
+Devem ser considerados, quando aplicável:
+
+- sucesso;
+- falha;
+- atraso relevante;
+- tentativa novamente;
+- repetição rápida da interação;
+- respostas concluídas fora da ordem;
+- resposta obsoleta depois de estado mais recente;
+- mutação principal concluída seguida de falha de sincronização, comunicação ou efeito secundário;
+- resultado indeterminado.
+
+Resposta tardia ou obsoleta não pode regredir silenciosamente foco, seleção, conteúdo, disponibilidade de ações ou outro estado válido produzido por interação posterior.
+
+Feedback, mensagens e ações de recuperação devem corresponder ao estado real conhecido da operação, sem induzir repetição insegura nem apresentar como definitivo resultado ainda não confirmado.
+
 ## 121. Inspeção heurística
 
 Avaliar, quando aplicável:
@@ -1440,6 +1484,7 @@ Uma interface somente pode ser considerada concluída quando:
 
 - [ ] Toda ação relevante produz feedback.
 - [ ] Operações demoradas indicam atividade.
+- [ ] Acionamentos equivalentes convergem para uma única intenção sem duplicação pelo mesmo evento.
 - [ ] Ações destrutivas comunicam consequência.
 - [ ] Processos automáticos são distinguíveis de decisões confirmadas.
 
@@ -1476,6 +1521,9 @@ Uma interface somente pode ser considerada concluída quando:
 - [ ] Formas alternativas de encerramento e confirmação foram consideradas quando suportadas.
 - [ ] Métodos de entrada compartilhados por um fluxo foram validados também em sequências intercaladas.
 - [ ] Alternância de método de entrada preserva foco, alvo, seleção, estado, contexto e atalhos aplicáveis.
+- [ ] Operações assíncronas aplicáveis foram verificadas em atraso, repetição, ordem de respostas e recuperação.
+- [ ] Respostas obsoletas não regressam estado válido produzido por interação posterior.
+- [ ] Falhas posteriores a efeito principal concluído são apresentadas e recuperadas conforme o estado real da operação.
 - [ ] Densidade e responsividade foram testadas em condições limite.
 - [ ] Navegação por teclado e estrutura acessível foram verificadas.
 - [ ] O nível declarado corresponde às evidências.
