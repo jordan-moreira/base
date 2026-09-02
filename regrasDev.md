@@ -795,6 +795,24 @@ Dependências não utilizadas devem ser removidas.
 - Recuperação automática só deve ocorrer quando for segura.
 - A taxonomia interna de erros deve ser definida antes da conversão para transporte, interface, logs ou métricas.
 
+### 49.1 Semântica do erro e estado da operação
+
+Erro interno, classificação semântica e estado resultante da operação são conceitos relacionados, mas não equivalentes.
+
+Para cada falha relevante, a fronteira responsável deve preservar informação suficiente para determinar, quando aplicável:
+
+- qual intenção ou operação falhou;
+- se seus efeitos principais não ocorreram, ocorreram parcialmente, foram concluídos ou permaneceram indeterminados;
+- quais efeitos secundários, sincronizações ou comunicações falharam depois de um efeito principal já válido;
+- se a repetição é segura;
+- quais formas de recuperação permanecem válidas.
+
+A conversão para transporte, interface, logs ou métricas deve preservar a semântica necessária ao consumidor sem expor detalhes internos desnecessários.
+
+Falhas ocorridas depois de uma mutação concluída não podem ser representadas como se a mutação necessariamente não tivesse ocorrido.
+
+Quando o resultado permanecer indeterminado, o sistema deve tratá-lo explicitamente como indeterminado e não presumir sucesso nem ausência de efeito.
+
 ## 50. Segurança
 
 - Toda entrada externa é não confiável.
@@ -1170,6 +1188,45 @@ Uma mesma evidência pode validar múltiplos elementos do grafo e um mesmo eleme
 
 Não pode existir transição catalogada sem evidência localizável nem evidência declarada como cobertura comportamental sem vínculo identificável com o comportamento protegido.
 
+### 66.9 Operações assíncronas, concorrência e respostas obsoletas
+
+Quando operações assíncronas, concorrentes ou sobrepostas puderem afetar o mesmo comportamento, o modelo deve definir a validade dos resultados e as relações de ordem que forem semanticamente relevantes.
+
+Um resultado é obsoleto quando foi produzido para contexto, precondições, versão ou intenção já superados por estado ou operação posterior relevante.
+
+Resultado obsoleto não pode sobrescrever silenciosamente estado válido mais recente. Ele deve ser descartado, reconciliado ou tratado por regra explícita compatível com o comportamento definido.
+
+A validação deve cobrir, quando aplicável:
+
+- sucesso;
+- falha antes da produção de efeitos;
+- repetição após falha recuperável;
+- atraso relevante;
+- conclusões fora da ordem de início;
+- repetição rápida;
+- invocações concorrentes ou sobrepostas;
+- cancelamento ou abandono;
+- mutação principal concluída seguida de falha em sincronização, comunicação ou efeito secundário;
+- resultado cuja conclusão permaneça indeterminada.
+
+Em cada cenário aplicável, devem ser verificados o estado resultante, os efeitos produzidos ou preservados, a validade de resultados tardios e a segurança de eventual repetição.
+
+Não é necessário criar cenários assíncronos artificiais quando a operação não admitir assincronicidade, concorrência, repetição ou ordenação relevante.
+
+### 66.10 Execução única da intenção de domínio
+
+Um mesmo evento lógico, sinal externo ou causa catalogada que represente uma única intenção de domínio deve produzir no máximo uma execução dessa mesma intenção.
+
+A intenção não pode ser executada novamente pelo mesmo evento por duplicação acidental de handlers, listeners, callbacks, propagação, composição de caminhos equivalentes ou reentrada técnica.
+
+Essa regra não limita a quantidade de mutações, chamadas ou efeitos internos necessários para concluir uma única intenção de domínio; ela impede apenas a duplicação não deliberada da própria intenção e de seus efeitos de domínio.
+
+Repetição técnica de transporte, infraestrutura ou integração somente pode ocorrer quando preservar a semântica da intenção e não duplicar efeitos de domínio indevidamente.
+
+Quando o domínio permitir repetição deliberada da mesma intenção, cada nova execução deve corresponder a novo evento semanticamente válido ou utilizar contrato de repetição seguro, como idempotência quando aplicável.
+
+A validação deve demonstrar que um único evento não provoca duplicação da intenção nem de efeitos que deveriam ocorrer uma única vez.
+
 ## 67. Níveis de teste
 
 A cobertura deve combinar, conforme necessidade real:
@@ -1194,6 +1251,7 @@ Uma categoria não deve ser exigida quando não agregar proteção, mas sua omis
 - Testes quebrados não podem ser ignorados ou removidos para permitir integração.
 - Cenários de erro e limite devem ser testados quando fizerem parte do comportamento.
 - Transições relevantes devem ser verificadas isoladamente e em sequências aplicáveis capazes de revelar dependência ou interferência de estado.
+- Operações assíncronas e concorrentes devem ser verificadas nos cenários aplicáveis de ordem, atraso, repetição, falha e recuperação.
 - Testes permanentes permanecem versionados.
 - Testes temporários só podem ser removidos quando não protegerem comportamento permanente.
 
@@ -1393,6 +1451,10 @@ A normalização ou modularização está concluída somente quando:
 - [ ] Combinações A → B, B → A, A → A e B → B foram consideradas quando semanticamente possíveis e sujeitas a interferência.
 - [ ] O modelo e as evidências possuem rastreabilidade bidirecional suficiente.
 - [ ] Não existem lacunas de tratamento, cobertura ou rastreabilidade incompatíveis com a declaração de cobertura integral.
+- [ ] Operações assíncronas aplicáveis foram validadas em sucesso, falha, atraso, repetição, concorrência e recuperação.
+- [ ] Respostas obsoletas não sobrescrevem estado válido mais recente.
+- [ ] Falha posterior a uma mutação concluída preserva a distinção entre efeito principal e falha secundária.
+- [ ] Um único evento lógico não duplica a mesma intenção de domínio nem efeitos que deveriam ocorrer uma única vez.
 - [ ] Fluxos principais, alternativos, erros e limites estão cobertos.
 - [ ] Níveis de teste foram escolhidos conforme risco e responsabilidade.
 - [ ] Testes permanentes não foram removidos.
