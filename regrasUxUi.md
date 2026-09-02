@@ -1230,6 +1230,27 @@ Verificar estados de sucesso, erro, vazio, carregamento e recuperação.
 
 A validação deve considerar comportamento observável, não apenas renderização.
 
+### 120.1 Reentrada e sequências de fluxos temporários
+
+Fluxos temporários, canceláveis ou reabertos devem ser validados em sequências capazes de revelar perda de contexto ou efeito residual entre entradas sucessivas.
+
+Quando semanticamente aplicável, deve ser validada ao menos a sequência:
+
+```text
+abrir → cancelar → reabrir → confirmar
+```
+
+Quando o fluxo suportar diferentes formas de encerramento ou confirmação, devem ser consideradas as formas aplicáveis, como:
+
+- `Escape`;
+- `Enter`;
+- clique ou toque fora da região temporária;
+- controle visível de fechar, cancelar ou confirmar.
+
+Reabrir um fluxo deve produzir o estado previsto pelo modelo comportamental, preservar somente o contexto que continuar válido e restaurar foco, seleção ou demais propriedades quando esse comportamento estiver definido.
+
+A validação deve identificar as transições ou sequências do grafo comportamental que o cenário protege.
+
 ## 121. Inspeção heurística
 
 Avaliar, quando aplicável:
@@ -1287,6 +1308,29 @@ Ferramentas automáticas não são suficientes para declarar conformidade integr
 Validar nas plataformas, navegadores, dimensões e métodos de entrada definidos no projeto.
 
 Simulação não substitui integralmente dispositivo real quando existirem riscos específicos.
+
+### 125.1 Alternância entre métodos de entrada
+
+Quando mais de um método de entrada puder operar o mesmo fluxo, a validação não pode limitar-se a executar o fluxo completo separadamente com cada método.
+
+Devem ser incluídas sequências que alternem os métodos suportados quando a alternância for semanticamente possível, como:
+
+```text
+teclado → ponteiro → teclado
+```
+
+ou outras combinações relevantes entre teclado, mouse, toque, caneta e tecnologias assistivas.
+
+A mudança do método de entrada não pode causar perda indevida de:
+
+- foco;
+- alvo da interação;
+- seleção;
+- estado válido;
+- contexto;
+- disponibilidade ou funcionamento dos atalhos aplicáveis.
+
+As transições produzidas por métodos de entrada equivalentes devem preservar o mesmo significado comportamental, salvo diferença explicitamente definida no modelo.
 
 ## 126. Regressão visual e comportamental
 
@@ -1428,6 +1472,10 @@ Uma interface somente pode ser considerada concluída quando:
 
 - [ ] Fluxos principais foram executados.
 - [ ] Estados de erro, vazio, carregamento e recuperação foram verificados.
+- [ ] Fluxos temporários e canceláveis foram validados em sequências de reentrada aplicáveis.
+- [ ] Formas alternativas de encerramento e confirmação foram consideradas quando suportadas.
+- [ ] Métodos de entrada compartilhados por um fluxo foram validados também em sequências intercaladas.
+- [ ] Alternância de método de entrada preserva foco, alvo, seleção, estado, contexto e atalhos aplicáveis.
 - [ ] Densidade e responsividade foram testadas em condições limite.
 - [ ] Navegação por teclado e estrutura acessível foram verificadas.
 - [ ] O nível declarado corresponde às evidências.
