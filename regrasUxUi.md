@@ -46,7 +46,16 @@ Este documento somente pode ser alterado quando o objeto da alteração for o pr
 
 ### Conceitos transversais
 
-Quando um conceito produzir obrigações tanto de engenharia ou arquitetura quanto de experiência ou interface, sua definição e suas especializações devem ser distribuídas pela responsabilidade fundamental:
+Quando um conceito produzir obrigações tanto de engenharia ou arquitetura quanto de experiência ou interface, sua definição e suas especializações devem ser distribuídas pela responsabilidade fundamental.
+
+A responsabilidade fundamental deve ser identificada pelos seguintes critérios:
+
+- um conceito possui responsabilidade fundamental de engenharia ou arquitetura quando a garantia correspondente continuar necessária para a corretude, segurança, integridade, contratos, estado, processamento ou estrutura do sistema mesmo que não exista interação humana;
+- um conceito possui responsabilidade fundamental de experiência ou interface quando a obrigação existir especificamente em razão de como uma pessoa percebe, compreende, opera ou recebe resposta do sistema;
+- quando o mesmo conceito possuir uma garantia sistêmica e uma consequência humana inseparáveis, a garantia sistêmica permanece canônica em `regrasDev.md` e a consequência humana é especializada neste documento;
+- quando a obrigação puder ser completamente definida sem depender de comportamento técnico interno e existir exclusivamente para a experiência humana, sua definição canônica pertence a este documento.
+
+Aplicada essa classificação:
 
 - quando a responsabilidade fundamental for de experiência ou interface, este documento contém a definição canônica e `regrasDev.md` contém somente as especializações técnicas necessárias;
 - quando a responsabilidade fundamental for de engenharia ou arquitetura, `regrasDev.md` contém a definição canônica e este documento contém somente as especializações necessárias à experiência e à interface;
@@ -714,9 +723,9 @@ A ausência de resposta não deve induzir repetição por incerteza.
 
 ### 58.1 Acionamentos equivalentes e intenção única
 
-Quando clique, toque, `Enter`, tecla de ativação, atalho, comando de tecnologia assistiva ou outro método suportado representarem a mesma ação semântica, todos devem convergir para a mesma intenção de domínio.
+Quando clique, toque, `Enter`, tecla de ativação, atalho, comando de tecnologia assistiva ou outro método suportado representarem a mesma ação semântica, todos devem convergir para a mesma intenção comportamental e, quando houver efeito de domínio, para a mesma intenção de domínio.
 
-Uma única interação física ou ativação lógica não pode executar essa intenção mais de uma vez por sobreposição de handlers, comportamento nativo combinado com handler manual, propagação, submissão implícita, atalhos concorrentes ou mecanismos equivalentes.
+Uma única interação física ou ativação lógica não pode executar a mesma intenção comportamental mais de uma vez por sobreposição de handlers, comportamento nativo combinado com handler manual, propagação, submissão implícita, atalhos concorrentes ou mecanismos equivalentes. Quando existir intenção de domínio associada, ela também não pode ser duplicada pelo mesmo evento.
 
 A execução única da intenção não proíbe múltiplos efeitos internos coordenados necessários à mesma ação.
 
@@ -1307,12 +1316,14 @@ Quando semanticamente aplicável, deve ser validada ao menos a sequência:
 abrir → cancelar → reabrir → confirmar
 ```
 
-Quando o fluxo suportar diferentes formas de encerramento ou confirmação, devem ser consideradas as formas aplicáveis, como:
+Quando o fluxo suportar diferentes formas de encerramento ou confirmação, cada forma suportada que possa produzir transição distinta, compartilhar estado, alterar foco ou apresentar interferência com outra forma deve ser validada. Isso inclui, quando aplicável:
 
 - `Escape`;
 - `Enter`;
 - clique ou toque fora da região temporária;
 - controle visível de fechar, cancelar ou confirmar.
+
+Formas suportadas comprovadamente equivalentes podem compartilhar a mesma evidência quando a equivalência comportamental estiver demonstrada e rastreável.
 
 Reabrir um fluxo deve produzir o estado previsto pelo modelo comportamental, preservar somente o contexto que continuar válido e restaurar foco, seleção ou demais propriedades quando esse comportamento estiver definido.
 
@@ -1528,7 +1539,7 @@ Uma interface somente pode ser considerada concluída quando:
 
 - [ ] Toda ação relevante produz feedback.
 - [ ] Operações demoradas indicam atividade.
-- [ ] Acionamentos equivalentes convergem para uma única intenção sem duplicação pelo mesmo evento.
+- [ ] Acionamentos equivalentes convergem para uma única intenção comportamental e, quando aplicável, uma única intenção de domínio sem duplicação pelo mesmo evento.
 - [ ] Cancelar e desfazer somente são oferecidos quando a operação subjacente suporta a consequência comunicada.
 - [ ] Limitações de reversibilidade são comunicadas quando aplicáveis.
 - [ ] Ações destrutivas comunicam consequência.
@@ -1573,7 +1584,7 @@ Uma interface somente pode ser considerada concluída quando:
 - [ ] Validações antecipadas da interface permanecem semanticamente compatíveis com a validação autoritativa.
 - [ ] Estados de erro, vazio, carregamento e recuperação foram verificados.
 - [ ] Fluxos temporários e canceláveis foram validados em sequências de reentrada aplicáveis.
-- [ ] Formas alternativas de encerramento e confirmação foram consideradas quando suportadas.
+- [ ] Formas suportadas de encerramento e confirmação que possam produzir transição distinta, compartilhar estado ou apresentar interferência foram validadas.
 - [ ] Métodos de entrada compartilhados por um fluxo foram validados também em sequências intercaladas.
 - [ ] Alternância de método de entrada preserva foco, alvo, seleção, estado, contexto e atalhos aplicáveis.
 - [ ] Operações assíncronas aplicáveis foram verificadas em atraso, repetição, ordem de respostas e recuperação.
