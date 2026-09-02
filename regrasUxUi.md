@@ -44,6 +44,17 @@ Este documento somente pode ser alterado quando o objeto da alteração for o pr
 
 `regrasProjeto.md` pode escolher tecnologias, valores e estratégias, mas não pode reduzir, contradizer ou dispensar os critérios universais.
 
+### Conceitos transversais
+
+Quando um conceito produzir obrigações tanto de engenharia ou arquitetura quanto de experiência ou interface, sua definição e suas especializações devem ser distribuídas pela responsabilidade fundamental:
+
+- quando a responsabilidade fundamental for de experiência ou interface, este documento contém a definição canônica e `regrasDev.md` contém somente as especializações técnicas necessárias;
+- quando a responsabilidade fundamental for de engenharia ou arquitetura, `regrasDev.md` contém a definição canônica e este documento contém somente as especializações necessárias à experiência e à interface;
+- uma especialização presente neste documento deve preservar integralmente o significado, os critérios mínimos e as restrições da definição canônica;
+- uma especialização não pode redefinir o conceito, criar critério concorrente nem constituir segunda fonte canônica;
+- uma obrigação transversal aplicável ao escopo deste documento deve ser explicitada aqui sempre que sua ausência puder permitir interpretação local incompleta, ainda que a definição canônica permaneça em `regrasDev.md`;
+- essa explicitação deve identificar a dependência normativa ou especializar suas consequências observáveis e interativas sem repetir desnecessariamente a definição canônica.
+
 ---
 
 ## 4. Aplicação independente e cumulativa
