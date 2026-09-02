@@ -294,6 +294,44 @@ Desempenho relevante:
 
 Compatibilidade relevante:
 
+### 11.1 Desempenho e capacidade
+
+Escopos com requisitos concretos de desempenho:
+
+Volume de dados por operação:
+
+Volume total esperado:
+
+Carga simultânea esperada:
+
+Metas de latência:
+
+Throughput esperado:
+
+Limites de memória:
+
+Limites de CPU:
+
+Limites de armazenamento:
+
+Limites de entrada e saída:
+
+Limites de rede:
+
+Limites de serviços externos:
+
+Recursos computacionais disponíveis:
+
+Caminhos críticos de desempenho:
+
+Trabalhos secundários que podem permanecer fora do caminho crítico:
+
+Estratégia de concorrência ou paralelismo:
+
+Limites de concorrência:
+
+Otimizações relevantes e respectivas justificativas:
+
 ## 12. Restrições e premissas
 
 Tecnologias obrigatórias:
@@ -610,6 +648,8 @@ Política de compatibilidade:
 
 ## 30. Estado
 
+Estados semânticos relevantes:
+
 Critério para estado local:
 
 Critério para estado de módulo ou feature:
@@ -619,6 +659,12 @@ Critério para estado global:
 Critério para estado remoto:
 
 Fonte canônica de cada estado compartilhado:
+
+Escopo e ciclo de vida dos estados relevantes:
+
+Política para estados derivados:
+
+Política de sincronização entre representações do mesmo estado:
 
 Estratégia de persistência:
 
@@ -870,6 +916,14 @@ Idempotência:
 
 Concorrência:
 
+Dependências de ordem:
+
+Tratamento de operações assíncronas ou sobrepostas:
+
+Tratamento de resultados obsoletos:
+
+Estratégia de cancelamento de operações em andamento:
+
 Diretório do domínio:
 
 Entidades:
@@ -1006,11 +1060,45 @@ Dados proibidos no repositório:
 
 Diferenças entre ambientes:
 
-## 48. Grafo de casos de uso e testes
+## 48. Grafo comportamental e testes
 
 Local do grafo de casos de uso:
 
+Local do grafo comportamental:
+
+Escopo do grafo comportamental:
+
+Local do catálogo de estados e transições:
+
+Estados semanticamente relevantes catalogados:
+
+Transições catalogadas:
+
+Estados de encerramento relevantes:
+
+Evidência de completude do grafo:
+
+Local da rastreabilidade entre modelo e validação:
+
+Forma de identificação de estados, transições e sequências nas evidências:
+
 Estratégia geral de testes:
+
+Critérios adicionais de cobertura específicos do projeto:
+
+Transições validadas isoladamente:
+
+Sequências comportamentais sujeitas a dependência ou interferência:
+
+Cenários de reentrada relevantes:
+
+Cenários de alternância entre métodos de entrada:
+
+Cenários assíncronos e concorrentes relevantes:
+
+Cenários de respostas obsoletas:
+
+Cenários de execução única da intenção de domínio:
 
 Casos de uso cobertos por testes unitários:
 
@@ -1205,9 +1293,20 @@ Prioridade:
 ## Implementação
 
 - [ ] Nomenclatura e contratos específicos estão definidos.
-- [ ] Estado possui fontes canônicas identificadas.
+- [ ] Estados semânticos relevantes e suas fontes canônicas estão identificados.
+- [ ] Ciclos de vida e sincronização de estados relevantes estão concretizados.
 - [ ] Critérios de abstração e compartilhamento estão concretizados.
 - [ ] Comportamentos e contratos protegidos estão registrados.
+- [ ] Concorrência, ordenação e tratamento de resultados obsoletos estão concretizados quando aplicáveis.
+
+## Desempenho
+
+- [ ] Escopos com requisitos de desempenho possuem metas ou limites concretos quando aplicáveis.
+- [ ] Volume, latência, throughput, concorrência e recursos disponíveis estão definidos quando relevantes.
+- [ ] Limites de memória, CPU, armazenamento, entrada e saída, rede e serviços externos estão registrados quando relevantes.
+- [ ] Caminhos críticos e trabalhos secundários independentes estão identificados quando relevantes.
+- [ ] Estratégia e limites de concorrência ou paralelismo estão concretizados quando aplicáveis.
+- [ ] Otimizações que adicionam complexidade relevante possuem justificativa registrada.
 
 ## UX e UI
 
@@ -1222,6 +1321,13 @@ Prioridade:
 ## Testes
 
 - [ ] O grafo de casos de uso está localizado.
+- [ ] O grafo comportamental e seu escopo estão localizados.
+- [ ] Estados e transições relevantes estão catalogados.
+- [ ] A evidência de completude do grafo está registrada.
+- [ ] A rastreabilidade entre modelo e evidências está definida.
+- [ ] Transições isoladas e sequências sujeitas a interferência estão identificadas.
+- [ ] Cenários assíncronos, concorrentes, de respostas obsoletas e de execução única estão registrados quando aplicáveis.
+- [ ] Critérios adicionais de cobertura específicos do projeto estão definidos quando existirem.
 - [ ] Fluxos principais, alternativos, erros e limites estão cobertos.
 - [ ] Unitários, integração e ponta a ponta são usados conforme necessidade.
 - [ ] Omissões de níveis de teste estão justificadas.
@@ -1231,7 +1337,7 @@ Prioridade:
 
 - [ ] Comandos de validação estão registrados.
 - [ ] Estratégia de branches está definida.
-- [ ] Critérios de promoção estão definidos.
+- [ ] Critérios para promoção estão definidos.
 - [ ] Artefatos temporários possuem política de remoção.
 - [ ] Critério técnico de conclusão está definido.
 
