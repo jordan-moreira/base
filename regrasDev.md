@@ -52,6 +52,17 @@ regrasDev.md + regrasUxUi.md
 
 `regrasProjeto.md` pode concretizar, restringir ou especializar decisões que os documentos universais delegarem ao projeto, mas não pode contradizê-los, dispensá-los ou reduzir seus critérios mínimos.
 
+### Conceitos transversais
+
+Quando um conceito produzir obrigações tanto de engenharia ou arquitetura quanto de experiência ou interface, sua definição e suas especializações devem ser distribuídas pela responsabilidade fundamental:
+
+- quando a responsabilidade fundamental for de engenharia ou arquitetura, este documento contém a definição canônica e `regrasUxUi.md` contém somente as especializações necessárias à experiência e à interface;
+- quando a responsabilidade fundamental for de experiência ou interface, `regrasUxUi.md` contém a definição canônica e este documento contém somente as especializações técnicas necessárias;
+- uma especialização presente neste documento deve preservar integralmente o significado, os critérios mínimos e as restrições da definição canônica;
+- uma especialização não pode redefinir o conceito, criar critério concorrente nem constituir segunda fonte canônica;
+- uma obrigação transversal aplicável ao escopo deste documento deve ser explicitada aqui sempre que sua ausência puder permitir interpretação local incompleta, ainda que a definição canônica permaneça em `regrasUxUi.md`;
+- essa explicitação deve identificar a dependência normativa ou especializar suas consequências técnicas sem repetir desnecessariamente a definição canônica.
+
 ---
 
 ## 4. Aplicação independente e cumulativa
