@@ -717,6 +717,18 @@ Não aplicar convenção apenas por hábito quando ela prejudicar a semântica.
 - Tipos locais permanecem próximos ao uso.
 - Tipos compartilhados representam contratos realmente compartilhados.
 
+### 42.1 Coerência semântica de validações
+
+Uma mesma restrição de domínio, contrato ou regra de negócio validada em múltiplas fronteiras deve preservar o mesmo significado semântico em todas elas.
+
+Validação antecipada em cliente, transporte, adaptador ou outra fronteira pode melhorar feedback ou rejeitar entradas inválidas mais cedo, mas não substitui a validação autoritativa na fronteira responsável pela regra.
+
+Fronteiras diferentes não podem aceitar e rejeitar estados semanticamente contraditórios para a mesma regra. Diferenças de formato, normalização, mensagem ou mecanismo são permitidas quando preservarem o mesmo conjunto semântico de estados válidos e inválidos.
+
+Quando fronteiras validarem responsabilidades diferentes, essa diferença deve ser explícita e não pode ser apresentada como se representasse a mesma regra.
+
+A regra autoritativa deve permanecer localizável no domínio, contrato ou fronteira responsável, e representações derivadas devem acompanhar suas alterações.
+
 ## 43. Contratos
 
 Contrato é qualquer interface estável entre módulos, processos ou sistemas.
@@ -813,6 +825,24 @@ Falhas ocorridas depois de uma mutação concluída não podem ser representadas
 
 Quando o resultado permanecer indeterminado, o sistema deve tratá-lo explicitamente como indeterminado e não presumir sucesso nem ausência de efeito.
 
+### 49.2 Cancelamento, reversão e compensação
+
+Cancelamento, reversão, compensação e repetição representam contratos distintos e não podem ser tratados como equivalentes por conveniência de implementação ou apresentação.
+
+Uma operação somente pode expor promessa de cancelar ou desfazer quando possuir semântica técnica capaz de produzir o efeito prometido sem violar invariantes, integridade, segurança ou contratos externos.
+
+Deve ser distinguido, quando aplicável:
+
+- impedir que uma operação ainda não efetivada continue;
+- interromper processamento futuro sem desfazer efeitos já produzidos;
+- reverter diretamente efeitos produzidos;
+- restaurar versão ou estado anterior válido;
+- executar operação compensatória que produza resultado semanticamente equivalente ao desfazer permitido.
+
+Quando uma operação for apenas parcialmente reversível, possuir efeitos externos irrevogáveis ou exigir compensação com resultado diferente da restauração exata, essas limitações devem permanecer explícitas no contrato.
+
+Uma camada externa, inclusive interface, não pode prometer cancelamento, desfazer ou recuperação mais forte do que a operação subjacente consegue garantir.
+
 ## 50. Segurança
 
 - Toda entrada externa é não confiável.
@@ -821,6 +851,18 @@ Quando o resultado permanecer indeterminado, o sistema deve tratá-lo explicitam
 - Dados sensíveis devem ser protegidos em armazenamento, transporte e logs.
 - Não confiar no cliente para decisões de segurança.
 - Requisitos de segurança e privacidade devem anteceder decisões sobre logs, persistência e preenchimento automático.
+
+### 50.1 Autoridade de autorização
+
+Autorização deve ser decidida e aplicada na fronteira que protege a operação ou o recurso correspondente.
+
+Estado visual, ocultação, desabilitação, roteamento de cliente ou qualquer outra restrição de interface não constitui mecanismo autoritativo de autorização.
+
+A interface pode refletir permissões conhecidas para evitar apresentar ações indevidamente disponíveis, mas essa representação não concede, revoga nem substitui a autorização técnica.
+
+Toda operação protegida deve validar a autorização aplicável independentemente da forma como foi alcançada, inclusive por chamada direta, cliente alternativo, automação ou fluxo não visual.
+
+Mudanças de permissão devem produzir comportamento compatível com o estado autoritativo vigente, sem depender de estado de interface previamente calculado como fonte de segurança.
 
 ## 51. Observabilidade
 
@@ -1423,6 +1465,9 @@ A normalização ou modularização está concluída somente quando:
 - [ ] Funções, componentes e arquivos possuem responsabilidade principal.
 - [ ] Nomes representam responsabilidades reais.
 - [ ] Contratos públicos são explícitos.
+- [ ] Validações da mesma regra preservam significado semântico entre fronteiras.
+- [ ] A autorização é aplicada na fronteira autoritativa independentemente da interface.
+- [ ] Promessas externas de cancelar ou desfazer correspondem à reversibilidade técnica real da operação.
 - [ ] Semântica nativa foi preservada.
 - [ ] Estados semânticos possuem fonte canônica.
 - [ ] Representações derivadas do mesmo estado permanecem semanticamente equivalentes.
