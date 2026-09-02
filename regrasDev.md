@@ -212,8 +212,8 @@ Uma exceção local não cria convenção geral.
 ## 11. Arquitetura proporcional
 
 - A arquitetura deve crescer conforme a complexidade real do projeto.
-- Projetos pequenos não devem reproduzir estruturas próprias de sistemas maiores sem necessidade.
-- Projetos maiores não devem permanecer em estruturas simples quando isso comprometer manutenção, testes, segurança ou evolução.
+- A arquitetura não deve introduzir camadas, abstrações, arquivos ou diretórios cujas responsabilidades, contratos, dependências ou ciclos de mudança não existam no projeto.
+- A arquitetura deve introduzir separações adicionais quando responsabilidades, contratos, dependências ou ciclos de mudança distintos fizerem a estrutura atual comprometer manutenção, testes, segurança ou evolução.
 - Nenhuma camada, abstração, arquivo ou diretório deve existir apenas para satisfazer um padrão teórico ou produzir simetria visual.
 
 ## 12. Proximidade
@@ -667,11 +667,11 @@ Cada função, método ou componente deve:
 - tornar efeitos externos explícitos;
 - retornar resultado previsível;
 - evitar misturar validação, transformação, persistência e apresentação sem coordenação justificável;
-- delegar etapas independentes;
+- delegar etapas que possuam responsabilidade própria conforme os critérios de modularização das Partes II e III;
 - evitar aninhamento excessivo;
 - tratar erros na fronteira adequada.
 
-Uma função coordenadora pode representar fluxo composto, desde que delegue etapas independentes.
+Uma função coordenadora pode representar fluxo composto, desde que delegue as etapas que possuam responsabilidade própria conforme os mesmos critérios de modularização.
 
 ## 35. Arquivos
 
@@ -783,6 +783,8 @@ Uma convenção pode prevalecer quando:
 - for consolidada e previsível no ecossistema;
 - melhorar interoperabilidade.
 
+Quando prevalecer, a convenção tecnológica especializa somente a forma, os nomes exigidos, os mecanismos de descoberta, a integração ou a interoperabilidade necessários ao ecossistema. Ela não pode reduzir semântica, responsabilidade, corretude, segurança, contratos ou comportamento exigidos por estas regras.
+
 Não aplicar convenção apenas por hábito quando ela prejudicar a semântica.
 
 ## 42. Tipagem
@@ -870,13 +872,18 @@ Dependências não utilizadas devem ser removidas.
 
 ## 48. Configuração
 
-- Configurações variáveis devem ser centralizadas.
+- Configurações variáveis devem possuir fonte canônica e mecanismo coerente de acesso e validação. Centralização semântica não exige concentração física em um único arquivo quando a modularização exigir distribuição por contexto.
 - Valores de ambiente devem ser validados na inicialização.
 - Configurações obrigatórias ausentes devem produzir erro claro.
 - Segredos nunca devem ser versionados.
 - Valores específicos de ambiente não pertencem à regra de negócio.
 
 ## 49. Erros
+
+Para esta seção:
+
+- erro esperado é uma falha prevista pelo contrato, pelo modelo comportamental ou pela regra da operação;
+- falha inesperada é uma falha não prevista para aquela operação e que, por isso, exige preservação de contexto para diagnóstico e eventual atualização do modelo ou da implementação.
 
 - Erros não devem ser ignorados silenciosamente.
 - Erros esperados devem possuir representação previsível.
@@ -1051,6 +1058,8 @@ Não devem concentrar:
 - regras de negócio independentes;
 - persistência;
 - integrações detalhadas.
+
+Para esta regra, transformação complexa ou integração detalhada é aquela que possui responsabilidade, contrato, dependência, teste ou ciclo de mudança próprios segundo os critérios de modularização deste documento. Tamanho físico, quantidade de linhas ou quantidade de chamadas não constituem critério isolado.
 
 ## 57. Fonte canônica de estados semânticos
 
@@ -1424,7 +1433,7 @@ Uma alteração só pode ser promovida quando:
 - Arquivos, scripts, workflows, branches, pacotes e fragmentos temporários devem possuir finalidade explícita.
 - Não devem tornar-se dependências da arquitetura final.
 - Automações com escrita devem possuir escopo mínimo e proteção contra ciclos.
-- Todo resíduo temporário deve ser removido antes da validação final.
+- Resíduos temporários que não sejam necessários à própria validação final devem ser removidos antes dela. Artefatos temporários necessários à validação podem permanecer somente enquanto cumprirem essa finalidade e devem seguir a política de evidências aplicável.
 
 ---
 
@@ -1452,6 +1461,8 @@ A árvore final planejada deve ser validada contra:
 
 Nenhuma migração estrutural deve começar sem plano completo.
 
+Para esta regra, o plano está completo para um ramo quando todas as decisões aplicáveis desse ramo na seção de planejamento estrutural de `regrasProjeto.md` estiverem definidas. Decisões marcadas como `Pendente.` bloqueiam somente os ramos que dependem delas, conforme as regras de preenchimento de `regrasProjeto.md`.
+
 ## 75. Ordem da refatoração
 
 Toda refatoração estrutural deve ocorrer das folhas para a raiz:
@@ -1472,7 +1483,7 @@ Toda refatoração estrutural deve ocorrer das folhas para a raiz:
 
 Mudanças estruturais devem preservar, salvo alteração funcional explícita:
 
-- conteúdo;
+- conteúdo observável ou contratualmente protegido registrado na baseline;
 - ordem lógica;
 - semântica;
 - foco;
@@ -1611,9 +1622,9 @@ A normalização ou modularização está concluída somente quando:
 
 - [ ] Baseline foi registrada.
 - [ ] Árvore final foi planejada antes da migração.
-- [ ] Todo conteúdo foi colocado na árvore final antes da poda.
+- [ ] Todo conteúdo necessário aos comportamentos, contratos e resultados protegidos foi colocado na árvore final antes da poda.
 - [ ] Contratos observáveis foram revalidados.
-- [ ] Não restaram resíduos temporários.
+- [ ] Não restaram resíduos temporários sem finalidade de validação ou evidência.
 
 ## Documentação
 
