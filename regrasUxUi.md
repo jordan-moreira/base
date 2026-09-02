@@ -548,6 +548,43 @@ A ausência de estado deve ser deliberada.
 
 Textos como `Selecionado` ou `Ativo` não são obrigatórios quando o estado já for perceptível sem depender apenas de cor e estiver exposto programaticamente.
 
+### 43.1 Estados e transições de interface
+
+Os estados e transições da interface especializam o modelo comportamental definido em `regrasDev.md` e não constituem modelo concorrente.
+
+Devem integrar esse modelo, quando alterarem comportamento semanticamente relevante, estados relacionados a:
+
+- foco;
+- seleção;
+- expansão;
+- edição;
+- carregamento;
+- sucesso;
+- erro;
+- vazio ou ausência;
+- indisponibilidade;
+- confirmação;
+- fluxos temporários, como diálogos, menus e sobreposições;
+- estado exposto às tecnologias assistivas.
+
+Ações do usuário, métodos de entrada, resultados de operações, mudanças de contexto e demais causas observáveis devem ser tratadas como causas de transição quando produzirem mudança semântica.
+
+### 43.2 Consistência semântica do estado
+
+A fonte canônica e a sincronização dos estados de interface obedecem às regras de estados semânticos definidas em `regrasDev.md`.
+
+Em um estado estável, devem representar o mesmo significado semântico:
+
+- apresentação visual;
+- comportamento interativo;
+- conteúdo apresentado;
+- estado acessível;
+- disponibilidade das ações.
+
+Uma representação não pode indicar seleção, disponibilidade, conclusão, erro, expansão ou outro estado enquanto outra representação do mesmo conceito indicar estado semanticamente incompatível.
+
+Quando a plataforma exigir representações derivadas ou transitórias distintas, sua sincronização deve permanecer determinística e não pode expor significado contraditório como estado válido.
+
 ## 44. Elementos nativos
 
 - Elementos nativos devem ser preferidos quando atenderem à necessidade.
@@ -605,13 +642,21 @@ Estado ativo deve ser perceptível visualmente e por tecnologias assistivas.
 
 ## 51. Continuidade
 
-Mudanças de página, etapa ou contexto devem preservar, quando esperado:
+Toda transição de interface deve preservar as propriedades de estado cuja alteração não faça parte dos efeitos definidos no modelo comportamental.
 
+Isso inclui, quando aplicável:
+
+- busca;
 - filtros;
+- paginação;
 - rolagem;
 - seleção;
 - dados não enviados;
+- foco;
+- expansão;
 - contexto da tarefa.
+
+Reinicialização, invalidação ou descarte dessas propriedades deve constituir efeito explícito da transição correspondente.
 
 Perda inevitável de contexto deve ser explícita.
 
@@ -1069,7 +1114,9 @@ A estratégia não pode destruir relações tabulares importantes.
 ## 106. Orientação e métodos de entrada
 
 - A interface deve permanecer funcional nas orientações suportadas.
-- Redimensionamento não deve exigir recarregamento ou perda de contexto.
+- Redimensionamento, mudança de orientação, adaptação responsiva, recomposição ou remontagem não devem exigir recarregamento nem descartar estado ainda semanticamente válido.
+- Quando composições diferentes representarem o mesmo comportamento, a troca entre elas deve preservar as propriedades de estado que continuarem aplicáveis.
+- Reinicialização deliberada durante adaptação deve constituir efeito explícito de transição prevista no modelo comportamental.
 - Mouse, teclado, toque, caneta e tecnologias assistivas devem coexistir quando aplicáveis.
 
 ---
@@ -1325,6 +1372,7 @@ Uma interface somente pode ser considerada concluída quando:
 - [ ] Cada nível possui função real.
 - [ ] A ordem visual preserva leitura, foco e execução.
 - [ ] Informação essencial permanece disponível.
+- [ ] Transições preservam propriedades de contexto cuja alteração não esteja definida entre seus efeitos.
 
 ## Densidade e estrutura visual
 
@@ -1340,6 +1388,8 @@ Uma interface somente pode ser considerada concluída quando:
 - [ ] Compartilhamento possui equivalência semântica.
 - [ ] Variantes representam conceitos reais.
 - [ ] Estados necessários foram implementados.
+- [ ] Estados e transições interativos aplicáveis especializam o modelo comportamental de desenvolvimento.
+- [ ] Estado visual, interativo, informacional e acessível permanecem semanticamente equivalentes.
 - [ ] Elementos nativos são utilizados quando adequados.
 
 ## Interação
@@ -1364,6 +1414,7 @@ Uma interface somente pode ser considerada concluída quando:
 - [ ] Breakpoints representam mudanças justificáveis.
 - [ ] Variações contínuas utilizam comportamento fluido quando adequado.
 - [ ] Ordem semântica e ações essenciais foram preservadas.
+- [ ] Redimensionamento e troca de composição preservam estado semanticamente válido.
 - [ ] Métodos de entrada suportados permanecem utilizáveis.
 
 ## Conteúdo
