@@ -1088,29 +1088,9 @@ Diferenças entre ambientes:
 
 ## 49. Grafo comportamental e testes
 
-Local do grafo de casos de uso:
+O grafo de casos de uso e o grafo comportamental são registrados em `modelo-comportamental.md`.
 
-Local do grafo comportamental:
-
-Relação e rastreabilidade entre grafo de casos de uso e grafo comportamental:
-
-Local do catálogo de estados, transições e restrições comportamentais:
-
-Estados catalogados no grafo comportamental:
-
-Estados declarados inalcançáveis e respectivas justificativas:
-
-Transições válidas catalogadas:
-
-Transições proibidas relevantes e evidências de prevenção ou rejeição:
-
-Estados de encerramento catalogados:
-
-Evidência de completude do grafo:
-
-Local do mapeamento entre transições semânticas e caminhos técnicos de implementação:
-
-Local da rastreabilidade entre modelo e validação:
+Mecanismo de verificação da correspondência entre modelo e implementação:
 
 Forma de identificação de estados, transições e sequências nas evidências:
 
@@ -1119,20 +1099,6 @@ Estratégia geral de testes:
 Critérios adicionais de cobertura específicos do projeto:
 
 Procedimento e evidências usados para demonstrar o atendimento ao critério universal de cobertura comportamental completa:
-
-Transições catalogadas validadas isoladamente:
-
-Sequências comportamentais sujeitas a dependência ou interferência:
-
-Cenários de reentrada relevantes:
-
-Cenários de alternância entre métodos de entrada:
-
-Cenários assíncronos e concorrentes relevantes:
-
-Cenários de respostas obsoletas:
-
-Cenários de execução única da intenção comportamental e, quando aplicável, da intenção de domínio:
 
 Casos de uso cobertos por testes unitários:
 
@@ -1177,8 +1143,6 @@ Operadores de mutação adotados:
 Momento de execução da mutação no escopo afetado e integral:
 
 Limite de tempo da mutação:
-
-Local do registro de mutantes equivalentes por equivalência sintática:
 
 Estratégia de isolamento das evidências:
 
@@ -1231,6 +1195,8 @@ Branches de trabalho:
 Estratégia de integração:
 
 Mecanismo de verificação do commit de conclusão:
+
+Mecanismo de verificação automática da auditoria de conformidade:
 
 Atualização forçada:
 

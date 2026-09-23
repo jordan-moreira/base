@@ -5,9 +5,18 @@ Esta seção existe somente no repositório `base` e deve ser removida ao adotar
 O repositório `base` mantém as regras universais e os templates documentais usados para iniciar e manter projetos.
 
 - `regrasDev.md` e `regrasUxUi.md`: copiados para o projeto sem alteração.
-- `regrasProjeto.md` e `README.md`: templates preenchidos pelo projeto.
-- Adoção: copiar os quatro arquivos, preencher os templates, modelar o grafo comportamental e registrar o hash do commit do `base` na declaração de conformidade do primeiro commit de conclusão.
-- Sincronização: executar `git diff <hash declarado> HEAD -- regrasDev.md regrasUxUi.md` no `base`, reavaliar as regras alteradas no projeto e registrar o novo hash na declaração do commit de conclusão que conclui a sincronização.
+- `regrasProjeto.md`, `README.md`, `modelo-comportamental.md` e `auditoria-conformidade.md`: templates preenchidos pelo projeto, sem remoção de seções ou linhas.
+- Adoção: copiar os seis arquivos, preencher os templates, modelar o grafo comportamental em `modelo-comportamental.md`, preencher a auditoria e registrar o hash do commit do `base` na declaração de conformidade do primeiro commit de conclusão.
+- Sincronização: as regras e os templates do `base` evoluem, e a sincronização aplica essas alterações ao projeto:
+  1. Identificar as alterações executando `git diff <hash declarado> HEAD` no `base`.
+  2. Substituir integralmente `regrasDev.md` e `regrasUxUi.md` do projeto pelas versões do `base`, sem mesclar conteúdo.
+  3. Para `regrasProjeto.md`, `README.md`, `modelo-comportamental.md` e `auditoria-conformidade.md`, partir do template atual do `base` e transcrever para ele o conteúdo já preenchido no projeto:
+     - seções e campos mantidos recebem o conteúdo existente;
+     - seções e campos renomeados ou renumerados recebem o conteúdo de seu correspondente anterior;
+     - seções e campos novos devem ser preenchidos;
+     - o conteúdo de seções e campos removidos deve ser transferido para o local que passou a deter sua responsabilidade, ou removido quando essa responsabilidade deixar de existir;
+     - na auditoria, as linhas correspondem pelo título, o status de regras inalteradas pode ser mantido e as regras alteradas devem ser reavaliadas.
+  4. Reavaliar o projeto contra as regras alteradas e registrar o novo hash na declaração do commit de conclusão que conclui a sincronização.
 
 ---
 
@@ -355,7 +364,9 @@ docker compose up --build
 2. `regrasProjeto.md`
 3. `regrasDev.md`
 4. `regrasUxUi.md`, quando aplicável
-5. Documentações específicas disponíveis em `docs/`
+5. `modelo-comportamental.md`
+6. `auditoria-conformidade.md`
+7. Documentações específicas disponíveis em `docs/`
 
 ## Fluxo recomendado para conhecer o projeto
 
@@ -679,6 +690,18 @@ Define os padrões universais de engenharia e desenvolvimento aplicáveis ao pro
 Responsabilidade:
 
 Define os padrões universais de experiência, interface, interação, acessibilidade e responsividade aplicáveis quando o projeto possuir interface ou interação humana. É normativo, universal e imutável no contexto do projeto.
+
+## `modelo-comportamental.md`
+
+Responsabilidade:
+
+Registra o grafo de casos de uso e o grafo comportamental do projeto, com estados, transições, restrições e evidências. É normativo, específico e plástico.
+
+## `auditoria-conformidade.md`
+
+Responsabilidade:
+
+Registra, para cada seção numerada das regras adotadas, o status de conformidade e a evidência correspondente no estado auditado. É derivado das regras e atualizado a cada commit de conclusão.
 
 ## `docs/`
 

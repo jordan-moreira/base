@@ -59,6 +59,8 @@ regrasDev.md + regrasUxUi.md
 - `regrasProjeto.md` concretiza as normas universais para um projeto específico.
 - o código-fonte implementa a concretização válida.
 - o `README.md` descreve o estado efetivamente implementado.
+- `modelo-comportamental.md` registra o grafo de casos de uso e o grafo comportamental do projeto.
+- `auditoria-conformidade.md` registra a avaliação de cada regra aplicável no estado auditado.
 
 `regrasProjeto.md` pode concretizar, restringir ou especializar decisões que os documentos universais delegarem ao projeto, mas não pode contradizê-los, dispensá-los ou reduzir seus critérios mínimos.
 
@@ -1325,7 +1327,11 @@ A estratégia de testes deve mapear dois modelos complementares:
 
 O grafo comportamental deve abranger todo o comportamento do projeto em uso, sem exceção de escopo.
 
-Os dois modelos podem ser registrados no mesmo artefato ou em artefatos separados. Quando forem separados, deve existir rastreabilidade explícita entre os casos de uso e os estados, transições ou caminhos comportamentais que os realizam.
+Os dois modelos devem ser registrados em `modelo-comportamental.md`, derivado do template mantido no repositório `base`. A estrutura do template constitui o conteúdo mínimo obrigatório, e deve existir rastreabilidade explícita entre os casos de uso e os estados, transições ou caminhos comportamentais que os realizam.
+
+Abreviações utilizadas no modelo devem constar de seu glossário.
+
+O mecanismo que demonstra a correspondência entre o modelo e a implementação pertence ao `regrasProjeto.md`.
 
 Em conjunto, os modelos devem representar, conforme aplicável:
 
@@ -1554,7 +1560,7 @@ Mutante sobrevivente constitui divergência entre modelo, implementação e evid
 - código redundante, sem efeito ou inalcançável: o código deve ser removido;
 - código com responsabilidade não funcional, como reutilização de resultados, cache ou redução de custo: deve existir evidência da propriedade garantida por esse código, como quantidade de execuções, de chamadas ou consumo de recursos.
 
-Somente mutante equivalente por equivalência exclusivamente sintática, em que a alteração produza forma alternativa de semântica idêntica, sem código redundante nem responsabilidade não funcional envolvidos, pode permanecer sobrevivente. Cada caso deve possuir justificativa verificável registrada no local definido em `regrasProjeto.md`.
+Somente mutante equivalente por equivalência exclusivamente sintática, em que a alteração produza forma alternativa de semântica idêntica, sem código redundante nem responsabilidade não funcional envolvidos, pode permanecer sobrevivente. Cada caso deve possuir justificativa verificável registrada em `modelo-comportamental.md`.
 
 Enquanto existir mutante sobrevivente sem essa justificativa, os elementos afetados não podem ser considerados cobertos.
 
@@ -1657,6 +1663,7 @@ No escopo afetado pela alteração, devem estar demonstrados:
 - a atualização da documentação afetada;
 - a ausência de resíduos, de implementações concorrentes e de elementos sem responsabilidade vigente;
 - a eficiência da execução das evidências conforme 71.1, quando a alteração afetar evidências, fixtures ou automações de validação;
+- a auditoria integral de conformidade atualizada conforme 76;
 - a aprovação de build, testes e demais validações aplicáveis.
 
 Alteração sem impacto comportamental deve declarar ausência de delta do grafo. A declaração é verificável pela preservação do grafo, das evidências e do resultado de mutação.
@@ -1682,6 +1689,7 @@ Uma promoção somente pode ocorrer a partir de commit de conclusão e quando es
 - as metas de desempenho verificadas conforme 13.4;
 - a atualização da documentação e do `README.md`;
 - a eficiência da execução das evidências conforme 71.1;
+- a auditoria integral de conformidade atualizada conforme 76;
 - a ausência de alterações incompatíveis na branch estável;
 - a ausência de não conformidades conhecidas.
 
@@ -1720,7 +1728,41 @@ Mutantes equivalentes por equivalência exclusivamente sintática e justificados
 
 O commit do `base` declarado identifica a versão das regras contra a qual a conformidade foi avaliada. O último commit que o declare identifica a sincronização vigente do projeto.
 
-## 76. Artefatos temporários
+## 76. Auditoria integral de conformidade
+
+Todo projeto deve manter `auditoria-conformidade.md`, derivado do template mantido no repositório `base`.
+
+A auditoria deve conter uma linha para cada seção e subseção numerada de `regrasDev.md`, de `regrasUxUi.md` e de `regrasProjeto.md` no commit do `base` adotado, identificada por número e título.
+
+As linhas do template constituem o conteúdo mínimo obrigatório. Nenhuma linha pode ser removida, e divergência entre as linhas e as seções dos documentos adotados impede a conclusão da alteração.
+
+Cada linha deve possuir um dos seguintes status:
+
+- `Conforme`: a regra é satisfeita e sua evidência é localizável;
+- `Exceção autorizada`: a regra é satisfeita por exceção registrada em `regrasProjeto.md`;
+- `N/A`: a regra não se aplica ao projeto, com justificativa verificável;
+- `Descritiva`: a seção não impõe obrigação;
+- `Não conforme`: a regra é descumprida, permitido somente em commit intermediário.
+
+O status `Descritiva` é atribuído exclusivamente pelo template e não pode ser atribuído pelo projeto.
+
+Para seções de `regrasProjeto.md`, `Conforme` significa que os campos da seção estão preenchidos, ou declarados `Não se aplica.` com justificativa, e que a implementação corresponde às decisões registradas.
+
+A evidência de cada linha deve permitir localizar a demonstração da regra específica. Evidências podem ser referenciadas por código de um catálogo. Quando o código for amplo, a linha deve complementá-lo com referência específica.
+
+Cada entrada do catálogo deve declarar artefatos, tipo e forma de reprodução. O tipo é automatizada, inspeção ou ambos. A forma de reprodução é o comando exato ou, para inspeção, o critério verificado.
+
+O estado auditado é o do commit que contém a auditoria. O cabeçalho deve declarar o commit do `base` adotado.
+
+A conclusão deve declarar a quantidade de linhas por status, e essa contagem deve corresponder à matriz.
+
+A completude da matriz, a correspondência entre números e títulos e a contagem da conclusão devem ser verificadas automaticamente.
+
+A auditoria deve ser atualizada em todo commit de conclusão, na promoção e na sincronização com o repositório `base`.
+
+No repositório `base`, toda alteração nas seções de `regrasDev.md`, `regrasUxUi.md` ou `regrasProjeto.md` deve atualizar as linhas do template de auditoria na mesma alteração.
+
+## 77. Artefatos temporários
 
 - Arquivos, scripts, workflows, branches, pacotes e fragmentos temporários devem possuir finalidade explícita.
 - Não devem tornar-se dependências da arquitetura final.
@@ -1731,7 +1773,7 @@ O commit do `base` declarado identifica a versão das regras contra a qual a con
 
 # Parte XII — Refatoração e manutenção
 
-## 77. Baseline obrigatória
+## 78. Baseline obrigatória
 
 Antes de normalização, migração ou refatoração estrutural, registrar baseline de:
 
@@ -1741,7 +1783,7 @@ Antes de normalização, migração ou refatoração estrutural, registrar basel
 - resultados observáveis;
 - casos de uso afetados.
 
-## 78. Planejamento antes da migração
+## 79. Planejamento antes da migração
 
 A árvore final planejada deve ser validada contra:
 
@@ -1755,7 +1797,7 @@ Nenhuma migração estrutural deve começar sem plano completo.
 
 Para esta regra, o plano está completo para um ramo quando todas as decisões aplicáveis desse ramo na seção de planejamento estrutural de `regrasProjeto.md` estiverem definidas. Decisões marcadas como `Pendente.` bloqueiam somente os ramos que dependem delas, conforme as regras de preenchimento de `regrasProjeto.md`.
 
-## 79. Ordem da refatoração
+## 80. Ordem da refatoração
 
 Toda refatoração estrutural deve ocorrer das folhas para a raiz:
 
@@ -1771,7 +1813,7 @@ Toda refatoração estrutural deve ocorrer das folhas para a raiz:
 10. remover estruturas antigas;
 11. validar comportamento, build e testes.
 
-## 80. Preservação de contratos observáveis
+## 81. Preservação de contratos observáveis
 
 Mudanças estruturais devem preservar, salvo alteração funcional explícita:
 
@@ -1795,7 +1837,7 @@ Equivalência não pode ser presumida apenas por:
 - ausência de erro de tipagem;
 - funcionamento do caminho principal isolado.
 
-## 81. Migração e poda
+## 82. Migração e poda
 
 Ao mover elemento:
 
@@ -1811,7 +1853,7 @@ A reorganização só termina quando existir uma única árvore válida para cad
 
 # Parte XIII — Critério de conclusão
 
-## 82. Regra de parada
+## 83. Regra de parada
 
 A normalização ou modularização está concluída somente quando:
 
