@@ -1,3 +1,16 @@
+# Sobre o repositório `base`
+
+Esta seção existe somente no repositório `base` e deve ser removida ao adotar este README em um projeto.
+
+O repositório `base` mantém as regras universais e os templates documentais usados para iniciar e manter projetos.
+
+- `regrasDev.md` e `regrasUxUi.md`: copiados para o projeto sem alteração.
+- `regrasProjeto.md` e `README.md`: templates preenchidos pelo projeto.
+- Adoção: copiar os quatro arquivos, preencher os templates, modelar o grafo comportamental e registrar o hash do commit do `base` na declaração de conformidade do primeiro commit de conclusão.
+- Sincronização: executar `git diff <hash declarado> HEAD -- regrasDev.md regrasUxUi.md` no `base`, reavaliar as regras alteradas no projeto e registrar o novo hash na declaração do commit de conclusão que conclui a sincronização.
+
+---
+
 # README
 
 ## Objetivo do documento
@@ -15,6 +28,8 @@ Os padrões universais de experiência e interface pertencem ao `regrasUxUi.md`,
 ## Natureza do documento
 
 Este documento é descritivo, específico e plástico.
+
+O README é a primeira leitura do projeto e funciona como guia do seu estado atual: o que o projeto é, como usá-lo, como executá-lo e onde cada responsabilidade está localizada. Não constitui histórico cronológico de alterações.
 
 Ele deve acompanhar continuamente o estado válido e efetivamente implementado do projeto.
 
@@ -43,7 +58,10 @@ Decisões temporárias, hipóteses e implementações acidentais não devem ser 
 - Utilizar textos explicativos apenas quando forem necessários para evitar ambiguidades.
 - Utilizar exemplos somente quando o conteúdo esperado para o campo não for evidente.
 - Remover os exemplos após o preenchimento definitivo do campo.
-- Não repetir decisões normativas presentes no `regrasProjeto.md`.
+- Remover a seção "Sobre o repositório `base`" ao adotar este documento em um projeto.
+- Não redefinir decisões normativas presentes no `regrasProjeto.md`.
+- Informações cuja fonte normativa seja o `regrasProjeto.md` podem ser apresentadas de forma resumida quando necessárias à orientação do leitor, desde que identifiquem a seção de origem e não acrescentem critério. Divergências seguem o procedimento definido no `regrasProjeto.md`.
+- Fatos do estado implementado, como versão, situação atual e funcionalidades, pertencem exclusivamente a este documento.
 - Não repetir padrões presentes no `regrasDev.md`.
 - Não repetir padrões presentes no `regrasUxUi.md`.
 - Referenciar os documentos normativos quando o leitor precisar consultá-los.

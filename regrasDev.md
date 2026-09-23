@@ -24,11 +24,21 @@ Durante a criação, manutenção ou normalização de um projeto:
 - este documento não pode ser adaptado ao projeto;
 - regras não aplicáveis não podem ser removidas;
 - regras específicas do projeto não podem ser adicionadas localmente;
-- o conteúdo deve corresponder integralmente à revisão oficial adotada do repositório `base`;
-- incompatibilidades devem ser resolvidas no projeto ou registradas como não conformidades;
+- o conteúdo deve corresponder integralmente ao commit do repositório `base` adotado na última sincronização do projeto;
+- incompatibilidades devem ser resolvidas no projeto e, enquanto não resolvidas, constituem não conformidades;
 - uma incompatibilidade local não autoriza modificar, ignorar, reduzir ou suspender uma regra universal.
 
 Este documento somente pode ser alterado quando o objeto da alteração for o próprio padrão universal mantido no repositório `base`.
+
+### Sincronização com o repositório `base`
+
+A versão vigente das regras universais no repositório `base` é o seu commit mais recente.
+
+A sincronização de um projeto com o repositório `base` é deliberada e não ocorre automaticamente. Até a sincronização seguinte, o projeto permanece sujeito às cópias locais correspondentes ao commit do `base` adotado na última sincronização.
+
+A conformidade de cada commit do projeto é avaliada exclusivamente contra as regras do commit do `base` registrado em sua declaração de conformidade. Alterações posteriores no repositório `base` não tornam retroativamente não conforme um commit que era conforme às regras então adotadas.
+
+A sincronização constitui alteração do projeto. As regras modificadas desde o commit do `base` anteriormente adotado devem ser identificadas pela comparação entre os dois commits, e a sincronização somente pode ser registrada em commit de conclusão quando o projeto satisfizer as regras sincronizadas no escopo afetado por essas modificações.
 
 ---
 
@@ -103,6 +113,12 @@ Cada regra universal deve ser:
 
 Uma regra não deve depender de inferência quando uma interpretação divergente já tiver sido observada.
 
+### Demonstração
+
+Um requisito está demonstrado quando existe evidência executada sobre o conteúdo exato da alteração, com resultado conhecido, reproduzível e localizável.
+
+Afirmação, intenção, execução sobre conteúdo diferente do avaliado ou resultado desconhecido não constituem demonstração.
+
 ---
 
 ## 5. Precedência e conflitos
@@ -138,27 +154,21 @@ Quando regras universais do mesmo nível não puderem ser satisfeitas simultanea
 5. comportamento observável;
 6. contratos públicos.
 
-A decisão deve ser explícita e documentada.
+A decisão deve ser explícita e registrada em `regrasProjeto.md` como conflito normativo resolvido, identificando as regras em conflito, o escopo, a solução adotada e o critério de precedência aplicado.
 
 ---
 
 ## 6. Não conformidades e exceções
 
-Cópias locais deste documento não podem divergir da fonte canônica.
+Cópias locais deste documento não podem divergir do commit do repositório `base` adotado na última sincronização.
 
-Quando o projeto não puder satisfazer uma regra universal, a situação deve ser registrada em `regrasProjeto.md` como não conformidade conhecida, contendo:
+Esta seção contém a definição canônica de não conformidade e de exceção para `regrasDev.md`, `regrasUxUi.md` e `regrasProjeto.md`.
 
-- documento e regra afetada;
-- causa;
-- escopo;
-- impacto;
-- risco;
-- responsável;
-- tratamento planejado;
-- medida compensatória, quando aplicável;
-- condição ou prazo para correção.
+Não conformidade é o descumprimento conhecido de regra aplicável.
 
-O registro de uma não conformidade:
+Commits intermediários podem conter não conformidades, desde que as declarem conforme a seção de declaração de conformidade. Commit de conclusão e commit de promoção não podem conter não conformidade conhecida.
+
+A declaração de uma não conformidade:
 
 - não substitui a regra;
 - não modifica a regra;
@@ -167,14 +177,19 @@ O registro de uma não conformidade:
 
 Uma exceção somente é válida quando a própria regra universal autorizar explicitamente a exceção.
 
-Toda exceção deve:
+Toda exceção deve ser registrada em `regrasProjeto.md`, contendo:
 
-- permanecer restrita ao menor escopo possível;
-- declarar a regra afetada;
-- possuir justificativa verificável;
-- registrar risco e impacto;
-- possuir critério de encerramento;
-- ser reavaliada quando mudar o contexto, a tecnologia, o risco ou a regra afetada.
+- documento e regra que autoriza a exceção;
+- justificativa verificável;
+- escopo mínimo;
+- impacto;
+- risco;
+- medida compensatória, quando aplicável;
+- responsável;
+- condição ou prazo de reavaliação;
+- critério de encerramento.
+
+Toda exceção deve permanecer restrita ao menor escopo possível e ser reavaliada quando mudar o contexto, a tecnologia, o risco ou a regra afetada.
 
 Uma exceção local não cria convenção geral.
 
@@ -195,6 +210,16 @@ Uma exceção local não cria convenção geral.
 - Uma responsabilidade representa um motivo coerente para mudança.
 - Quando um nó tende a mudar por motivos independentes, ele deve ser avaliado para divisão.
 - Responsabilidade é o critério principal de modularização.
+
+### 8.1 Elementos sem responsabilidade vigente
+
+Todo elemento do projeto, como código, arquivo, diretório, dependência, configuração, estilo, asset, documentação, comentário, teste ou flag, deve possuir responsabilidade vigente ou consumidor real.
+
+Elemento sem responsabilidade vigente deve ser removido na mesma alteração que eliminou sua responsabilidade.
+
+Código que não realize nem suporte comportamento catalogado no grafo comportamental não possui responsabilidade vigente.
+
+As regras específicas sobre código comentado, documentação, dependências, imports, camadas, estruturas migradas, artefatos temporários e testes temporários constituem aplicações desta regra.
 
 ## 9. Coesão
 
@@ -247,13 +272,23 @@ Devem ser evitados, quando desnecessários, custos superiores em:
 - comunicação de rede;
 - quantidade de chamadas a serviços, persistência ou recursos externos.
 
-Entre soluções que preservem igualmente corretude, segurança, integridade, contratos e comportamento, deve ser preferida aquela que reduza custo computacional ou uso de recursos relevante sem aumentar desproporcionalmente complexidade estrutural, risco ou manutenção.
+Processo crítico é a operação ou o fluxo essencial para o funcionamento da aplicação ou executado com alta frequência. Os processos críticos devem ser identificados em `regrasProjeto.md`.
 
-A menor complexidade assintótica possível não constitui obrigação isolada. Uma solução teoricamente mais eficiente não deve substituir solução suficientemente eficiente quando o ganho for irrelevante para os limites reais e a troca aumentar complexidade ou risco sem benefício justificável.
+Em processos críticos:
+
+- a complexidade computacional deve ser a menor conhecida para o problema;
+- a complexidade adotada deve ser conhecida e declarada em `regrasProjeto.md`;
+- entre complexidade de tempo e consumo de memória, deve prevalecer a menor complexidade de tempo compatível com os limites de memória definidos em `regrasProjeto.md`;
+- a complexidade deve ser avaliada em relação às dimensões da entrada que não possuam limite garantido por contrato, tipo ou invariante; dimensões com limite garantido podem ser tratadas como constantes.
+
+Fora de processos críticos:
+
+- entre soluções que preservem igualmente corretude, segurança, integridade, contratos e comportamento, deve ser preferida aquela que reduza custo computacional ou uso de recursos relevante sem aumentar desproporcionalmente complexidade estrutural, risco ou manutenção;
+- a menor complexidade assintótica possível não constitui obrigação isolada, e uma solução teoricamente mais eficiente não deve substituir solução suficientemente eficiente quando o ganho for irrelevante para os limites reais e a troca aumentar complexidade ou risco sem benefício justificável.
 
 A relevância de custo, ganho ou economia de recursos deve ser avaliada contra os limites, metas, carga esperada e recursos concretizados em `regrasProjeto.md`. Ganho apenas teórico, sem efeito verificável nesses limites ou metas, não constitui benefício relevante por si só.
 
-Otimizações que adicionem complexidade relevante devem possuir necessidade verificável no contexto esperado. Limites, metas e restrições concretas de desempenho pertencem ao `regrasProjeto.md`.
+Otimizações que adicionem complexidade relevante devem possuir necessidade demonstrada conforme a regra de medição de desempenho. Limites, metas e restrições concretas de desempenho pertencem ao `regrasProjeto.md`.
 
 ### 13.2 Trabalho computacional redundante
 
@@ -276,6 +311,12 @@ Resultados válidos podem ser reutilizados quando isso reduzir custo relevante e
 Cache, memoização, materialização ou outra forma de reutilização não são obrigatórios quando invalidação, obsolescência, coordenação, consumo de recursos ou complexidade introduzida superarem o benefício esperado.
 
 Repetição necessária para preservar segurança, integridade, idempotência, observabilidade ou validação em fronteiras independentes não constitui trabalho redundante apenas por produzir verificação semelhante.
+
+Resultado reutilizado constitui representação derivada de sua fonte e obedece à regra de fonte canônica de estados semânticos.
+
+Quando a obsolescência de um resultado reutilizado puder afetar comportamento observável, seus estados de validade devem integrar o grafo comportamental, e a invalidação deve constituir efeito explícito das transições que alteram a fonte.
+
+As evidências devem demonstrar tanto a reutilização, como propriedade de custo, quanto a invalidação, como propriedade de corretude.
 
 ### 13.3 Caminho crítico, concorrência e paralelismo
 
@@ -301,6 +342,49 @@ Dependências reais e requisitos de ordenação devem permanecer explícitos. Tr
 Concorrência ou paralelismo não devem ser introduzidos quando custo de coordenação, sincronização, contenção, criação de tarefas, comunicação, consumo adicional de recursos, complexidade ou risco superar o benefício esperado.
 
 Paralelização não substitui a eliminação de trabalho redundante nem a escolha de complexidade computacional proporcional.
+
+### 13.4 Medição de desempenho
+
+Toda decisão justificada por desempenho, toda declaração de ganho e toda meta de desempenho devem ser demonstradas por medição reproduzível.
+
+Isso inclui, quando aplicável:
+
+- necessidade de otimização;
+- reutilização de resultados, cache ou memoização;
+- concorrência ou paralelismo;
+- impacto de dependências;
+- metas e limites definidos em `regrasProjeto.md`.
+
+A medição deve declarar:
+
+- cenário;
+- volume de dados representativo dos limites definidos em `regrasProjeto.md`;
+- ambiente;
+- quantidade de repetições suficiente para distinguir o efeito da variação.
+
+Um ganho somente pode ser declarado pela comparação entre medições anterior e posterior à alteração, no mesmo cenário e ambiente.
+
+As metas de desempenho do projeto devem possuir verificação automatizada quando viável.
+
+Regressão além da tolerância definida em `regrasProjeto.md` impede a conclusão da alteração.
+
+A complexidade computacional declarada pode ser demonstrada por análise, sem prejuízo da medição exigida para metas e ganhos.
+
+### 13.5 Ciclo de vida de recursos
+
+Todo recurso adquirido, como memória retida, conexão, arquivo, handle, listener, assinatura, timer, worker ou bloqueio, deve possuir responsável definido e ser liberado ao fim do ciclo de vida que justificou sua aquisição, inclusive nos caminhos de erro, cancelamento e abandono.
+
+A liberação constitui efeito das transições de saída ou de encerramento correspondentes no grafo comportamental.
+
+As evidências devem demonstrar que a execução repetida de um fluxo não acumula recursos além do estado anterior à sua execução.
+
+### 13.6 Volumes sem limite
+
+Toda operação cujo custo cresça com dimensão de dados sem limite garantido por contrato, tipo ou invariante deve possuir limite explícito, como paginação, processamento em lotes, fluxo contínuo, tamanho máximo ou limite de tempo.
+
+Toda entrada externa deve possuir limite de tamanho verificado na fronteira de entrada antes do processamento.
+
+Os limites concretos pertencem ao `regrasProjeto.md`.
 
 ---
 
@@ -551,6 +635,8 @@ Semelhança visual, nominal, estrutural ou técnica isolada não justifica compa
 
 Código compartilhado deve retornar ao contexto específico quando os consumidores deixarem de possuir equivalência semântica.
 
+Esta é a definição canônica de compartilhamento para qualquer nó, inclusive componentes de interface. `regrasUxUi.md` especializa somente suas consequências perceptíveis.
+
 ## 27. Camadas
 
 Adicionar camada somente quando houver:
@@ -732,7 +818,7 @@ Quando aplicável, utilizar ordem previsível:
 7. composição ou coordenação;
 8. exports.
 
-A ordem pode ser adaptada à tecnologia, mas deve permanecer consistente no projeto.
+A ordem pode ser adaptada à tecnologia, mas deve permanecer consistente no projeto e ser registrada em `regrasProjeto.md`.
 
 ## 39. Duplicação
 
@@ -763,7 +849,7 @@ A responsabilidade deve ser identificada antes da escolha do nome.
 
 Convenções de linguagem definem a forma, não o significado.
 
-Quando aplicável:
+Quando a linguagem ou o ecossistema não possuírem convenção consolidada:
 
 - `camelCase` para variáveis, funções, métodos e propriedades;
 - `PascalCase` para componentes, classes, tipos, interfaces e enums;
@@ -790,7 +876,7 @@ Não aplicar convenção apenas por hábito quando ela prejudicar a semântica.
 ## 42. Tipagem
 
 - Contratos públicos devem possuir tipos explícitos.
-- Preferir `unknown` a `any` quando o dado precisar de validação.
+- Dados que precisem de validação devem utilizar tipos que exijam verificação antes do uso, e não tipos que desativem a verificação, como `unknown` em vez de `any` em TypeScript.
 - Evitar casts para silenciar erros.
 - Dados externos devem ser validados em runtime quando necessário.
 - Tipos devem impedir estados inválidos quando viável.
@@ -837,18 +923,20 @@ Não substituir recurso nativo adequado por abstração genérica que exija reco
 
 Quando uma abstração for necessária, ela deve preservar os contratos observáveis e acrescentar responsabilidade real.
 
+Esta é a definição canônica de preservação da semântica nativa. `regrasUxUi.md` especializa somente suas consequências perceptíveis e interativas.
+
 ## 45. Comentários e documentação
 
 - Comentários explicam intenção, restrição, decisão ou motivo não evidente.
 - Não comentar linha a linha comportamento já claro.
 - Comentários devem permanecer sincronizados.
 - Código desativado não deve permanecer comentado.
-- Documentação afetada deve ser atualizada junto com o código.
+- Documentação afetada deve ser atualizada junto com o código e removida quando perder seu objeto.
 - Evidências temporárias devem permanecer em logs ou artefatos apropriados.
 
 ---
 
-# Parte VII — Dependências, configuração, erros e segurança
+# Parte VII — Dependências, configuração, erros, segurança, persistência e integrações
 
 ## 46. Dependências
 
@@ -937,6 +1025,8 @@ Uma camada externa, inclusive interface, não pode prometer cancelamento, desfaz
 - Não confiar no cliente para decisões de segurança.
 - Requisitos de segurança e privacidade devem anteceder decisões sobre logs, persistência e preenchimento automático.
 
+A classificação dos dados sensíveis, suas formas de proteção, a gestão de segredos, a retenção de dados e as exigências legais aplicáveis pertencem ao `regrasProjeto.md`.
+
 ### 50.1 Autoridade de autorização
 
 Autorização deve ser decidida e aplicada na fronteira que protege a operação ou o recurso correspondente.
@@ -956,11 +1046,49 @@ Mudanças de permissão devem produzir comportamento compatível com o estado au
 - Mensagens devem ser consistentes e acionáveis.
 - Métricas e rastreamento devem existir quando houver necessidade operacional real.
 
+## 52. Integridade e persistência
+
+Invariantes de dados devem ser protegidos na fronteira responsável pela persistência, independentemente do caminho de escrita.
+
+Um conjunto de escritas que represente um único efeito de domínio deve ser atômico ou possuir compensação explícita conforme 49.2. Estado parcial não pode tornar-se observável como estado válido sem estar catalogado no grafo comportamental.
+
+Toda alteração na estrutura dos dados persistidos deve ocorrer por migração versionada e reproduzível.
+
+Toda correção de dados persistidos deve ocorrer por mecanismo versionado e reproduzível.
+
+Uma migração deve preservar compatibilidade com todas as versões da aplicação que possam operar sobre os mesmos dados durante a implantação. Uma alteração incompatível deve ser decomposta em etapas sucessivas compatíveis.
+
+Uma migração deve ser reversível ou declarada irreversível antes da aplicação, com a perda de dados explicitada.
+
+Uma migração deve ser validada sobre dados representativos dos estados existentes, incluindo limites, antes de ser aplicada a dados reais.
+
+Dados que não possam ser reconstruídos devem possuir backup. Backup cuja restauração não tenha sido verificada não constitui proteção.
+
+Estratégias, ferramentas, periodicidade e valores concretos pertencem ao `regrasProjeto.md`.
+
+## 53. Integrações externas
+
+Toda integração deve ser acessada por adaptador com contrato interno. Tipos, formatos e erros externos não devem ultrapassar o adaptador.
+
+Dados externos devem ser validados e normalizados na fronteira do adaptador.
+
+Toda chamada externa deve possuir limite de tempo. Espera indefinida é proibida.
+
+Falha, limite de tempo atingido e resposta inválida são erros esperados e devem possuir estado de operação definido conforme 49.1. Limite de tempo atingido depois do envio da requisição constitui resultado indeterminado.
+
+Repetição somente pode ocorrer quando for segura conforme 49.1, com limite de tentativas e intervalo que não agrave a sobrecarga do serviço.
+
+Alternativa em caso de falha somente é válida quando for semanticamente equivalente ou comunicada como estado degradado. Ela não pode simular sucesso.
+
+As evidências devem reproduzir falha, atraso, limite de tempo atingido e resposta inválida do serviço. A compatibilidade do contrato interno com o serviço real deve ser verificada quando viável.
+
+Limites de tempo, tentativas, intervalos, alternativas e limites de uso concretos pertencem ao `regrasProjeto.md`.
+
 ---
 
 # Parte VIII — Regras de front-end
 
-## 52. Organização do front-end
+## 54. Organização do front-end
 
 A árvore deve representar responsabilidades reais da interface e dos fluxos.
 
@@ -980,11 +1108,16 @@ Quando existirem, distinguir:
 
 Nenhuma divisão é criada automaticamente.
 
-## 53. Normalização global de estilos
+## 55. Normalização global de estilos
 
-Todo front-end web deve possuir base global de estilos carregada na inicialização para neutralizar diferenças desnecessárias entre navegadores suportados.
+Todo front-end cuja plataforma aplique estilos padrão divergentes entre os ambientes suportados deve possuir base global de estilos carregada na inicialização para neutralizar diferenças desnecessárias entre esses ambientes.
 
-Reset mínimo:
+A base global deve garantir, no mínimo:
+
+- modelo de dimensionamento uniforme e previsível para todos os elementos;
+- ausência de espaçamentos padrão não intencionais.
+
+Exemplo em front-end web com CSS:
 
 ```css
 *,
@@ -1010,7 +1143,7 @@ A base global não deve:
 - remover sinais de interação sem alternativa clara;
 - introduzir regras específicas de componentes.
 
-## 54. Responsabilidades estruturais e visuais
+## 56. Responsabilidades estruturais e visuais
 
 Elementos estruturais ou visuais com responsabilidade identificável podem possuir representação nomeada no código, mesmo sem comportamento próprio.
 
@@ -1041,13 +1174,13 @@ São decisões independentes:
 
 Cada decisão deve satisfazer seus próprios critérios.
 
-## 55. Componentes
+## 57. Componentes
 
 - Componentes específicos permanecem próximos à página ou funcionalidade.
 - Mover para compartilhado somente com equivalência semântica e contrato estável.
 - Não manter árvores concorrentes como `src/components` e `src/shared/components` quando representarem a mesma responsabilidade.
 
-## 56. Páginas e telas
+## 58. Páginas e telas
 
 Páginas e telas coordenam interface e fluxos de alto nível.
 
@@ -1061,7 +1194,7 @@ Não devem concentrar:
 
 Para esta regra, transformação complexa ou integração detalhada é aquela que possui responsabilidade, contrato, dependência, teste ou ciclo de mudança próprios segundo os critérios de modularização deste documento. Tamanho físico, quantidade de linhas ou quantidade de chamadas não constituem critério isolado.
 
-## 57. Fonte canônica de estados semânticos
+## 59. Fonte canônica de estados semânticos
 
 Cada estado semântico deve possuir uma representação canônica.
 
@@ -1081,7 +1214,7 @@ Não manter fontes independentes equivalentes, como:
 
 Quando a plataforma exigir duplicação, a derivação e sincronização devem ser explícitas, determinísticas e testáveis.
 
-## 58. Condições no nível responsável
+## 60. Condições no nível responsável
 
 Toda condição deve ser representada no menor nível com responsabilidade e informação suficientes.
 
@@ -1095,17 +1228,22 @@ Condições apresentacionais não devem introduzir estado de aplicação, evento
 
 A camada visual não deve reconstruir decisões de negócio a partir de sinais indiretos de apresentação.
 
-## 59. Contratos de variantes
+## 61. Contratos de variantes
+
+Esta é a definição canônica de contratos de variantes. `regrasUxUi.md` especializa somente suas consequências perceptíveis.
 
 Parâmetros de componentes devem representar conceitos coerentes, como:
 
 - tamanho;
 - densidade;
-- ênfase;
+- ênfase ou prioridade;
 - intenção;
 - orientação;
 - estado;
-- variante.
+- comportamento;
+- contexto de uso.
+
+Cada variante deve possuir finalidade clara e nome semântico. A quantidade de variantes deve permanecer previsível.
 
 Parâmetros públicos não devem transportar detalhes visuais arbitrários, como margens, paddings, cores e posicionamentos.
 
@@ -1113,7 +1251,7 @@ Detalhes concretos de apresentação permanecem na camada visual ou no sistema d
 
 Uma exceção exige que o valor seja parte real e estável do contrato público.
 
-## 60. Estado local e compartilhado
+## 62. Estado local e compartilhado
 
 - Estado local permanece próximo ao consumidor.
 - Promover para store, contexto ou equivalente somente com múltiplos consumidores, sobrevivência necessária ou atualização coordenada.
@@ -1121,13 +1259,13 @@ Uma exceção exige que o valor seja parte real e estável do contrato público.
 - A localização técnica do estado não pode reduzir o ciclo de vida exigido pelo comportamento que ele representa.
 - Quando a sobrevivência além do consumidor atual fizer parte do comportamento, o estado deve permanecer no menor escopo capaz de preservá-la corretamente.
 
-## 61. Engines e templates
+## 63. Engines e templates
 
 Transformações complexas, cálculos, serialização e geração de arquivos permanecem fora de componentes visuais quando possuírem responsabilidade própria.
 
 Preview e exportação não devem depender de fontes de verdade divergentes.
 
-## 62. Assets
+## 64. Assets
 
 Assets devem ser organizados por finalidade ou domínio.
 
@@ -1137,7 +1275,7 @@ Não criar subdiretório por asset isolado sem fronteira real.
 
 # Parte IX — Regras de back-end
 
-## 63. Organização do back-end
+## 65. Organização do back-end
 
 A árvore deve ser organizada prioritariamente por domínio ou funcionalidade.
 
@@ -1155,13 +1293,13 @@ Quando existirem, distinguir:
 
 Nenhuma subdivisão é automática.
 
-## 64. Domínio antes da categoria técnica
+## 66. Domínio antes da categoria técnica
 
 Evitar diretórios globais como `controllers`, `services`, `repositories` e `models` quando dispersarem uma funcionalidade por toda a árvore.
 
 Preferir proximidade dos elementos do mesmo domínio.
 
-## 65. Camadas proporcionais
+## 67. Camadas proporcionais
 
 Não criar controller, service, use case, repository, gateway e adapter para todo fluxo automaticamente.
 
@@ -1173,12 +1311,14 @@ Camadas que apenas encaminham argumentos devem ser removidas ou incorporadas.
 
 # Parte X — Testes e validação
 
-## 66. Grafo comportamental e casos de uso
+## 68. Grafo comportamental e casos de uso
 
 A estratégia de testes deve mapear dois modelos complementares:
 
 - o grafo de casos de uso, que representa objetivos, casos de uso, conexões e fluxos funcionais relevantes;
 - o grafo comportamental, que representa estados semanticamente distintos, transições, precondições, efeitos, invariantes, falhas, recuperação e encerramento.
+
+O grafo comportamental deve abranger todo o comportamento do projeto em uso, sem exceção de escopo.
 
 Os dois modelos podem ser registrados no mesmo artefato ou em artefatos separados. Quando forem separados, deve existir rastreabilidade explícita entre os casos de uso e os estados, transições ou caminhos comportamentais que os realizam.
 
@@ -1197,7 +1337,7 @@ Em conjunto, os modelos devem representar, conforme aplicável:
 
 Cobertura de linhas, funções, branches ou instruções não substitui a completude nem a cobertura do grafo comportamental.
 
-### 66.1 Modelo comportamental
+### 68.1 Modelo comportamental
 
 Quando um comportamento possuir estado ou evolução entre condições semanticamente distintas, o modelo deve representar explicitamente:
 
@@ -1217,7 +1357,7 @@ Uma transição somente pode alterar propriedades cuja alteração esteja defini
 
 O ciclo de vida da representação técnica de um estado deve ser suficiente para o ciclo de vida do comportamento que ele representa. Recriação, recomposição, remontagem, troca de contexto técnico ou outra mudança de implementação não pode descartar estado ainda semanticamente válido sem transição que defina esse efeito.
 
-### 66.2 Estados semanticamente distintos
+### 68.2 Estados semanticamente distintos
 
 Um estado deve ser catalogado separadamente quando sua existência alterar pelo menos um aspecto semanticamente relevante do comportamento, como:
 
@@ -1232,17 +1372,17 @@ Um estado deve ser catalogado separadamente quando sua existência alterar pelo 
 
 Combinações arbitrárias de valores não constituem estados distintos quando não alterarem comportamento semanticamente relevante.
 
-### 66.3 Estados de encerramento
+### 68.3 Estados de encerramento
 
 Estados que representem encerramento de fluxo devem declarar explicitamente quais transições de saída, se houver, permanecem permitidas.
 
 Não devem existir transições implícitas a partir de estado de encerramento.
 
-Quando o encerramento for definitivo no escopo modelado, nenhuma transição de saída deve ser permitida.
+Quando o encerramento for definitivo no fluxo correspondente, nenhuma transição de saída deve ser permitida.
 
-### 66.4 Completude do grafo comportamental
+### 68.4 Completude do grafo comportamental
 
-O grafo comportamental somente pode ser declarado completo quando todos os estados semanticamente possíveis e alcançáveis no escopo modelado e todas as transições válidas entre eles estiverem catalogados.
+O grafo comportamental somente pode ser declarado completo quando todos os estados semanticamente possíveis e alcançáveis no projeto e todas as transições válidas entre eles estiverem catalogados.
 
 A análise de completude deve considerar, quando aplicável:
 
@@ -1267,7 +1407,7 @@ Um estado semanticamente inválido ou inalcançável por construção não preci
 
 Estado ou transição cuja existência permaneça desconhecida, indefinida ou apenas presumida impede declarar o grafo completo.
 
-### 66.5 Conformidade entre modelo e implementação
+### 68.5 Conformidade entre modelo e implementação
 
 A implementação não pode produzir estado semanticamente alcançável ausente do grafo comportamental nem permitir transição alcançável não catalogada.
 
@@ -1282,11 +1422,11 @@ Quando a análise, execução ou teste revelar estado ou transição alcançáve
 
 Enquanto a divergência existir, o comportamento afetado não pode ser considerado conforme.
 
-### 66.6 Completude e cobertura
+### 68.6 Completude e cobertura
 
 Completude do grafo e cobertura do grafo são critérios independentes e cumulativos.
 
-- completude demonstra que o modelo contém todos os estados e transições semanticamente possíveis e alcançáveis no escopo definido;
+- completude demonstra que o modelo contém todos os estados e transições semanticamente possíveis e alcançáveis no projeto;
 - cobertura demonstra que os elementos aplicáveis do modelo possuem tratamento e evidência de validação adequados.
 
 Todo estado catalogado no grafo deve possuir tratamento compatível com seu papel no modelo e pelo menos uma evidência de validação que demonstre os comportamentos, restrições ou invariantes que o distinguem semanticamente. Essa evidência pode ser compartilhada com evidências de transições de entrada, permanência ou saída quando a relação permanecer explícita.
@@ -1297,9 +1437,11 @@ Cobertura comportamental completa não pode ser declarada enquanto existir estad
 
 Cobertura comportamental completa não pode ser declarada para grafo cuja completude não tenha sido estabelecida.
 
+Cobertura comportamental completa não pode ser declarada sem sensibilidade das evidências demonstrada conforme 68.11.
+
 O grafo deve estar formalizado e sua completude deve ser estabelecida antes de declarar cobertura comportamental completa.
 
-### 66.7 Transições isoladas e sequências comportamentais
+### 68.7 Transições isoladas e sequências comportamentais
 
 Cada transição catalogada deve ser validada isoladamente a partir de precondições conhecidas.
 
@@ -1318,7 +1460,7 @@ Sequências adicionais devem ser incluídas quando forem necessárias para repre
 
 Validar apenas o estado final não substitui validar os efeitos e invariantes relevantes ao longo da sequência.
 
-### 66.8 Rastreabilidade entre modelo e validação
+### 68.8 Rastreabilidade entre modelo e validação
 
 Cada transição catalogada deve apontar para pelo menos uma evidência de validação que demonstre seu comportamento esperado.
 
@@ -1330,7 +1472,7 @@ Uma mesma evidência pode validar múltiplos elementos do grafo e um mesmo eleme
 
 Não pode existir transição catalogada sem evidência localizável nem evidência declarada como cobertura comportamental sem vínculo identificável com o comportamento protegido.
 
-### 66.9 Operações assíncronas, concorrência e respostas obsoletas
+### 68.9 Operações assíncronas, concorrência e respostas obsoletas
 
 Quando operações assíncronas, concorrentes ou sobrepostas puderem afetar o mesmo comportamento, o modelo deve definir a validade dos resultados e as relações de ordem que forem semanticamente relevantes.
 
@@ -1355,7 +1497,7 @@ Em cada cenário aplicável, devem ser verificados o estado resultante, os efeit
 
 Não é necessário criar cenários assíncronos artificiais quando a operação não admitir assincronicidade, concorrência, repetição ou ordenação relevante.
 
-### 66.10 Execução única da intenção de domínio
+### 68.10 Execução única da intenção de domínio
 
 Um mesmo evento lógico, sinal externo ou causa catalogada que represente uma única intenção de domínio deve produzir no máximo uma execução dessa mesma intenção.
 
@@ -1369,7 +1511,51 @@ Quando o domínio permitir repetição deliberada da mesma intenção, cada nova
 
 A validação deve demonstrar que um único evento não provoca duplicação da intenção nem de efeitos que deveriam ocorrer uma única vez.
 
-## 67. Níveis de teste
+### 68.11 Sensibilidade das evidências e testes de mutação
+
+Uma evidência somente protege um elemento do grafo comportamental quando falha na ausência ou na violação do tratamento correspondente.
+
+Evidência que permanece aprovada após remoção ou violação do tratamento de um estado, transição, precondição, invariante ou efeito não constitui cobertura desse elemento.
+
+A sensibilidade das evidências deve ser demonstrada por teste de mutação sobre todo código associado ao grafo comportamental conforme 68.5.
+
+Quando não existir ferramenta de teste de mutação viável para a tecnologia utilizada, a indisponibilidade deve ser registrada em `regrasProjeto.md`, e a sensibilidade deve ser demonstrada pela falha observada de cada evidência antes da implementação do tratamento correspondente.
+
+Para esta seção:
+
+- mutante é uma versão do código com alteração deliberada capaz de violar comportamento;
+- mutante morto é aquele que provoca falha de pelo menos uma evidência;
+- mutante sobrevivente é aquele que não provoca falha de nenhuma evidência;
+- mutante equivalente é aquele cujo comportamento observável é idêntico ao do código original.
+
+Os operadores de mutação devem incluir, além de alterações sintáticas, as mutações semânticas aplicáveis:
+
+- remoção ou inversão de precondição;
+- permissão de transição proibida;
+- omissão de efeito;
+- duplicação de efeito ou de intenção;
+- alteração do estado de destino;
+- omissão de invalidação, reinicialização ou descarte declarados;
+- alteração de propriedade que a transição deve preservar;
+- aceitação de resultado obsoleto;
+- inversão de ordem exigida;
+- omissão de liberação de recurso.
+
+Todo mutante do escopo deve ser morto.
+
+Mutante sobrevivente constitui divergência entre modelo, implementação e evidência, e deve ser resolvido conforme sua causa:
+
+- evidência insuficiente: a evidência deve ser fortalecida;
+- código redundante, sem efeito ou inalcançável: o código deve ser removido;
+- código com responsabilidade não funcional, como reutilização de resultados, cache ou redução de custo: deve existir evidência da propriedade garantida por esse código, como quantidade de execuções, de chamadas ou consumo de recursos.
+
+Somente mutante equivalente por equivalência exclusivamente sintática, em que a alteração produza forma alternativa de semântica idêntica, sem código redundante nem responsabilidade não funcional envolvidos, pode permanecer sobrevivente. Cada caso deve possuir justificativa verificável registrada no local definido em `regrasProjeto.md`.
+
+Enquanto existir mutante sobrevivente sem essa justificativa, os elementos afetados não podem ser considerados cobertos.
+
+Resultados de mutação somente são válidos sobre evidências determinísticas. Evidência instável deve ser corrigida antes da avaliação de mutação.
+
+## 69. Níveis de teste
 
 A cobertura deve combinar, conforme necessidade real:
 
@@ -1385,7 +1571,7 @@ Uma categoria não deve ser exigida quando não agregar proteção, mas sua omis
 - quais comportamentos permanecem cobertos;
 - por quais níveis de teste.
 
-## 68. Comportamento e permanência
+## 70. Comportamento e permanência
 
 - Testes verificam comportamento observável.
 - Regras de negócio relevantes e estáveis devem possuir testes.
@@ -1397,38 +1583,111 @@ Uma categoria não deve ser exigida quando não agregar proteção, mas sua omis
 - Testes permanentes permanecem versionados.
 - Testes temporários só podem ser removidos quando não protegerem comportamento permanente.
 
-## 69. Automação e evidências
+## 71. Automação e evidências
 
 - Integração contínua deve executar validações aplicáveis quando utilizada.
 - Validações essenciais devem possuir forma documentada de execução local ou equivalente.
 - Ausência de execução ou resultado desconhecido não equivale a aprovação.
-- Declarações de validação devem identificar escopo, revisão, procedimentos, resultados e limitações.
+- Declarações de conformidade de commits seguem a seção de declaração de conformidade.
 - Evidências utilizadas para cobertura comportamental devem manter rastreabilidade com os estados, transições ou sequências correspondentes.
 
 ---
 
 # Parte XI — Versionamento e integração
 
-## 70. Branches
+## 72. Branches
 
-- Projetos devem identificar branches estáveis, de integração e de trabalho quando existirem.
-- Alterações devem ocorrer fora da branch estável quando houver fluxo de integração.
-- Nomes e exceções pertencem ao `regrasProjeto.md`.
+- Projetos devem identificar a branch estável e a branch de integração, e as branches de trabalho quando existirem.
+- A branch estável contém somente estados promovidos para uso em produção.
+- Alterações não podem ser registradas diretamente na branch estável; elas chegam à branch estável somente por promoção.
+- Nomes pertencem ao `regrasProjeto.md`.
 - Atualizações forçadas devem ser evitadas e somente podem ocorrer com autorização explícita e sem perda de histórico relevante.
 
-## 71. Promoção
+## 73. Commit de conclusão
 
-Uma alteração só pode ser promovida quando:
+Commit de conclusão é o commit que declara concluída uma alteração, como funcionalidade implementada, correção, refatoração ou sincronização com o repositório `base`.
 
-- o diff corresponder ao escopo autorizado;
-- build, testes e validações aplicáveis estiverem aprovados;
-- contratos e comportamentos protegidos estiverem preservados;
-- documentação afetada estiver atualizada;
-- não existirem resíduos ou implementações concorrentes;
-- limitações e não conformidades estiverem registradas;
-- a branch de destino não possuir alterações incompatíveis.
+Commits intermediários são permitidos somente fora da branch estável, não declaram conclusão e devem declarar as não conformidades conhecidas que contenham.
 
-## 72. Artefatos temporários
+Um commit de conclusão somente pode ser realizado quando a alteração satisfizer todas as regras aplicáveis de `regrasDev.md`, `regrasUxUi.md` e `regrasProjeto.md`, conforme o commit do `base` adotado.
+
+No escopo afetado pela alteração, devem estar demonstrados:
+
+- a identificação das regras aplicáveis;
+- a ausência de não conformidades conhecidas;
+- a correspondência entre o diff e o escopo da alteração;
+- o delta do grafo comportamental, compreendendo estados e transições criados, removidos, alterados ou afetados, inclusive sequências e cenários assíncronos que passem a ser relevantes;
+- o grafo atualizado e conforme à implementação;
+- o tratamento de todo estado e transição do delta;
+- a cobertura comportamental conforme 68.6 a 68.8;
+- a sensibilidade das evidências conforme 68.11;
+- as medições exigidas por 13.4, quando a alteração afetar processo crítico ou meta de desempenho;
+- a preservação de contratos e comportamentos protegidos;
+- a atualização da documentação afetada;
+- a ausência de resíduos, de implementações concorrentes e de elementos sem responsabilidade vigente;
+- a aprovação de build, testes e demais validações aplicáveis.
+
+Alteração sem impacto comportamental deve declarar ausência de delta do grafo. A declaração é verificável pela preservação do grafo, das evidências e do resultado de mutação.
+
+Alteração exclusivamente em evidências não pode reduzir cobertura nem tornar sobrevivente mutante anteriormente morto.
+
+A verificação deve ser automatizada quando viável.
+
+## 74. Promoção
+
+Promoção é a integração da branch de integração na branch estável quando o conjunto acumulado estiver apto para uso em produção.
+
+A promoção deve produzir commit próprio na branch estável, que registre sua declaração de conformidade. Integração que não produza commit próprio não constitui promoção válida.
+
+Uma promoção somente pode ocorrer a partir de commit de conclusão e quando estiverem demonstrados, para o projeto inteiro:
+
+- a completude do grafo comportamental;
+- a cobertura comportamental completa;
+- a sensibilidade das evidências por execução completa de mutação;
+- a geração do artefato de produção;
+- a aprovação dos testes de todos os níveis aplicáveis;
+- o nível de validação de UX e UI exigido, quando aplicável;
+- as metas de desempenho verificadas conforme 13.4;
+- a atualização da documentação e do `README.md`;
+- a ausência de alterações incompatíveis na branch estável;
+- a ausência de não conformidades conhecidas.
+
+## 75. Declaração de conformidade
+
+Todo commit de conclusão e todo commit de promoção deve conter declaração de conformidade em sua mensagem.
+
+A declaração é declarativa e não descreve procedimentos. Sua demonstração decorre da reprodutibilidade das evidências a partir do próprio commit.
+
+Declaração do commit de conclusão:
+
+```text
+Conformidade: regras aplicáveis satisfeitas
+Grafo: atualizado | sem delta
+Mutação: escopo afetado, 0 sobreviventes
+Base: <hash do commit do base adotado>
+```
+
+Declaração do commit de promoção:
+
+```text
+Promoção: validação integral satisfeita
+Grafo: completo
+Mutação: execução completa, 0 sobreviventes
+Desempenho: metas verificadas
+Base: <hash do commit do base adotado>
+```
+
+Commit intermediário que contenha não conformidade conhecida deve declará-la em sua mensagem, identificando documento, regra e escopo afetados:
+
+```text
+Não conformidades: regrasDev 68.11 (mutação em pedidos/cancelamento); regrasUxUi 91 (foco no diálogo)
+```
+
+Mutantes equivalentes por equivalência exclusivamente sintática e justificados conforme 68.11 não são contados como sobreviventes.
+
+O commit do `base` declarado identifica a versão das regras contra a qual a conformidade foi avaliada. O último commit que o declare identifica a sincronização vigente do projeto.
+
+## 76. Artefatos temporários
 
 - Arquivos, scripts, workflows, branches, pacotes e fragmentos temporários devem possuir finalidade explícita.
 - Não devem tornar-se dependências da arquitetura final.
@@ -1439,7 +1698,7 @@ Uma alteração só pode ser promovida quando:
 
 # Parte XII — Refatoração e manutenção
 
-## 73. Baseline obrigatória
+## 77. Baseline obrigatória
 
 Antes de normalização, migração ou refatoração estrutural, registrar baseline de:
 
@@ -1449,7 +1708,7 @@ Antes de normalização, migração ou refatoração estrutural, registrar basel
 - resultados observáveis;
 - casos de uso afetados.
 
-## 74. Planejamento antes da migração
+## 78. Planejamento antes da migração
 
 A árvore final planejada deve ser validada contra:
 
@@ -1463,7 +1722,7 @@ Nenhuma migração estrutural deve começar sem plano completo.
 
 Para esta regra, o plano está completo para um ramo quando todas as decisões aplicáveis desse ramo na seção de planejamento estrutural de `regrasProjeto.md` estiverem definidas. Decisões marcadas como `Pendente.` bloqueiam somente os ramos que dependem delas, conforme as regras de preenchimento de `regrasProjeto.md`.
 
-## 75. Ordem da refatoração
+## 79. Ordem da refatoração
 
 Toda refatoração estrutural deve ocorrer das folhas para a raiz:
 
@@ -1479,7 +1738,7 @@ Toda refatoração estrutural deve ocorrer das folhas para a raiz:
 10. remover estruturas antigas;
 11. validar comportamento, build e testes.
 
-## 76. Preservação de contratos observáveis
+## 80. Preservação de contratos observáveis
 
 Mudanças estruturais devem preservar, salvo alteração funcional explícita:
 
@@ -1503,7 +1762,7 @@ Equivalência não pode ser presumida apenas por:
 - ausência de erro de tipagem;
 - funcionamento do caminho principal isolado.
 
-## 77. Migração e poda
+## 81. Migração e poda
 
 Ao mover elemento:
 
@@ -1519,7 +1778,7 @@ A reorganização só termina quando existir uma única árvore válida para cad
 
 # Parte XIII — Critério de conclusão
 
-## 78. Regra de parada
+## 82. Regra de parada
 
 A normalização ou modularização está concluída somente quando:
 
@@ -1534,102 +1793,3 @@ A normalização ou modularização está concluída somente quando:
 - nenhum nó pode ser dividido sem criar fragmentação artificial;
 - comportamento e contratos permanecem preservados;
 - documentação está atualizada.
-
----
-
-# Checklist de conformidade
-
-## Arquitetura
-
-- [ ] A árvore representa responsabilidades reais.
-- [ ] A estrutura é a menor semanticamente suficiente.
-- [ ] Não existem árvores concorrentes.
-- [ ] Não existem camadas artificiais.
-- [ ] Dependências possuem direção previsível.
-
-## Modularização
-
-- [ ] A análise começou nas folhas.
-- [ ] Nenhum nível pai foi validado antes dos filhos.
-- [ ] A unidade de modularização foi a responsabilidade.
-- [ ] Tamanho físico não foi usado como critério isolado.
-- [ ] Ramos afetados foram reavaliados do menor nível até a raiz.
-
-## Abstrações e compartilhamento
-
-- [ ] Cada abstração reduz custo identificável.
-- [ ] Não existem abstrações preventivas.
-- [ ] Compartilhamento possui equivalência semântica.
-- [ ] Código específico permanece próximo ao consumidor.
-
-## Código
-
-- [ ] Funções, componentes e arquivos possuem responsabilidade principal.
-- [ ] Nomes representam responsabilidades reais.
-- [ ] Contratos públicos são explícitos.
-- [ ] Validações da mesma regra preservam significado semântico entre fronteiras.
-- [ ] A autorização é aplicada na fronteira autoritativa independentemente da interface.
-- [ ] Promessas externas de cancelar ou desfazer correspondem à reversibilidade técnica real da operação.
-- [ ] Semântica nativa foi preservada.
-- [ ] Estados semânticos possuem fonte canônica.
-- [ ] Representações derivadas do mesmo estado permanecem semanticamente equivalentes.
-- [ ] Transições preservam propriedades cuja alteração não esteja definida entre seus efeitos.
-- [ ] O ciclo de vida técnico dos estados preserva o ciclo de vida dos comportamentos representados.
-- [ ] Condições estão no nível responsável.
-- [ ] Variantes representam conceitos, não propriedades arbitrárias.
-
-## Desempenho
-
-- [ ] A complexidade computacional e o consumo de recursos são proporcionais aos limites reais do problema.
-- [ ] Trabalho computacional redundante foi eliminado quando sua repetição não possui responsabilidade necessária.
-- [ ] Trabalho secundário independente não permanece artificialmente no caminho crítico.
-- [ ] Trabalhos independentes utilizam concorrência ou paralelismo quando há ganho relevante demonstrável pelas metas e limites do projeto e segurança semântica.
-- [ ] Dependências e requisitos reais de ordem permanecem explícitos.
-- [ ] Concorrência ou paralelismo não foram introduzidos quando seus custos, contenção, complexidade ou riscos superam o benefício esperado.
-
-## Referências
-
-- [ ] Imports são válidos.
-- [ ] Exports são válidos.
-- [ ] Aliases são válidos.
-- [ ] Não existem ciclos ou caminhos obsoletos.
-
-## Testes
-
-- [ ] O grafo de casos de uso e o grafo comportamental estão mapeados e possuem relação explícita quando registrados separadamente.
-- [ ] Todos os estados semanticamente possíveis e alcançáveis no escopo estão catalogados.
-- [ ] Todas as transições válidas e alcançáveis no escopo estão catalogadas.
-- [ ] Transições proibidas tecnicamente tentáveis possuem restrição explícita e evidência de prevenção ou rejeição.
-- [ ] Estados declarados inalcançáveis possuem justificativa verificável quando necessária à completude do modelo.
-- [ ] Não existem estados ou transições alcançáveis fora do modelo catalogado.
-- [ ] Caminhos técnicos capazes de realizar transições semanticamente relevantes estão mapeados às transições correspondentes.
-- [ ] A completude do grafo foi estabelecida antes de declarar cobertura comportamental completa.
-- [ ] Cada estado catalogado possui tratamento e pelo menos uma evidência de validação adequada.
-- [ ] Cada transição catalogada possui tratamento explícito e evidência de validação localizável.
-- [ ] Transições catalogadas foram validadas isoladamente e em sequências aplicáveis.
-- [ ] Combinações A → B, B → A, A → A e B → B foram consideradas quando semanticamente possíveis e sujeitas a interferência.
-- [ ] O modelo e as evidências possuem rastreabilidade bidirecional suficiente.
-- [ ] Não existem lacunas de tratamento, cobertura ou rastreabilidade incompatíveis com a declaração de cobertura comportamental completa.
-- [ ] Operações assíncronas aplicáveis foram validadas em sucesso, falha, atraso, repetição, concorrência e recuperação.
-- [ ] Respostas obsoletas não sobrescrevem estado válido mais recente.
-- [ ] Falha posterior a uma mutação concluída preserva a distinção entre efeito principal e falha secundária.
-- [ ] Um único evento lógico não duplica a mesma intenção de domínio nem efeitos que deveriam ocorrer uma única vez.
-- [ ] Fluxos principais, alternativos, erros e limites estão cobertos.
-- [ ] Níveis de teste foram escolhidos conforme risco e responsabilidade.
-- [ ] Testes permanentes não foram removidos.
-
-## Refatoração
-
-- [ ] Baseline foi registrada.
-- [ ] Árvore final foi planejada antes da migração.
-- [ ] Todo conteúdo necessário aos comportamentos, contratos e resultados protegidos foi colocado na árvore final antes da poda.
-- [ ] Contratos observáveis foram revalidados.
-- [ ] Não restaram resíduos temporários sem finalidade de validação ou evidência.
-
-## Documentação
-
-- [ ] `regrasDev.md` corresponde à revisão canônica.
-- [ ] `regrasUxUi.md` corresponde à revisão canônica quando aplicável.
-- [ ] `regrasProjeto.md` concretiza as decisões específicas.
-- [ ] `README.md` descreve o estado implementado.
-- [ ] Não conformidades estão explicitamente registradas.

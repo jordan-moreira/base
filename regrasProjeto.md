@@ -46,8 +46,7 @@ Este documento deve acompanhar mudanças em:
 - estratégias;
 - restrições;
 - critérios de validação;
-- exceções autorizadas;
-- não conformidades.
+- exceções autorizadas.
 
 Este documento não pode:
 
@@ -108,6 +107,7 @@ Após a análise:
 - Campos pendentes bloqueiam somente os ramos que dependem deles.
 - Exemplos devem ser removidos após preenchimento definitivo.
 - Justificativas históricas e contexto de decisões pertencem ao `README.md` ou a registro específico de decisão.
+- Fatos do estado implementado, como versão, situação atual e funcionalidades, pertencem exclusivamente ao `README.md`.
 - Novas seções somente devem existir quando representarem decisão independente não acomodável nas seções existentes.
 - Regras devem ser objetivas, afirmativas e verificáveis.
 - Proibições devem impedir violações concretas, não preferências pessoais.
@@ -148,63 +148,19 @@ Responsável principal:
 
 Repositório principal:
 
-Branch estável:
-
-Branch de integração:
-
-Estado atual:
-
-Versão atual:
-
-## 6. Revisões universais adotadas
-
-Revisão de `regrasDev.md`:
-
-Revisão de `regrasUxUi.md`:
+## 6. Adoção das regras universais
 
 Aplicabilidade de `regrasUxUi.md`:
 
-Data da última sincronização:
+O commit do repositório `base` adotado é registrado na declaração de conformidade de cada commit de conclusão e de promoção, conforme `regrasDev.md`.
 
-Método utilizado para confirmar integridade das cópias locais:
-
-## 7. Não conformidades conhecidas
-
-Para cada não conformidade, registrar:
-
-Regra afetada:
-
-Causa:
-
-Escopo:
-
-Impacto:
-
-Risco:
-
-Responsável:
-
-Medida compensatória:
-
-Tratamento planejado:
-
-Prazo ou condição para correção:
-
-Estado:
-
-Quando não existirem:
-
-```text
-Não se aplica.
-```
-
-## 8. Exceções autorizadas pelas regras universais
+## 7. Exceções autorizadas pelas regras universais
 
 Para cada exceção autorizada, registrar:
 
-Regra que autoriza a exceção:
+Documento e regra que autoriza a exceção:
 
-Motivo:
+Justificativa verificável:
 
 Escopo mínimo:
 
@@ -216,9 +172,27 @@ Medida compensatória:
 
 Responsável:
 
-Prazo ou condição de reavaliação:
+Condição ou prazo de reavaliação:
 
 Critério de encerramento:
+
+Quando não existirem:
+
+```text
+Não se aplica.
+```
+
+## 8. Conflitos normativos resolvidos
+
+Para cada conflito entre regras universais do mesmo nível resolvido conforme `regrasDev.md`, registrar:
+
+Regras em conflito:
+
+Escopo:
+
+Solução adotada:
+
+Critério de precedência aplicado:
 
 Quando não existirem:
 
@@ -260,39 +234,19 @@ Casos de uso de erro e recuperação:
 
 ## 11. Requisitos do sistema
 
+Requisitos que possuem seção própria neste documento são definidos exclusivamente nela.
+
 Plataformas suportadas:
 
 Modo de funcionamento:
 
 Funcionamento offline:
 
-Usuários simultâneos:
-
-Autenticação:
-
-Autorização:
-
-Persistência:
-
 Comunicação em tempo real:
-
-Serviços externos:
 
 Importação de arquivos:
 
 Geração de arquivos:
-
-Processamento assíncrono:
-
-Responsividade:
-
-Acessibilidade:
-
-Internacionalização:
-
-Volume esperado de dados:
-
-Desempenho relevante:
 
 Compatibilidade relevante:
 
@@ -324,9 +278,15 @@ Limites de rede:
 
 Limites de serviços externos:
 
+Limites de tamanho de entrada:
+
+Limites de tamanho de resultado:
+
 Recursos computacionais disponíveis:
 
-Caminhos críticos de desempenho:
+Processos críticos:
+
+Complexidade computacional adotada por processo crítico:
 
 Conteúdos, regiões ou resultados prioritários, quando aplicáveis:
 
@@ -340,6 +300,14 @@ Limites de concorrência relacionados à capacidade:
 
 Otimizações relevantes e respectivas justificativas:
 
+Ferramenta de medição de desempenho:
+
+Ambiente de medição:
+
+Cenários de medição:
+
+Tolerância de variação e de regressão:
+
 ## 12. Restrições e premissas
 
 Tecnologias obrigatórias:
@@ -349,12 +317,6 @@ Tecnologias proibidas:
 Ambientes suportados:
 
 Limites de infraestrutura:
-
-Compatibilidades preservadas:
-
-Comportamentos que não podem mudar:
-
-Contratos que não podem mudar:
 
 Restrições acadêmicas, comerciais, legais ou organizacionais:
 
@@ -412,7 +374,7 @@ Estado remoto:
 
 Formulários:
 
-Validação:
+Biblioteca de validação:
 
 Estratégia de estilos:
 
@@ -428,13 +390,13 @@ Framework:
 
 Servidor ou adaptador HTTP:
 
-Validação:
+Biblioteca de validação:
 
-Autenticação:
+Mecanismo de autenticação:
 
 Documentação da API:
 
-Processamento assíncrono:
+Mecanismo de processamento assíncrono:
 
 ## 17. Persistência
 
@@ -444,13 +406,13 @@ Banco de dados:
 
 ORM, query builder ou driver:
 
-Migrações:
+Ferramenta de migrações:
 
 Cache:
 
-Armazenamento de arquivos:
+Estratégia de invalidação:
 
-Estratégia de backup:
+Armazenamento de arquivos:
 
 ## 18. Ferramentas de desenvolvimento
 
@@ -626,6 +588,8 @@ Critério para criar arquivo:
 
 Critério para manter conteúdo no mesmo arquivo:
 
+Ordem interna dos arquivos:
+
 ## 28. Abstrações e compartilhamento
 
 Critério concreto para criar abstração:
@@ -724,9 +688,7 @@ Métricas:
 
 # Parte VI — Concretização de UX e UI
 
-## 32. Aplicabilidade e contexto
-
-Aplicabilidade de `regrasUxUi.md`:
+## 32. Contexto de uso
 
 Público principal:
 
@@ -854,7 +816,7 @@ Padrão de datas, números e unidades:
 
 Tom de voz:
 
-Internacionalização:
+Idiomas suportados e padrão de internacionalização:
 
 ## 39. Acessibilidade
 
@@ -872,9 +834,7 @@ Redução de movimento:
 
 Alternativas de mídia:
 
-Exceções autorizadas:
-
-## 40. Condições limite de validação
+## 40. Validação de UX e UI
 
 Largura mínima:
 
@@ -905,6 +865,8 @@ Teclado:
 Mudanças dinâmicas de conteúdo:
 
 Nível de validação UX/UI exigido:
+
+Critérios de sucesso de UX e respectivos valores:
 
 ---
 
@@ -990,7 +952,13 @@ Integridade dos dados:
 
 Estratégia de migração:
 
+Compatibilidade entre versões durante a implantação:
+
+Validação de migrações:
+
 Backup:
+
+Verificação de restauração:
 
 Dados de teste:
 
@@ -1016,6 +984,8 @@ Timeout:
 
 Repetição:
 
+Limite de tentativas:
+
 Backoff:
 
 Fallback:
@@ -1023,6 +993,8 @@ Fallback:
 Tratamento de erros:
 
 Limites de uso:
+
+Verificação de contrato:
 
 ## 45. Autenticação e autorização
 
@@ -1050,7 +1022,23 @@ Revogação:
 
 Rotas protegidas:
 
-## 46. Processamentos especializados
+## 46. Segurança e privacidade
+
+Classificação dos dados sensíveis:
+
+Proteção em armazenamento:
+
+Proteção em transporte:
+
+Proteção em logs e mensagens:
+
+Gestão de segredos:
+
+Retenção e descarte de dados:
+
+Exigências legais aplicáveis:
+
+## 47. Processamentos especializados
 
 Para cada processamento, registrar:
 
@@ -1078,7 +1066,7 @@ Comportamentos preservados:
 
 # Parte VIII — Configuração, testes e entrega
 
-## 47. Configuração e ambientes
+## 48. Configuração e ambientes
 
 Ambientes:
 
@@ -1098,15 +1086,13 @@ Dados proibidos no repositório:
 
 Diferenças entre ambientes:
 
-## 48. Grafo comportamental e testes
+## 49. Grafo comportamental e testes
 
 Local do grafo de casos de uso:
 
 Local do grafo comportamental:
 
 Relação e rastreabilidade entre grafo de casos de uso e grafo comportamental:
-
-Escopo do grafo comportamental:
 
 Local do catálogo de estados, transições e restrições comportamentais:
 
@@ -1182,7 +1168,19 @@ Critério para remover teste temporário:
 
 Omissões justificadas de categoria de teste:
 
-## 49. Comandos de validação
+Ferramenta de teste de mutação:
+
+Indisponibilidade de ferramenta de mutação e justificativa:
+
+Operadores de mutação adotados:
+
+Momento de execução da mutação no escopo afetado e integral:
+
+Limite de tempo da mutação:
+
+Local do registro de mutantes equivalentes por equivalência sintática:
+
+## 50. Comandos de validação
 
 Desenvolvimento:
 
@@ -1202,7 +1200,11 @@ Formatação:
 
 Validação UX/UI:
 
-## 50. Versionamento e integração
+Mutação:
+
+Desempenho:
+
+## 51. Versionamento e integração
 
 Branch estável:
 
@@ -1210,13 +1212,13 @@ Branch de integração:
 
 Branches de trabalho:
 
-Alterações diretas na branch estável:
-
 Estratégia de integração:
+
+Mecanismo de verificação do commit de conclusão:
 
 Atualização forçada:
 
-Critérios para promoção:
+Critérios adicionais para promoção:
 
 Relatórios permanentes:
 
@@ -1224,7 +1226,7 @@ Destino de evidências temporárias:
 
 Política para scripts e workflows temporários:
 
-## 51. Build e implantação
+## 52. Build e implantação
 
 Artefato de build:
 
@@ -1240,7 +1242,7 @@ Critério técnico de conclusão:
 
 # Parte IX — Controle arquitetural
 
-## 52. Restrições obrigatórias
+## 53. Restrições obrigatórias
 
 Arquivos ou módulos que não podem ser removidos:
 
@@ -1250,13 +1252,15 @@ Comportamentos protegidos:
 
 Contratos protegidos:
 
+Compatibilidades protegidas:
+
 Acessos diretos proibidos:
 
 Duplicações arquiteturais proibidas:
 
-## 53. Baseline de comportamento
+## 54. Baseline de comportamento
 
-Revisão usada como baseline:
+Commit usado como baseline:
 
 Casos de uso executados:
 
@@ -1268,13 +1272,9 @@ Resultados observáveis registrados:
 
 Evidências:
 
-## 54. Planejamento estrutural
+## 55. Planejamento estrutural
 
-Árvore final aprovada:
-
-Módulos finais:
-
-Arquivos finais:
+A árvore aprovada é definida exclusivamente na seção de estrutura de diretórios.
 
 Estratégia de migração:
 
@@ -1282,7 +1282,7 @@ Estratégia de poda:
 
 Critérios de revalidação dos ramos:
 
-## 55. Decisões pendentes
+## 56. Decisões pendentes
 
 Para cada decisão:
 
@@ -1300,7 +1300,7 @@ Ramos bloqueados:
 
 Seções afetadas:
 
-## 56. Débitos técnicos
+## 57. Débitos técnicos
 
 Para cada débito:
 
@@ -1317,92 +1317,3 @@ Escopo:
 Tratamento planejado:
 
 Prioridade:
-
----
-
-# Checklist de conformidade
-
-## Documentos
-
-- [ ] A revisão de `regrasDev.md` está identificada.
-- [ ] A revisão de `regrasUxUi.md` está identificada quando aplicável.
-- [ ] As cópias locais correspondem às versões canônicas.
-- [ ] Este documento contém somente concretizações específicas.
-- [ ] O `README.md` descreve o estado implementado.
-
-## Escopo e arquitetura
-
-- [ ] Objetivo, escopo e restrições estão definidos.
-- [ ] A arquitetura emerge das responsabilidades reais.
-- [ ] A árvore final está registrada.
-- [ ] Fronteiras e dependências são explícitas.
-- [ ] Não existem árvores concorrentes.
-
-## Implementação
-
-- [ ] Nomenclatura e contratos específicos estão definidos.
-- [ ] A validação autoritativa e suas validações antecipadas ou derivadas permanecem semanticamente coerentes.
-- [ ] Estados semânticos concretizados na implementação e suas fontes canônicas estão identificados.
-- [ ] Ciclos de vida e sincronização de estados relevantes estão concretizados.
-- [ ] Critérios de abstração e compartilhamento estão concretizados.
-- [ ] Comportamentos e contratos protegidos estão registrados.
-- [ ] Estados de operação, repetição segura e recuperação de erros relevantes estão concretizados.
-- [ ] Semântica de concorrência, ordenação e tratamento de resultados obsoletos estão concretizados quando aplicáveis.
-- [ ] Cancelamento, reversão, compensação e efeitos irrevogáveis estão concretizados quando aplicáveis.
-
-## Desempenho
-
-- [ ] Escopos com requisitos de desempenho possuem metas ou limites concretos quando aplicáveis.
-- [ ] Volume, latência, throughput, concorrência e recursos disponíveis estão definidos quando relevantes.
-- [ ] Metas de resposta percebida e prioridades observáveis estão definidas quando aplicáveis.
-- [ ] Limites de memória, CPU, armazenamento, entrada e saída, rede e serviços externos estão registrados quando relevantes.
-- [ ] Caminhos críticos e trabalhos secundários independentes estão identificados quando relevantes.
-- [ ] O critério para considerar ganho de desempenho relevante está definido quando necessário.
-- [ ] Estratégia e limites de concorrência ou paralelismo voltados a desempenho e capacidade estão concretizados quando aplicáveis.
-- [ ] Otimizações que adicionam complexidade relevante possuem justificativa registrada.
-
-## UX e UI
-
-- [ ] A aplicabilidade de `regrasUxUi.md` está declarada.
-- [ ] Densidades por contexto estão definidas.
-- [ ] Estratégias global e local de responsividade estão definidas.
-- [ ] Breakpoints possuem justificativas observáveis.
-- [ ] Conteúdo essencial e secundário está classificado.
-- [ ] Disponibilidade de ações conforme permissões conhecidas está concretizada quando aplicável.
-- [ ] Cancelamento, reversibilidade e suas limitações possuem política observável compatível com as garantias técnicas.
-- [ ] Condições limite de validação estão registradas.
-- [ ] Nível de acessibilidade e validação está definido.
-
-## Testes
-
-- [ ] O grafo de casos de uso e o grafo comportamental estão localizados e sua relação está explícita.
-- [ ] Estados e transições válidos do grafo comportamental estão catalogados.
-- [ ] Estados declarados inalcançáveis possuem justificativas registradas quando necessárias à completude.
-- [ ] Transições proibidas relevantes possuem restrição e evidência de prevenção ou rejeição registradas.
-- [ ] A evidência de completude do grafo está registrada.
-- [ ] O mapeamento entre transições semânticas e caminhos técnicos está localizado.
-- [ ] A rastreabilidade entre modelo e evidências está definida.
-- [ ] O procedimento e as evidências usados para demonstrar o critério universal de cobertura comportamental completa estão definidos.
-- [ ] Transições catalogadas isoladas e sequências sujeitas a interferência estão identificadas.
-- [ ] Cenários assíncronos, concorrentes, de respostas obsoletas e de execução única estão registrados quando aplicáveis.
-- [ ] Critérios adicionais de cobertura específicos do projeto estão definidos quando existirem.
-- [ ] Cobertura quantitativa, quando adotada, está registrada como critério adicional e não como substituta da cobertura comportamental.
-- [ ] Fluxos principais, alternativos, erros e limites estão cobertos.
-- [ ] Unitários, integração e ponta a ponta são usados conforme necessidade.
-- [ ] Omissões de níveis de teste estão justificadas.
-- [ ] Testes permanentes permanecem versionados.
-
-## Entrega
-
-- [ ] Comandos de validação estão registrados.
-- [ ] Estratégia de branches está definida.
-- [ ] Critérios para promoção estão definidos.
-- [ ] Artefatos temporários possuem política de remoção.
-- [ ] Critério técnico de conclusão está definido.
-
-## Conformidade
-
-- [ ] Não conformidades estão registradas separadamente de exceções.
-- [ ] Exceções possuem autorização universal explícita.
-- [ ] Decisões pendentes bloqueiam somente ramos dependentes.
-- [ ] Nenhuma implementação acidental foi transformada em regra local.

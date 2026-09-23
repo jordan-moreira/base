@@ -25,7 +25,7 @@ Durante a criação, manutenção ou normalização de um projeto:
 - regras não utilizadas não podem ser removidas;
 - decisões visuais específicas não podem ser incorporadas localmente;
 - sua aplicabilidade e concretização devem ser registradas em `regrasProjeto.md`;
-- incompatibilidades devem ser registradas como não conformidades;
+- incompatibilidades devem ser resolvidas no projeto e, enquanto não resolvidas, constituem não conformidades;
 - uma incompatibilidade não autoriza modificar, ignorar, reduzir ou suspender a regra universal.
 
 Este documento somente pode ser alterado quando o objeto da alteração for o próprio padrão universal mantido no repositório `base`.
@@ -107,22 +107,9 @@ Acessibilidade prevalece sobre identidade visual, animações, densidade, person
 
 ## 6. Não conformidades e exceções
 
-Uma violação inevitável deve ser registrada em `regrasProjeto.md` como não conformidade, contendo:
+Não conformidades e exceções seguem integralmente a definição canônica de `regrasDev.md`, inclusive a forma de declaração das não conformidades e o conteúdo obrigatório do registro de exceções em `regrasProjeto.md`.
 
-- regra afetada;
-- causa;
-- escopo;
-- impacto;
-- risco;
-- medida compensatória;
-- tratamento planejado;
-- critério ou prazo para correção.
-
-O registro não modifica nem suspende a regra.
-
-Uma exceção somente é válida quando a própria norma universal a autorizar.
-
-Nenhuma exceção pode reduzir conformidade abaixo de exigências legais, técnicas obrigatórias ou requisitos mínimos de acessibilidade da plataforma.
+No escopo deste documento, nenhuma exceção pode reduzir conformidade abaixo de exigências legais, técnicas obrigatórias ou requisitos mínimos de acessibilidade da plataforma.
 
 ---
 
@@ -514,22 +501,21 @@ Elementos de marca não devem superar a prioridade da tarefa principal sem motiv
 
 ## 41. Reutilização semântica
 
-Compartilhar componente somente quando ele representar:
+O compartilhamento de componentes obedece à definição canônica de compartilhamento de `regrasDev.md`.
 
-- mesmo significado;
-- mesmo comportamento;
-- mesmo contrato;
-- mesma expectativa de uso;
-- evolução previsivelmente conjunta.
+No escopo da interface, equivalência semântica exige também a mesma expectativa de uso percebida pelo usuário.
 
 Semelhança visual isolada não justifica compartilhamento.
 
 ## 42. Variantes
 
-- Cada variante deve possuir finalidade clara e nome semântico.
-- Variantes devem representar prioridade, estado, comportamento, intenção ou contexto.
-- Não criar variante apenas para transportar valor visual isolado.
-- A quantidade de variantes deve permanecer previsível.
+Os contratos de variantes obedecem à definição canônica de `regrasDev.md`.
+
+No escopo da interface:
+
+- variantes com significados diferentes devem ser perceptivelmente distinguíveis sem depender apenas de cor;
+- variantes com o mesmo significado devem possuir apresentação e comportamento equivalentes;
+- não criar variante apenas para transportar valor visual isolado.
 
 ## 43. Estados obrigatórios
 
@@ -589,10 +575,13 @@ Quando a plataforma exigir representações derivadas ou transitórias distintas
 
 ## 44. Elementos nativos
 
-- Elementos nativos devem ser preferidos quando atenderem à necessidade.
-- Semântica e comportamento nativos não devem ser recriados sem justificativa.
-- Componentes personalizados devem preservar teclado, foco, nome, função, estado e valor acessíveis.
-- Aparência personalizada não deve remover sinais necessários.
+A preservação da semântica nativa obedece à definição canônica de `regrasDev.md`.
+
+No escopo da interface:
+
+- elementos nativos devem ser preferidos quando atenderem à necessidade;
+- componentes personalizados devem preservar teclado, foco, nome, função, estado e valor acessíveis;
+- aparência personalizada não deve remover sinais necessários.
 
 ## 45. Área de interação
 
@@ -1291,6 +1280,14 @@ Podem ser utilizadas quando:
 - Indicadores devem corresponder ao escopo afetado.
 - Carregamento global só deve bloquear tudo quando necessário para consistência ou segurança.
 
+### 119.1 Medição do desempenho percebido
+
+A medição do desempenho percebido especializa a regra de medição de desempenho de `regrasDev.md`.
+
+A resposta percebida deve ser medida da entrada do usuário até o feedback ou resultado observável correspondente, nos dispositivos e contextos suportados definidos em `regrasProjeto.md`.
+
+A classificação de operações como instantâneas ou demoradas, a estabilidade visual e o cumprimento das metas de resposta percebida devem ser demonstrados por medição.
+
 ---
 
 # Parte XV — Validação
@@ -1345,6 +1342,21 @@ Devem ser considerados, quando aplicável:
 Resposta tardia ou obsoleta não pode regredir silenciosamente foco, seleção, conteúdo, disponibilidade de ações ou outro estado válido produzido por interação posterior.
 
 Feedback, mensagens e ações de recuperação devem corresponder ao estado real conhecido da operação, sem induzir repetição insegura nem apresentar como definitivo resultado ainda não confirmado.
+
+### 120.3 Sensibilidade das evidências de interface
+
+A sensibilidade das evidências de interface especializa a regra de sensibilidade das evidências e testes de mutação de `regrasDev.md`.
+
+Os operadores de mutação devem incluir, quando aplicável à interface:
+
+- dessincronização entre estado visual, interativo, informacional e acessível;
+- omissão de movimentação ou retorno de foco definidos;
+- remoção de bloqueio de ação duplicada;
+- desconexão de um dos acionamentos equivalentes;
+- descarte de contexto que a transição deve preservar;
+- regressão de estado por resposta obsoleta.
+
+Alterações exclusivamente visuais que não afetem estado semanticamente relevante não integram o escopo obrigatório de mutação.
 
 ## 121. Inspeção heurística
 
@@ -1489,104 +1501,15 @@ Uma interface somente pode ser considerada concluída quando:
 - fluxos principais funcionarem nos contextos suportados;
 - estados semanticamente aplicáveis à interface e catalogados no modelo comportamental estiverem implementados;
 - problemas críticos de usabilidade e acessibilidade estiverem resolvidos;
-- não conformidades restantes estiverem registradas;
+- não existirem não conformidades conhecidas;
 - comportamento observado corresponder aos objetivos;
 - nível de validação exigido tiver sido alcançado.
 
----
+## 131. Conformidade da alteração
 
-# Checklist de conformidade
+A conformidade exigida por `regrasDev.md` para commit de conclusão e para promoção inclui, quando o projeto possuir interface:
 
-## Princípios
-
-- [ ] O usuário identifica contexto, ações e resultados prováveis.
-- [ ] A interface utiliza a menor complexidade suficiente.
-- [ ] Padrões equivalentes permanecem consistentes.
-- [ ] Complexidade é proporcional à tarefa e ao risco.
-
-## Informação e navegação
-
-- [ ] Conteúdo segue objetivos e vocabulário do usuário.
-- [ ] Agrupamentos permanecem perceptíveis.
-- [ ] Cada nível possui função real.
-- [ ] A ordem visual preserva leitura, foco e execução.
-- [ ] Informação essencial permanece disponível.
-- [ ] Transições preservam propriedades de contexto cuja alteração não esteja definida entre seus efeitos.
-
-## Densidade e estrutura visual
-
-- [ ] Densidade aumenta informação útil, não apenas reduz dimensões.
-- [ ] A ordem de compactação foi respeitada.
-- [ ] Contêineres possuem função.
-- [ ] Não existem bordas, fundos ou sombras redundantes.
-- [ ] Áreas interativas não foram reduzidas indevidamente.
-
-## Componentes e estados
-
-- [ ] Componentes possuem responsabilidade identificável.
-- [ ] Compartilhamento possui equivalência semântica.
-- [ ] Variantes representam conceitos reais.
-- [ ] Estados semanticamente aplicáveis à interface e catalogados no modelo comportamental foram implementados.
-- [ ] Estados e transições interativos aplicáveis especializam o modelo comportamental de desenvolvimento.
-- [ ] Estado visual, interativo, informacional e acessível permanecem semanticamente equivalentes.
-- [ ] Disponibilidade apresentada das ações reflete permissões conhecidas sem substituir autorização técnica.
-- [ ] Elementos nativos são utilizados quando adequados.
-
-## Interação
-
-- [ ] Toda ação relevante produz feedback.
-- [ ] Operações demoradas indicam atividade.
-- [ ] Acionamentos equivalentes convergem para uma única intenção comportamental e, quando aplicável, uma única intenção de domínio sem duplicação pelo mesmo evento.
-- [ ] Cancelar e desfazer somente são oferecidos quando a operação subjacente suporta a consequência comunicada.
-- [ ] Limitações de reversibilidade são comunicadas quando aplicáveis.
-- [ ] Ações destrutivas comunicam consequência.
-- [ ] Processos automáticos são distinguíveis de decisões confirmadas.
-
-## Acessibilidade
-
-- [ ] Estrutura utiliza semântica adequada.
-- [ ] Fluxos essenciais são operáveis por teclado.
-- [ ] Foco é visível e lógico.
-- [ ] Controles expõem nome, função, estado e valor.
-- [ ] Informação não depende apenas de cor.
-- [ ] Ampliação e redução de movimento foram consideradas.
-
-## Responsividade
-
-- [ ] A adaptação ocorre no menor contexto suficiente.
-- [ ] Breakpoints representam mudanças justificáveis.
-- [ ] Variações contínuas utilizam comportamento fluido quando adequado.
-- [ ] Ordem semântica e ações essenciais foram preservadas.
-- [ ] Redimensionamento e troca de composição preservam estado semanticamente válido.
-- [ ] Métodos de entrada suportados permanecem utilizáveis.
-
-## Desempenho percebido
-
-- [ ] Feedback e próxima ação não são atrasados por trabalho secundário independente sem necessidade.
-- [ ] Conteúdo prioritário e regiões independentes não são serializados artificialmente antes de trabalho do qual não dependem.
-- [ ] Trabalhos independentes avançam incrementalmente, concorrentemente ou em paralelo quando há benefício relevante e segurança semântica.
-- [ ] Dependências reais preservam ordem, consistência e invariantes.
-- [ ] Ganho de desempenho percebido não é obtido por concorrência ou paralelismo que comprometam corretude, segurança, acessibilidade ou limites de recursos.
-
-## Conteúdo
-
-- [ ] O mesmo conceito utiliza o mesmo termo.
-- [ ] Rótulos descrevem ações concretas.
-- [ ] Mensagens informam resultado, impacto e próxima ação.
-- [ ] Datas, números e unidades seguem o contexto.
-
-## Validação
-
-- [ ] Fluxos principais foram executados.
-- [ ] Validações antecipadas da interface permanecem semanticamente compatíveis com a validação autoritativa.
-- [ ] Estados de erro, vazio, carregamento e recuperação foram verificados.
-- [ ] Fluxos temporários e canceláveis foram validados em sequências de reentrada aplicáveis.
-- [ ] Formas suportadas de encerramento e confirmação que possam produzir transição distinta, compartilhar estado ou apresentar interferência foram validadas.
-- [ ] Métodos de entrada compartilhados por um fluxo foram validados também em sequências intercaladas.
-- [ ] Alternância de método de entrada preserva foco, alvo, seleção, estado, contexto e atalhos aplicáveis.
-- [ ] Operações assíncronas aplicáveis foram verificadas em atraso, repetição, ordem de respostas e recuperação.
-- [ ] Respostas obsoletas não regressam estado válido produzido por interação posterior.
-- [ ] Falhas posteriores a efeito principal concluído são apresentadas e recuperadas conforme o estado real da operação.
-- [ ] Densidade e responsividade foram testadas em condições limite.
-- [ ] Navegação por teclado e estrutura acessível foram verificadas.
-- [ ] O nível declarado corresponde às evidências.
+- os estados e transições de interface do delta do grafo comportamental conforme 43.1;
+- as sequências de reentrada, de alternância entre métodos de entrada e de operações assíncronas aplicáveis conforme 120.1, 120.2 e 125.1;
+- a sensibilidade das evidências de interface conforme 120.3;
+- o nível de validação de UX e UI exigido em `regrasProjeto.md`, na promoção.
