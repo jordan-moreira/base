@@ -256,7 +256,10 @@ Quando não for possível satisfazer simultaneamente todos os objetivos:
 - integridade dos dados prevalece sobre eficiência;
 - contratos públicos prevalecem sobre conveniências de refatoração;
 - responsabilidade e coesão prevalecem sobre tamanho físico;
-- estrutura semântica prevalece sobre simetria da árvore.
+- estrutura semântica prevalece sobre simetria da árvore;
+- a responsabilidade de uma evidência prevalece sobre a eficiência de sua execução.
+
+As regras de eficiência deste documento aplicam-se a todo código do projeto, inclusive evidências, fixtures, automações e scripts de validação.
 
 ### 13.1 Eficiência computacional proporcional
 
@@ -273,6 +276,8 @@ Devem ser evitados, quando desnecessários, custos superiores em:
 - quantidade de chamadas a serviços, persistência ou recursos externos.
 
 Processo crítico é a operação ou o fluxo essencial para o funcionamento da aplicação ou executado com alta frequência. Os processos críticos devem ser identificados em `regrasProjeto.md`.
+
+A execução das evidências exigidas pelos portões de commit de conclusão e de promoção constitui processo crítico em todo projeto.
 
 Em processos críticos:
 
@@ -1591,6 +1596,32 @@ Uma categoria não deve ser exigida quando não agregar proteção, mas sua omis
 - Declarações de conformidade de commits seguem a seção de declaração de conformidade.
 - Evidências utilizadas para cobertura comportamental devem manter rastreabilidade com os estados, transições ou sequências correspondentes.
 
+### 71.1 Eficiência da execução das evidências
+
+A capacidade de uma evidência de cumprir sua responsabilidade precede sua eficiência de execução. Evidência não otimizada que protege corretamente o comportamento é preferível a evidência otimizada que não o protege.
+
+Nenhuma otimização pode ser adotada quando reduzir, ainda que parcialmente, cobertura comportamental, sensibilidade, determinismo, isolamento, rastreabilidade ou completude da seleção de evidências. Otimização que comprometa qualquer dessas propriedades não é aplicável, e sua não adoção está justificada por esta regra.
+
+Respeitada essa precedência, a execução das evidências deve ser de máxima eficiência.
+
+A execução é de máxima eficiência quando todas as otimizações desta seção aplicáveis à tecnologia estiverem adotadas, a complexidade de execução for a menor conhecida e o tempo medido estiver dentro dos limites definidos em `regrasProjeto.md`. Otimização aplicável não adotada exige justificativa verificável registrada em `regrasProjeto.md`.
+
+São obrigatórias, quando aplicáveis:
+
+- independência de cada evidência em relação à ordem de execução e às demais evidências, admitindo estado compartilhado somente quando imutável ou isolado por execução;
+- execução concorrente ou paralela das evidências independentes;
+- reutilização de preparação custosa somente quando não permitir vazamento de estado entre evidências;
+- sincronização por evento, condição observável ou relógio controlado, sendo proibidas esperas fixas de tempo;
+- no commit de conclusão, seleção das evidências pelo impacto da alteração, derivada da rastreabilidade entre código, grafo e evidências, com completude demonstrada; na dúvida, a evidência deve ser incluída;
+- na mutação, mutar somente o código do escopo afetado, executar para cada mutante somente as evidências que cobrem o código mutado, encerrar a avaliação do mutante na primeira falha, executar mutantes em paralelo e reutilizar resultados de código e evidências não alterados;
+- entre níveis de teste que ofereçam proteção equivalente, o de menor custo de execução.
+
+A otimização da execução de evidências constitui alteração em evidências e deve demonstrar a preservação da cobertura, do resultado de mutação e do determinismo existentes antes da otimização.
+
+Uma evidência é redundante quando outra evidência do mesmo nível protege os mesmos elementos do grafo com sensibilidade igual ou superior, demonstrada pela ausência de mutantes mortos exclusivamente por ela. Evidências redundantes não possuem responsabilidade vigente.
+
+O tempo de execução dos portões deve ser medido conforme 13.4. Regressão além da tolerância definida em `regrasProjeto.md` impede a conclusão da alteração.
+
 ---
 
 # Parte XI — Versionamento e integração
@@ -1625,6 +1656,7 @@ No escopo afetado pela alteração, devem estar demonstrados:
 - a preservação de contratos e comportamentos protegidos;
 - a atualização da documentação afetada;
 - a ausência de resíduos, de implementações concorrentes e de elementos sem responsabilidade vigente;
+- a eficiência da execução das evidências conforme 71.1, quando a alteração afetar evidências, fixtures ou automações de validação;
 - a aprovação de build, testes e demais validações aplicáveis.
 
 Alteração sem impacto comportamental deve declarar ausência de delta do grafo. A declaração é verificável pela preservação do grafo, das evidências e do resultado de mutação.
@@ -1649,6 +1681,7 @@ Uma promoção somente pode ocorrer a partir de commit de conclusão e quando es
 - o nível de validação de UX e UI exigido, quando aplicável;
 - as metas de desempenho verificadas conforme 13.4;
 - a atualização da documentação e do `README.md`;
+- a eficiência da execução das evidências conforme 71.1;
 - a ausência de alterações incompatíveis na branch estável;
 - a ausência de não conformidades conhecidas.
 

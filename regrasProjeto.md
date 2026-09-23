@@ -1180,6 +1180,16 @@ Limite de tempo da mutação:
 
 Local do registro de mutantes equivalentes por equivalência sintática:
 
+Estratégia de isolamento das evidências:
+
+Estratégia de paralelização das evidências:
+
+Estratégia de seleção de evidências por impacto:
+
+Otimizações de mutação adotadas:
+
+Otimizações de execução não adotadas e justificativas:
+
 ## 50. Comandos de validação
 
 Desenvolvimento:
@@ -1203,6 +1213,12 @@ Validação UX/UI:
 Mutação:
 
 Desempenho:
+
+Tempo máximo do portão de conclusão:
+
+Tempo máximo da promoção:
+
+Tolerância de regressão do tempo dos portões:
 
 ## 51. Versionamento e integração
 
